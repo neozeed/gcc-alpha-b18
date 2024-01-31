@@ -1,0 +1,13 @@
+Wed Mar 19 15:28:24 1997  Martin M. Hunt  <hunt@onions.cygnus.com>
+
+	* Makefile, asm.tcl, breakpoint.tcl, copyright.tcl, expr.tcl,
+	file.tcl, main.tcl, register.tcl, source.tcl: New files. These
+	replace the old gdbtk.tcl.
+
+	* tclIndex. Generated from Makefile.
+
+	* stop2.gif: A stop sign icon.
+
+	* break.xbm: Another stop sign.
+
+

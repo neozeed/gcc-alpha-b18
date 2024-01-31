@@ -1,0 +1,266 @@
+Tue Jul  1 03:20:47 1997  Paul N. Hilfinger  <hilfingr@helen.CS.Berkeley.EDU>
+
+	* Release 4.16.gnat.1.13
+
+	* ada-lang.c (ada_demangle): Change demangling to exclude more
+	compiler-generated names.
+	* Merged in changes from Roch-Alexandre Nomine Beguin and Arnaud
+	Charlet for tasking and exception-handling.  Re-arranged headers, 
+	added copyright boilerplate, updated Makefile.in.
+
+Tue Jul  1 03:20:02 1997  Roch-Alexandre Nomine-Beguin <RA.NOMINEBEGUIN@enst-bretagne.fr>
+
+	(These changes from 22 May)
+	* ada-tasks.c: Added support for gnat tasks 
+	* fork-child.c: Destroy old task list
+	* inflow.c: idem
+	* infrun.c: idem
+	* win32-nat.c: idem (nobody knows)
+
+Tue Jul  1 01:42:09 1997  Paul N. Hilfinger  <hilfingr@helen.CS.Berkeley.EDU>
+
+	* ada-lang.c (desc_data_type): Protect against NULL argument.
+	(ada_is_array_descriptor): Tighten up criteria for descriptor-hood.
+
+Mon Jun 30 01:20:17 1997  Paul N. Hilfinger  <hilfingr@helen.CS.Berkeley.EDU>
+
+	* Various files: Update copyright notice.
+	* ada-*.c: Change mentions of C/C++ to Ada in file headers.
+	* ada-valprint.c (ada_value_print): Handle bogus array types.
+	* ada-lang.c (ada_demangle): Change place for testing for upper-case 
+	letters so as not to interfere with operator names.
+	(ada_is_bogus_array_descriptor): New function.
+	* ada-lang.h: Add defn of ada_is_bogus_array_descriptor.
+	* ada-typeprint.c (ada_type,name ada_print_type): Fireproof against 
+	null type argument.
+	(ada_print_type): Handle case of weird array descriptor type.
+
+	* Release 4.16.gnat.1.12.3.
+
+	* gdb.1 (Backtrace): Add Ada to list of languages.
+	* Makefile.in (VERSION): Remove use of PRCS project stuff and
+	update by hand (turns out there are assumptions about the format of 
+	this line in the doc/ subdirectory; sigh).
+	
+Sun Jun 29 01:10:18 1997  Paul N. Hilfinger  <hilfingr@helen.CS.Berkeley.EDU>
+
+	* valarith.c (value_binop): Add BINOP_MIN and BINOP_MAX for floating
+	point.
+	* ada-lang.h: Add ATR_MIN, ATR_MAX, ATR_POS, ATR_IMG, ATR_IMAGE, 
+	ATR_VAL. 
+	* ada-lang.c (ada_evaluate_subexp): Handle 'MIN, 'MAX, 'POS, 'VAL. 
+	Allow OP_TYPE.
+	(discrete_type_p, value_pos_atr, value_val_atr): New functions.
+	* ada-lex.l: Add 'MIN, 'MAX, 'VAL, 'POS
+	(process_real): Use new C-language code for floating-point literals
+	(uses DOUBLEST type).
+	* ada-exp.y (exp): Add 'MIN, 'MAX, 'VAL, 'POS.
+	Adjust treatment of floating-point literals for change to DOUBLEST
+	type.
+	* expprint.c (print_subexp): Allow type prefix on attributes.
+
+Sat Jun 28 00:05:14 1997  Paul N. Hilfinger  <hilfingr@helen.CS.Berkeley.EDU>
+
+	* symtab.c (list_symbols): Suppress "static" indication in Ada mode.
+	Don't print non-debugging symbols in Ada mode (?).
+	* ada-lang.c (ada_demangle): Suppress symbols without lower-case
+	letter after ___.  Correctly demangle types whose only change
+	is trailing ___....
+	* ada-typeprint.c (print_func_type): Put in argument types.
+
+Fri Jun 27 14:16:30 1997  Paul N. Hilfinger  <hilfingr@helen.CS.Berkeley.EDU>
+
+	* symtab.h (SYMBOL_INIT_DEMANGLED_NAME): Don't free result of 
+	ada_demangle.
+	* utils.c (fprintf_symbol_filtered): Don't free result of ada_demangle.
+	* ada-lang.c (ada_suppress_symbol_printing): Suppress struct, union, 
+	and enum tags.  Handle non-Ada symbols.
+	(ada_demangle): Make ada_demangle re-use storage.
+	(ada_msymbol_matches_name): Don't free result of ada_demangle.
+	* ada-lex.l (is_digit_in_base, digit_to_int, strtoulst): New functions.
+	(processInt): Use strtoulst in case of long long literals.
+	* ada-typeprint.c (print_record_type): Remove ';' after "end record".
+	(ada_typedef_print): Print names always.
+	(ada_print_type): Handle TYPE_CODE_INT.
+	* Makefile.in (z8k-tdep.o): Remove redundant dependency line for
+	ada-exp.tab.o.
+
+Thu Jun 26 03:37:42 1997  Paul N. Hilfinger  <hilfingr@helen.CS.Berkeley.EDU>
+
+	* Removed OP_FUNCALL_OR_MULTI_SUBSCRIPT, using OP_FUNCALL instead.
+	Since GDB allows language-specific interpretation, there is no point
+	in introducing a new operator (despite the precedent of F77).
+	* ada-exp.y: Revise way of handling non-trivial attributes.  Add
+	'length, 'tag.
+	(write_attribute_call[01]): New functions.
+	* ada-lex.l: Add 'unchecked_access, 'unrestricted_access, 'length,
+	'tag.
+	* ada-lang.c (ada_array_length): New function.
+	(ada_evaluate_subexp, ada_resolve_subexp): Handle OP_ATTRIBUTE; 
+	remove OP_LWB, OP_UPB.  Handle 'LENGTH, 'FIRST, 'LAST attribute with
+	OP_ATTRIBUTE.
+	(ada_tag_type): New function.
+	(ada_value_tag): New function.
+	* ada-lang.h: Add defn of type ada_attribute, function 
+	ada_attribute_name, ada_tag_type, ada_value_tag.
+	* defs.h: Add ada_attribute_name.
+	* parse.c (length_of_subexp, prefixify_subexp): Add OP_ATTRIBUTE and 
+	remove OP_LWB, OP_UPB.
+	* expprint.c (print_subexp, dump_expression): Add OP_ATTRIBUTE and 
+	remove OP_LWB, OP_UPB.
+	* expression.h (exp_opcode): Add OP_ATTRIBUTE and remove OP_LWB, 
+	OP_UPB.
+
+Wed Jun 25 02:28:11 1997  Paul N. Hilfinger  <hilfingr@helen.CS.Berkeley.EDU>
+
+	* ada-lang.h: Declare Ada builtin types.
+	* ada-lex.l, ada-exp.y: Use Ada builtin types for literals.
+	* ada-lex.l: Add attributes 'unchecked_access, 'unrestricted_access,
+	'length, 'tag.
+	* ada-lex.y: Implement 'tag, 'length.
+	* ada-lang.c (ada_resolve_subexp, ada_evaluate_subexp): 
+	Handle TERNOP_SLICE.
+	(ada_is_string_type): Handle fat arrays.
+	* ada-exp.y (exp): Add slice syntax.
+	* c-valprint.c (c_val_print): Correct bug for printing 0-length
+	arrays or arrays of 0-length elements.  Element elttype is needed 
+	below.
+
+Tue Jun 24 04:14:27 1997  Paul N. Hilfinger  <hilfingr@helen.CS.Berkeley.EDU>
+
+	* ada-valprint.c (print_optional_low_bound): New function.
+	(ada_val_print): Print lower bound on array aggregates when it is 
+	non-default.
+	* ada-lang.c (ada_array_bound): Use more appropriate abstraction level.
+	
+        * gdb-4.16-gnat-1.12.1 released.
+	
+	* ada-lang.c (ada_is_ignored_field): New function.
+	(ada_parent_type): New function.
+	(ada_is_parent_field): Add field_num argument.
+	(ada_is_wrapper_field): Add again.
+	(ada_is_variant_part): Add field_num.
+	(ada_variant_discrim_type): New function.
+	(ada_is_others_clause): New function.
+	(ada_variant_discrim_name): New function.
+	(ada_scan_number): New function.
+	(ada_in_variant): New function.
+	(ada_lookup_struct_elt_type): Add displacement.
+	(ada_is_ignored_field): Ignore fields that start with "_" or have
+	null names.
+	(ada_is_tagged_type): New function.
+	* ada-lang.h: ada_scan_number, ada_parent_type, ada_is_ignored_field,
+	ada_is_wrapper_field, ada_is_variant_part, ada_variant_discrim_type,
+	ada_is_others_clause, ada_in_variant, ada_variant_discrim_name, 
+	ada_lookup_struct_elt_type, ada_value_struct_elt, ada_is_tagged_type.
+	* ada-typeprint.c (print_choices): New function.
+	(print_variant_clauses): New function.
+	(print_variant_part): New function.
+	(print_record_field_types): Modify for variants, return indication
+	of fields printed, print indenting properly.
+	(print_record_type): New function.
+	(print_func_type): New function.
+	(print_variant_clauses, etc.): Correct spacing and newline placement.
+	(print_record_field_types): Ignored field handling.
+	(print_record_type): Handle tagged records.
+	* ada-valprint.c (which_variant_applies): New function.
+	(print_variant_part): New function.
+	(print_field_values): Revised from ada_print_field_values to handle
+	commas correctly, ignored fields, handle variant parts, etc.
+
+Sun Jun 22 01:39:51 1997  Paul N. Hilfinger  <hilfingr@helen.CS.Berkeley.EDU>
+
+	* ada-lang.h: Remove ada_is_wrapper_field. Add ada_is_parent_field,
+	ada_is_variant_part, ada_lookup_struct_elt_type, ada_value_struct_elt.
+	* ada-lang.c (ada_lookup_partial_symbol): Clean up.
+	(ada_resolve_subexp): In OP_VAR_VALUE clause, update exp 
+	after calling replace_operator_with_call [From Doug Rupp.]
+	(ada_is_parent_field): New function; removed ada_is_wrapper_field.
+	(ada_is_variant_part): New function.
+	(ada_search_struct_field): Handle variants; correct handling of 
+	wrapper fields.
+	(ada_value_struct_elt): New function, adapted from valops.c.
+	(ada_lookup_struct_elt_type): New function, adapted from gdbtypes.c.
+	* ada-typeprint.c (print_func_type): New function.
+	(ada_print_type): Start handling function types.
+	* valops.c: Restored to initial (0.1) version by moving newer
+	Ada-related changes to ada-lang.c.
+
+Sat Jun 21 01:29:07 1997  Paul N. Hilfinger  <hilfingr@helen.CS.Berkeley.EDU>
+
+	* ada-lang.c (ada_resolve): Allow 'expression' to denote a type.
+	(ada_is_string_type): re-arrange test.
+	(ada_update_initial_language): Include additional check for VMS.
+	* Makefile.in (ada-typeprint.o): Added dependence on ada-lang.h
+	* ada-typeprint.c: Removed ada_type_print_varspec_suffix, 
+	ada_type_print_derivation_info, ada_type_print_args,
+	ada_type_print_varspec_prefix, ada_type_print_base.
+	(ada_type_name): New function.
+	(ada_typedef_print): Correct to Ada syntax.
+	(print_range): New function.
+	(print_enum_type): New function.
+	(print_array_type): Use Ada syntax.
+	(print_record_field_types): New function.
+	(ada_print_type): Handle names and 'show' parameter correctly.
+	Correct to Ada syntax for array, range, enumerated, and record
+	types.
+
+Thu Jun 19 00:46:52 1997  Paul N. Hilfinger  <hilfingr@helen.CS.Berkeley.EDU>
+
+	* ada-lang.h: Remove ada_print_value_fields.  Add ada_is_string_type.
+	* ada-valprint.c (ada_val_print): Spruce up comment.  Use 
+	ada_print_record to print records.  Use ada_is_string_type to test
+	for strings.  
+	(ada_print_record): New function 
+	(ada_print_value_fields): Remove printing of ( and ), thus
+	allowing this routine to flatten PARENT fields more easily.
+	* Makefile.in (eval.o): Remove dependency on ada-lang.h.
+	* eval.c (evaluate_subexp_standard): Moved Ada-specific stuff to 
+	ada-lang.c.
+	* ada-lang.c, eval.c (evaluate_subexp_type): Moved from eval.c
+	to ada-lang.c
+	* ada-lang.c (unwrap_value): New function.
+	(ada_printstr): Removed null-termination C'ism.
+	(ada_is_string_type): New function.
+	(ada_evaluate_subexp): New function: Ada-specific parts of 
+	evaluate_subexp_standard moved here.  Replaced evaluation entry 
+	in ada_language_defn.
+	* ada-valprint.c (ada_val_print): Cleaned up aligner handling using 
+	new definitions of ada_aligned_value_addr and ada_aligned_type.
+	* ada-valprint.c, ada-lang.c: Moved defns of ada_is_aligner_type, 
+	ada_aligned_type, ada_aligned_value_addr to ada-lang.c from 
+	ada-valprint.c.
+
+Wed Jun 18 00:46:22 1997  Paul N. Hilfinger  <hilfingr@helen.CS.Berkeley.EDU>
+
+	* ada-lang.c (ada_search_struct_field): New function.
+	(ada_is_wrapper_field): New function.
+	* ada-lang.h: Add definitions of ada_is_wrapper_field,
+	ada_search_struct_field.
+	* valops.c (value_struct_elt): Modify to accound for PARENT fields.
+	* ada-typeprint.c (ada_print_type): Modify to remove __PAD wrapper from
+	aligned types.
+
+Tue Jun 17 13:11:17 1997  Paul N. Hilfinger  <hilfingr@helen.CS.Berkeley.EDU>
+
+	* ada-valprint.c (ada_print_value_fields): New function.
+	(ada_is_aligner_type): New function.
+	(ada_aligned_type): New function.
+	(ada_aligned_value_addr): New function.
+	* ada-lang.h: Add defn. of ada_print_value_fields, ada_is_aligner_type,
+	ada_aligned_type, ada_aligned_value_addr.
+	* ada-valprint.c (ada_val_print): Change record and array format to 
+	use "()" and "=>".  Remove __PAD wrapper from aligned types.
+	* ada-lang.c (user_select_syms): Fixed bug that caused gdb to 
+	blow up if no symbols are available and overloaded symbol is
+	referenced.  Now just reports "no source file available".  [Fix
+	from Doug Rupp.]
+
+Mon Jun 16 19:38:08 1997  Paul N. Hilfinger  <hilfingr@helen.CS.Berkeley.EDU>
+
+	* Makefile.in: Added $Format$ entry to supply VERSION definition.
+
+Thu Mar 27 00:33:01 1997  Paul Hilfinger  <hilfingr@nile.gnat.com>
+
+	* config/sparc/tm-sun4sol2.h: Undefine SUN_FIXED_LBRAC_BUG (meaning 
+	that the bug IS fixed).

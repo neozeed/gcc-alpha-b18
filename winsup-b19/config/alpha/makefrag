@@ -1,0 +1,29 @@
+# makefrag: included by the main Cygwin32 Makefile.in
+
+# Copyright 1996 Cygnus Solutions.
+
+# This file is part of Cygwin32.
+
+# This software is a copyrighted work licensed under the terms of the
+# Cygwin32 license.  Please consult the file "CYGWIN32_LICENSE" for
+# details.
+
+# peoffset.c needs to be compiled with MS winnt headers
+# so we cheat and copy a binary (peoffset.obj) to destination
+# MS headers can be downloaded from Microsost web site (Platform SDK).
+
+
+EXTRA_DLL_OFILES= setjmp.o longjmp.o getsp.o peoffset.o
+
+setjmp.o:config/alpha/setjmp.S
+	$(CC) -c $(ALL_CFLAGS) $<
+
+longjmp.o:config/alpha/longjmp.S
+	$(CC) -c $(ALL_CFLAGS) $<
+
+getsp.o:config/alpha/getsp.S
+	$(CC) -c $(ALL_CFLAGS) $<
+
+peoffset.o:config/alpha/peoffset.obj
+	cp config/alpha/peoffset.obj peoffset.o
+

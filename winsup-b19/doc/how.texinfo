@@ -1,0 +1,973 @@
+@chapter Question and Answers
+
+@section Where can I get the tools?
+
+Please see the list of sites in the README section of this FAQ.
+
+@section Where's the documentation?
+
+There are links to quite a lot of it on the main gnu-win32 WWW page:
+@file{http://www.cygnus.com/misc/gnu-win32/}
+Be sure to at least read the Release Notes on the main WWW page, if
+there are any.
+
+Tool-specific information can be found here:
+@file{http://www.cygnus.com/library/}
+
+@section How can I get on the gnu-win32 mailing list?
+
+You can get on the gnu-win32 mailing list by sending mail
+to
+        gnu-win32-request@@cygnus.com
+
+with a message body of:
+
+@example
+        subscribe gnu-win32  <your-email-address-here>
+@end example
+
+where <your-email-address-here> is your email address.
+
+You can get off the mailing list by sending mail to
+
+        gnu-win32-request@@cygnus.com
+
+with a message body of:
+
+@example
+        unsubscribe gnu-win32 <your-email-address-here>
+@end example
+
+Note that because mail sometimes takes a day or two to get delivered to
+the list, there is often a lag of a day or two before you stop receiving
+messages after an unsubscribe request is made.
+
+There's an archive of the mailing list in
+
+@file{http://www.cygnus.com/ml/gnu-win32}
+
+@section Help! I haven't created /tmp and tools are behaving strangely!
+
+Many Unix tools (bash, byacc, etc.) expect that /tmp always exists.
+This is not guaranteed in Win32 land.  You should create /tmp or "mount"
+the directory of your choice to /tmp to avoid this problem.
+
+@section Why does bash spew out "49054596: No such file or directory"?
+
+Are you sure you created a /tmp?  As of beta 18, bash will warn if
+it doesn't find a /tmp.
+
+@section Why the undefined reference to "WinMain@@16"?
+
+Try adding an empty main() function to one of your sources.
+
+@section Where did my mount points go?
+
+Earlier releases stored mount points in the registry under
+"Cygnus Support".  This changed to "Cygnus Solutions" starting
+with beta 18.  Either use a registry editor (regedit under NT)
+to rename the old entry or just redo your mount points and the
+cygwin.dll will automatically create the new one for you.
+
+@section What does "mount failed: Device or resource busy" mean?
+
+This usually means that you are trying to mount to a location
+already in use by mount.  For example, if c: is mounted as '/'
+and you try to mount d: there as well, you will get this error
+message.  First "umount" the old location, then "mount" the new one and
+you should have better luck.
+
+@section Why is the install of the tools failing?
+
+If you are getting an error message saying "The decompression of
+%s failed.  There may no be enough free disk space in the TEMP directory.",
+read on.
+
+InstallShield has a bug where it fails with this message if there
+are more than a certain number of files in your TEMP directory.
+You can also get this message if you have files in your TEMP dir
+named the same thing InstallShield wishes to name its files (probably
+from past runs of other InstallShield install scripts) which it cannot,
+for some reason, write over.  Perhaps this will be fixed in a future
+release of InstallShield.
+
+Until then, clearing out your TEMP directory entirely should do it.
+That will get rid of any files with conflicting names and solve the
+"too many files" problem as well.
+
+@section Why aren't man, less, groff, etc. included in the betas?
+
+For obvious reasons, it isn't feasible for us to maintain and provide
+binary distributions of every tool ported to work with the Cygwin32
+tools.  Instead I think Cygnus should concentrate its efforts on the
+core development tools.  Perhaps V or wxwin should count?
+It's likely that less and a man command will get added once we
+get them working to our satisfaction.
+
+Other tools that have been ported should have their changes added to
+the official releases so they can be compiled straight from normal
+sources for that tool.  In cases where that isn't possible, someone
+else (possibly Cygnus if that made sense) could maintain the diffs and
+have them up for ftp.  Maybe we could keep a list of such tools on the
+gnu-win32 Web site...
+
+@section Where I can I find "which"?
+
+While we don't include a which command, you can use the bash built
+in "type" command which does something fairly similar.
+
+@section Bash says that it can't vfork (or just hangs).  Why?
+
+Most often this is because it can't find itself in the path.  Make sure
+that your path includes the directory where bash lives, before you start
+it.  Also make sure you have a copy of bash installed as /bin/sh.exe.
+
+If you get errors like 'no such file or directory' when you're trying
+to run a shell script, which you know is there, then your problem
+probably that bash can't find @code{/bin/sh}.
+
+@section I'm having basic problems with find.  Why?
+
+Make sure you are using the find that came with the gnu-win32 tools
+and that you aren't picking up the Win32 find command instead.  You
+can verify that you are getting the right one by doing a "type find"
+in bash.
+
+@section How does everything work?
+
+There's a C library which provides a Unix-style API.  The
+applications are linked with it and voila - they run on Windows.
+
+The aim is to add all the goop necessary to make your apps run on
+Windows into the C library.  Then your apps should run on Unix and
+Windows with no changes at the source level.
+
+The C library is in a DLL, which makes basic applications quite small.
+And it allows painless upgrades to the Win32/Unix translation layer,
+providing that dll changes stay backward-compatible.
+
+@section How do I use Win32 API calls?
+
+It's pretty simple actually.  GNU-Win32 requires that you explicitly
+link the import libraries for whatever Win32 API functions that you
+are going to use, with the exception of kernel32, which is linked
+automatically (because the startup and/or built-in code uses it).
+
+For example, to use graphics functions (GDI) you must link
+with gdi32 like this:
+
+gcc -o foo.exe foo.o bar.o -lgdi32
+
+or (compiling and linking in one step):
+
+gcc -o foo.exe foo.c bar.c -lgdi32
+
+The following libraries are available for use in this way:
+
+advapi32  largeint  ole32     scrnsave  vfw32
+cap       lz32      oleaut32  shell32   win32spl
+comctl32  mapi32    oledlg    snmp      winmm
+comdlg32  mfcuia32  olepro32  svrapi    winserve
+ctl3d32   mgmtapi   opengl32  tapi32    winspool
+dlcapi    mpr       penwin32  th32      winstrm
+gdi32     msacm32   pkpd32    thunk32   wow32
+glaux     nddeapi   rasapi32  url       wsock32
+glu32     netapi32  rpcdce4   user32    wst
+icmp      odbc32    rpcndr    uuid
+imm32     odbccp32  rpcns4    vdmdbg
+kernel32  oldnames  rpcrt4    version
+
+The regular setup allows you to use the option -mwindows on the
+command line to include a set of the basic libraries (and also
+make your program a GUI program instead of a console program),
+including user32, gdi32 and, IIRC, comdlg32.
+
+Note that you should never include -lkernel32 on your link line
+unless you are invoking ld directly.  Do not include the same import
+library twice on your link line.  Finally, it is a good idea to
+put import libraries last on your link line, or at least after
+all the object files and static libraries that reference them.
+
+The first two are related to problems the linker has (as of b18 at least)
+when import libraries are referenced twice.  Tables get messed up and
+programs crash randomly.  The last point has to do with the fact that
+gcc processes the files listed on the command line in sequence and
+will only resolve references to libraries if they are given after
+the file that makes the reference.
+
+@section How do I make the console window go away?
+
+The default during compilation is to produce a console application.
+It you are writing a GUI program, you should either compile with
+-mwindows as explained above, or add the string
+"-Wl,--subsystem,windows" to the GCC commandline.
+
+@section Is the Cygwin32 library thread-safe?
+
+Unfortunately no.  We want to make it thread-safe eventually but it
+will be a lot of work.  The minimalist package (mingw32) available
+from the main project web site appears to be multi-thread safe.
+
+@section Why can't we redistribute Microsoft's Win32 headers?
+
+Section 2.d.f of the `Microsoft Open Tools License agreement' looks like
+it says that can not "permit further redistribution of the
+Redistributables to their end users".  We take this to mean that we can
+give them to you, but you can't give them to anyone else, which is
+something that Cygnus can't agree to.  Fortunately, we have our own
+Win32 headers which are pretty complete.
+
+@section How do I link against .lib files?
+
+1. Build a C file with a function table. In that table you should
+put all functions you want to use. This is to force the linker
+to include all the object files from the .lib. Maybe there is
+an option to force LINK.EXE to include an object file.
+2. Build a dummy 'LibMain'
+3. Build a .def with all the exports you need
+4. Link with your .lib using link.exe.
+
+or
+
+1. Extract all the object files from the .lib using LIB.EXE
+2. Build a dummy C file referencing all the functions you need.
+Either with a direct call or with an initialized function pointer.
+3. Build a dummy LibMain
+4. Link all the objects with this file+LibMain.
+5. Write a .def.
+6. Link.
+
+You can use these methods to use MSVC (and many other runtime libs)
+with gnu-win32 development tools.
+
+Note that this is a lot of work (half a day or so), but much less than
+rewriting the runtime library in question from specs...
+
+(thanks to Jacob Navia (root@@jacob.remcomp.fr) for this explanation)
+
+@section Why are some things supported under NT that aren't under 95?
+
+Windows 95: n.
+32 bit extensions and a graphical shell for a 16 bit patch to an
+8 bit operating system originally coded for a 4 bit microprocessor,
+written by a 2 bit company that can't stand 1 bit of competition.
+
+But seriously, Windows 95 lacks most of the security-related calls and
+has several other deficiencies with respect to its version of the Win32
+API.  See the calls.texinfo document for more information as to what
+is not supported in Win 95.
+
+@chapter Known/potential problems in B19
+
+@section Why does the GUI version of gdb crash under Windows 95?
+
+We don't know yet.  Either invoke it with -nw, install NT and try
+again, or wait until a later release and see if the problem is fixed.
+
+@section Fixed-length arrays in the dll
+There are still some places in the dll where fixed-length arrays are
+used instead of dynamic structures which makes us use more memory than
+necessary or limits the capabilities of the Cygwin32 layer.
+
+@section Programs can't deal with // pathname scheme in arguments
+gcc and other tools aren't fully compatible with the current pathname
+scheme: it can't grok an argument of -I//d/foo which means it is vital
+that when attempting to self-host, that only normal paths with single
+slashes are used.
+
+@section DOS special filenames
+Files cannot be named com1, lpt1, or aux (to name a few); either as
+the root filename or as the extension part.  If you do, you'll have
+trouble.  Unix programs don't avoid these names which can make things
+interesting.  Eg, the perl distribution has a file called @code{aux.sh}.
+The perl configuration tries to make sure that @code{aux.sh} is there,
+but an operation on a file with the magic letters 'aux' in it will hang.
+
+@section User defined mallocs.
+If you define a function called @code{malloc} in your own code, and link
+with the DLL, the DLL @emph{will} call your @code{malloc}.  You'd better
+make sure that your malloc more or less works.
+
+If you run any programs from the DOS command prompt, rather than from in
+bash, the DLL will try and expand the wildcards on the command line.
+This process uses @code{malloc} @emph{before} your main line is started.
+If you have written your own @code{malloc} to need some initialization
+to occur after @code{main} is called, then this will surely break.
+
+@section Mixed case filenames.
+The perl config causes some other problems too; the config<foo>.SH
+scripts generate a file called "Makefile", and use and delete a file
+called "makefile" on the way.  Because of NT's case insensitivity, this
+will nuke Makefile, leaving you with nothing.
+@section How do I set /etc up?
+
+If you want a valid /etc set up (so "ls -l" will display correct
+user information for example) and if you are running NT (preferably
+with an NTFS file system), you should just need to create the /etc
+directory on the filesystem mounted as / and then use mkpasswd and
+mkgroup to create /etc/passwd and /etc/group respectively.  Since
+Windows 95's Win32 API is less complete, you're out of luck if you're
+running Windows 95!
+
+@section How do I rebuild the tools on my NT box?
+
+Assuming that you have the src installed as /src, will build in
+the directory /obj, and want to install the tools in /install:
+
+@example
+bash
+cd /obj
+/src/configure --prefix=/install -v > configure.log 2>&1
+make > make.log 2>&1
+make install > install.log 2>&1
+@end example
+
+@section How do you share files between Unix and NT?
+
+During development, we have both Unix boxes running Samba and
+NT/Windows 95 dual-boot machines.  We often build with cross-compilers
+under Unix and copy binaries and source to the NT/Win 95 system
+or just toy with them directly off the Samba-mounted partition.
+While the tools should work fine with NTFS, we usually use the FAT
+filesystem so we can also access the files under Windows 95.
+
+@section How can I compile a powerpc NT toolchain?
+
+Unfortunately, this will be difficult.  It hasn't been built for
+some time (late 1996) since Microsoft has dropped development of
+powerpc NT.  Exception handling/signals support semantics/args have been
+changed for x86 and not updated for ppc so the ppc specific support would
+have to be rewritten.  We don't know of any other incompatibilities.
+Please send us patches if you do this work!
+
+@section How can I compile an Alpha NT toolchain?
+
+We have not ported the tools to Alpha NT and do not have plans to
+do so at the present time.  We would be happy to add support
+for Alpha NT if someone contributes the changes to us.
+
+@section How can I adjust the heap/stack size of an application?
+
+Pass heap/stack linker arguments to gcc.  To create foo.exe with
+a heap size of 1024 and a stack size of 4096, you would invoke
+gcc as:
+
+@code{gcc -Wl,--heap,1024,--stack,4096 -o foo foo.c}
+
+@section Why do I get a message saying Out of Queue slots?
+
+"Out of queue slots!" generally occurs when you're trying to remove
+many files that you do not have permission to remove (either because
+you don't have permission, they are opened exclusively, etc).  What
+happens is gnuwin32 queues up these files with the supposition that it
+will be possible to delete these files in the future.  Assuming that
+the permission of an affected file does change later on, the file will
+be deleted as requested.  However, if too many requests come in to
+delete inaccessible files, the queue overflows and you get the message
+you're asking about.  Usually you can remedy this with a quick chmod,
+close of a file, or other such thing.  (Thanks to Larry Hall for
+this explanation).
+
+@section How can I find out which dlls are needed by an executable?
+
+objdump -p provides this information.
+
+@section How is the Cygwin32 fork() implemented?
+
+Cygwin32 fork() essentially works like a non-copy on write version
+of fork() (like old Unix versions used to do).  Because of this it
+can be a little slow.  In most cases, you are better off using the
+spawn family of calls if possible.
+
+Here's how fork works as of beta 18:
+
+Parent initializes a space in the Cygwin process
+table for child.  Parent creates child suspended using Win32 CreateProcess
+call, giving the same path it was invoked with itself.  Parent
+calls setjmp to save its own context and then sets a pointer to this
+in the Cygwin32 shared memory area (shared among all Cygwin32 tasks).
+Parent fills in the childs .data and .bss sections by copying from
+its own address space into the suspended child's address space.
+Parent then starts the child.  Parent waits on mutex for child to get
+to safe point.  Child starts and discovers if has been forked and
+then longjumps using the saved jump buffer.  Child sets mutex parent
+is waiting on and then blocks on another mutex waiting for parent to
+fill in its stack and heap.  Parent notices child is in safe area,
+copies stack and heap from itself into child, releases the mutex
+the child is waiting on and returns from the fork call.  Child wakes
+from blocking on mutex, recreates any mmapped areas passed to it via
+shared area and then returns from fork itself.
+
+@section How does wildcarding (globbing) work?
+
+If an application using CYGWIN.DLL starts up, and can't find the
+@code{PID} environment variable, it assumes that it has been started
+from the a DOS style command prompt.  This is pretty safe, since the
+rest of the tools (including bash) set PID so that a new process knows
+what PID it has when it starts up.
+
+If the DLL thinks it has come from a DOS style prompt, it runs a
+`globber' over the arguments provided on the command line.  This means
+that if you type @code{LS *.EXE} from DOS, it will do what you might
+expect.
+
+Beware: globbing uses @code{malloc}.  If your application defines
+@code{malloc}, that will get used.  This may do horrible things to you.
+
+@section How can I access other drives?
+
+Since beta 16, you can refer to random drive letters in your
+paths.  To do an "ls" on drive letter a:, do the following:
+
+@example
+bash$ ls //a/
+@end example
+
+Or you can use the "mount" command to mount it so you can refer
+to it with only single slashes:
+
+@example
+bash$ mount a:/ /mnt/floppy
+bash$ ls /mnt/floppy
+....
+@end example
+
+If you want to write to the raw device, then use @code{/dev/fd0} for
+drive A or @code{/dev/fd1} for drive B.
+
+e.g.
+@example
+bash$ tar cf /dev/fd0 *.exe
+bash$ tar tvf /dev/fd0
+....
+@end example
+
+Note that you can also access UNC paths in the standard way.  Because of
+the drive letter shortcut mentioned above, machine names in UNC paths
+must be more than one character long.
+
+@section How can I get at other disks?
+
+You can mount them using the 'mount' command.  Eg, to get to a share
+
+@example
+$ mount i:/a /a
+$ mount 
+i:\a on /a type dos (normal)
+c:\ on / type dos (normal)
+@end example
+
+This is done with textual substitution whenever a file is opened.
+So if you're going to do @code{ls /a/bar} on a mount like the above
+the guts will turn that into @code{ls i:/a/bar}.
+
+Note that you only need to mount drives once.  The mapping is kept
+in the registry so mounts stay valid pretty much indefinitely.
+You can only get rid of them with umount (or the registry editor).
+
+The '-b' option mounts in binary mode.
+
+If you want to put the release onto a drive that's not drive 'C', then you
+@emph{have} to use the @code{mount} command if you want to make progress.
+
+Eg, assume that you've installed the tree into @code{f:/fish}, so that
+the binaries live in @code{f:/fish/bin} etc.
+@example
+$ mount f:/fish /usr
+@end example
+This means that when you type @code{ls /usr/bin}, cygwin.dll will look in
+@code{f:/fish/bin}.
+
+@section Are mixed-case filenames possible with GNU-Win32?
+
+Several Unix programs expect to be able to use to filenames
+spelled the same way, but with different case.  A prime example
+of this is perl's configuration script, which wants @code{Makefile} and
+@code{makefile}.  WIN32 can't tell the difference between files with
+just different case, so the configuration fails.
+
+In releases prior to beta 16, mount had a special mixed case option
+which renamed files in such a way as to allow mixed case filenames.
+We chose to remove the support when we rewrote the path handling
+code for beta 16.
+
+@section How do I build a DLL?
+
+There's documentation that explains the process on the main gnu-win32
+project web page (http://www.cygnus.com/misc/gnu-win32).
+
+@section How can I set a breakpoint at MainCRTStartup?
+
+Set a breakpoint at *0x401000 in gdb and then run the program in
+question.
+
+@section When it hangs, how do I get it back?
+
+Sometimes the tools will just stop, (easy to do if you try and read a
+file called aux.sh).  To get your world back, hit ^C to return to
+bash or the cmd prompt.
+
+If you start up another shell, and applications don't run, it's a good
+bet that the hung process is still running somewhere.
+
+If you have pview, fire it up and kill it. (if it's the aux
+thing, then the app might well be cp).  If you don't have
+pview or an equivalent then you'll probably have to log out.
+
+@section How is the DOS/Unix CR/LF thing handled?
+
+By default, tools that deal with binaries (e.g. objdump) operate in unix
+binary mode and tools that deal with text files (e.g. bash) operate in
+text mode.
+
+You can enable the DOS CR/LF end of line in a text file mode by
+setting fmode_binary setting in the registry to 0.  I've tried to keep
+the file types 'natural'.  By default a file is opened in text mode.
+This can be changed by adding @code{O_BINARY} to the second argument of
+an @code{open} call, or @code{"b"} to second argument of an
+@code{fopen} call.  You can also call @code{setmode (fd, O_BINARY)}.
+
+@code{lseek} now only works in binary mode.
+
+@section How can I build a relocatable dll?
+
+You must execute the following sequence of five commands, in this
+order:
+
+@example
+$(LD) -s --base-file BASEFILE --dll -o DLLNAME OBJS LIBS -e ENTRY
+
+$(DLLTOOL) --as=$(AS) --dllname DLLNAME --def DEFFILE \
+        --base-file BASEFILE --output-exp EXPFILE
+
+$(LD) -s --base-file BASEFILE EXPFILE -dll -o DLLNAME OBJS LIBS -e ENTRY
+
+$(DLLTOOL) --as=$(AS) --dllname DLLNAME --def DEFFILE \
+	--base-file BASEFILE --output-exp EXPFILE
+
+$(LD) EXPFILE --dll -o DLLNAME OBJS LIBS -e ENTRY
+@end example
+
+In this example, $(LD) is the linker, ld.
+
+$(DLLTOOL) is dlltool.
+
+$(AS) is the assembler, as.
+
+DLLNAME is the name of the DLL you want to create, e.g., tcl80.dll.
+
+OBJS is the list of object files you want to put into the DLL.
+
+LIBS is the list of libraries you want to link the DLL against.  For
+example, you may or may not want -lcygwin.  You may want -lkernel32.
+Tcl links against -lcygwin -ladvapi32 -luser32 -lgdi32 -lcomdlg32
+-lkernel32.
+
+DEFFILE is the name of your definitions file.  A simple DEFFILE would
+consist of ``EXPORTS'' followed by a list of all symbols which should
+be exported from the DLL.  Each symbol should be on a line by itself.
+Other programs will only be able to access the listed symbols.
+
+BASEFILE is a temporary file that is used during this five stage
+process, e.g., tcl.base.
+
+EXPFILE is another temporary file, e.g., tcl.exp.
+
+ENTRY is the name of the function which you want to use as the entry
+point.  This function should be defined using the WINAPI attribute,
+and should take three arguments:
+        int WINAPI startup (HINSTANCE, DWORD, LPVOID)
+
+This means that the actual symbol name will have an appended @@12, so if
+your entry point really is named @samp{startup}, the string you should
+use for ENTRY in the above examples would be @samp{startup@@12}.
+
+If your DLL calls any cygwin32 functions, the entry function will need
+to initialize the cygwin32 impure pointer.  You can do that by declaring
+a global variable @samp{_impure_ptr}, and then initializing it in the
+entry function.  Be careful not to export the global variable
+@samp{_impure_ptr} from your DLL; that is, do not put it in DEFFILE.
+
+@example
+/* This is a global variable.  */
+struct _reent *_impure_ptr;
+extern struct _reent *__imp_reent_data;
+
+int entry (HINSTANT hinst, DWORD reason, LPVOID reserved)
+@{
+  _impure_ptr = __imp_reent_data;
+  /* Whatever else you want to do.  */
+@}
+@end example
+
+You may put an optional `--subsystem windows' on the $(LD) lines.  The
+Tcl build does this, but I admit that I no longer remember whether
+this is important.
+
+You may put an optional `--image-base BASEADDR' on the $(LD) lines.
+This will set the default image base.  Programs using this DLL will
+start up a bit faster if each DLL occupies a different portion of the
+address space.  Each DLL starts at the image base, and continues for
+whatever size it occupies.
+
+Now that you've built your DLL, you may want to build a library so
+that other programs can link against it.  This is not required: you
+could always use the DLL via LoadLibrary.  However, if you want to be
+able to link directly against the DLL, you need to create a library.
+Do that like this:
+
+$(DLLTOOL) --as=$(AS) --dllname DLLNAME --def DEFFILE --output-lib LIBFILE
+
+$(DLLTOOL), $(AS), DLLNAME, and DEFFILE are the same as above.  Make
+sure you use the same DLLNAME and DEFFILE, or things won't work right.
+
+LIBFILE is the name of the library you want to create, e.g.,
+libtcl80.a.  You can then link against that library using something
+like -ltcl80 in your linker command.
+
+@section How can I debug what's going on?
+
+You can debug your application using @code{gdb}.  Make sure you
+compile it with the -g flag!  If your application calls functions in
+MS dlls, gdb will complain about not being able to load debug information
+for them when you run your program.  This is normal since these dlls
+don't contain debugging information (and even if they did, that debug
+info would not be compatible with gdb).
+
+@section Can I use a system trace mechanism instead?
+
+Yes.  At the most basic level, you can set the @code{STRACE}
+environment variable to @code{1}, and get a whole load of
+debug information on your screen whenever a Cygwin32 app runs.
+This is an especially useful tool to use when tracking bugs down
+inside the Cygwin32 library.  @code{STRACE} can be set to different
+values to achieve different amounts of granularity.  You can set it
+to @code{0x10} for information about syscalls or @code{0x800} for
+signal/process handling-related info, to name two.  The strace
+mechanism is well documented in the Cygwin32 library sources in the
+file @code{winsup/include/sys/strace.h}.
+
+@section How do symbolic links work?
+
+CYGWIN.DLL generates link files with a magic header.  When 
+you open a file or directory that is a link to somewhere else, it
+opens the file or directory listed in the magic header.
+
+@section The linker complains that it can't find something.
+
+A common error is to put the library on the command line before
+the thing that needs things from it.
+
+This is wrong @code{gcc -lstdc++ hello.cc}.
+This is right @code{gcc hello.cc -lstdc++}.
+
+@section I use a function I know is in the API, but I still get a link
+error.
+
+The function probably isn't declared in the header files, or
+the UNICODE stuff for it isn't filled in.
+
+@section Can you make dll's that are linked against libc ?
+
+Yes.
+
+@section Why do some files, which are not executables have the 'x' type.
+
+When working out the unix-style attribute bits on a file, the library
+has to fill out some information not provided by the WIN32 API.  
+
+It guesses that files ending in .exe and .bat are executable, as are
+ones which have a "#!" as their first characters.
+
+@section Why won't you/the mailing list answer my questions?
+
+Perhaps your question has an answer that's already in the FAQ.
+Perhaps nobody has time to answer your question.  Perhaps nobody
+knows the answer...
+
+@section How do the net-related functions work?
+
+The network support in cygwin32 is supposed to provide the Unix API, not
+the winsock API.
+
+There are differences between the semantics of functions with the same
+name under the API.
+
+E.g., the select system call on Unix can wait on a standard file handles
+and handles to sockets.  The select call in winsock can only wait on
+sockets.  Because of this, cygwin.dll does a lot of nasty stuff behind
+the scenes, trying to persuade various winsock/win32 functions to do what
+a Unix select would do.
+
+If you are porting an application which already uses winsock, then
+using the net support in cygwin32 is wrong.
+
+But you can still use native winsock, and use cygwin32.  The functions
+which cygwin.dll exports are called 'cygwin32_<name>'.  There
+are a load of defines which map the standard Unix names to the names
+exported by the dll - check out include/netdb.h:
+
+@example
+..etc..
+void		cygwin32_setprotoent (int);
+void		cygwin32_setservent (int);
+void		cygwin32_setrpcent (int);
+..etc..
+#ifndef __INSIDE_CYGWIN_NET__
+#define endprotoent cygwin32_endprotoent 
+#define endservent cygwin32_endservent 
+#define endrpcent  cygwin32_endrpcent  
+..etc..
+@end example
+
+The idea is that you'll get the Unix->cygwin32 mapping if you include
+the standard Unix header files.  If you use this, you won't need to
+link with libwinsock.a - all the net stuff is inside the dll.
+
+The mywinsock.h file is a standard winsock.h which has been hacked to
+remove the bits which conflict with the standard Unix API, or are
+defined in other headers.  E.g., in mywinsock.h, the definition of
+struct hostent is removed.  This is because on a Unix box, it lives in
+netdb.  It isn't a good idea to use it in your applications.
+
+As of the b19 release, this information may be slightly out of date.
+
+@section I don't want Unix sockets, how do I use normal Win32 winsock?
+
+To use the vanilla Win32 winsock, you just need to #define Win32_Winsock
+and #include "windows.h" at the top of your source file(s).  You'll also
+want to add -lwsock32 to the compiler's command line so you link against
+libwsock32.a.
+
+@section Why the weird directory structure?
+
+Why are cpp.exe, cc1.exe, etc., not in the bin directory?
+
+Why more than one lib and include directory?
+H-i386-cygwin32\lib\gcc-lib\...\cygnus-2.7.2-960712\include
+x86-cygwin32\include
+x86-cygwin32\H-i386-cygwin32\i386-cygwin32\include
+
+This way multiple releases for different hosts and targets can all
+coexist in the same tree.  H-i386-cygwin32 means hosted on
+i386-cygwin32, common files shared by all hosts are in the top level
+directories, target-specific files are in the
+H-i386-cygwin32/i386-cygwin32
+directory, etc...
+
+If you had a server sharing files to a ppc NT machine and an x86 NT
+machine, you could have both an H-i386-cygwin32 and an
+H-powerpcle-cygwin32 directory without having to duplicate the top level
+files that are the same for both hosts.  If you built and installed an
+i386-cygwin32 x m68k-coff cross-compiler (I'm not sure if this is
+possible yet, just an example), you would have an
+H-i386-cygwin32/m68k-aout with its target-specific files and some
+m68k-aout- prefixed binaries in H-i386-cygwin32/bin.
+
+Normally we also have another higher level directory that identifies the
+release.  If/when multiple gnuwin32 releases can coexist with different
+dll versions, you might have
+gnuwin32/b16/H-i386-cygwin32
+gnuwin32/b17/H-i386-cygwin32
+...
+
+In any case, this does add complexity to the directory structure but
+it's worth it for people with more complex installations.
+
+@section Can I mix objects compiled with msvc++ and gcc?
+
+Yes, this supposedly works.  The key seems to be using MS's LINK.EXE
+to do the linking instead of GNU ld.  There may be issues with
+constructor calls for C++/Obj C.
+
+@section Can I use the gdb debugger to debug programs built by VC++?
+
+No, not for full (high level source language) debugging.
+The Microsoft compilers generate a different type of debugging
+symbol information, which gdb does not understand.
+
+However, the low-level (assembly-type) symbols generated by
+Microsoft compilers are coff, which gdb DOES understand.
+Therefore you should at least be able to see all of your
+global symbols; you just won't have any information about
+data types, line numbers, local variables etc.
+
+@section How secure is Cygwin32 in a multi-user environment?
+
+Cygwin32 is not secure in a multi-user environment.  For
+example if you have a long running daemon such as "inetd"
+running as admin while ordinary users are logged in, or if
+you have a user logged in remotely while another user is logged
+into the console, one cygwin client can trick another into
+running code for it.  In this way one user may gain the
+priveledge of another cygwin program running on the machine.
+This is because cygwin has shared state that is accessible by 
+all processes.
+
+(Thanks to Tim Newsham (newsham@@lava.net) for this explanation).
+
+@section Where can I find info on x86 assembly?
+
+CPU reference manuals for Intel's current chips are available in
+downloadable PDF form on Intel's web site:
+
+@file{http://developer.intel.com/design/pro/MANUALS/242691.HTM}
+
+@section What version numbers are associated with Cygwin32?
+
+There is a version number for each gnu-win32 public release.
+This gets incremented each time a release occurs.
+
+There is a cygwin.dll major version number which only changes when
+incompatible changes are made to the way Cygwin32 uses the registry.
+This has been "17" since the beta 16 release.
+
+There is a cygwin.dll minor version which gets incremented whenever
+a public release happens or a major change is made in functionality
+in the dll.
+
+"uname -v" prints the cygwin.dll version numbers as major.minor.
+
+Finally there is a Cygwin32 registry version number which only
+changes when incompatible changes are made to the way Cygwin32
+uses the registry.  This has been "B15.0" since the beta 16 release.
+
+@section Shell scripts aren't running properly from my makefiles?
+
+You need to have . (dot) in your $PATH.  You should NOT need to add
+/bin/sh in front of each and every shell script invoked in your
+Makefiles.
+
+@section Do anti-virus programs like gnu-win32?
+
+One person reported that McAfee VirusScan for NT (and others?) is
+incompatible with gnu-win32.  This is because it tries to scan the
+newly loaded shared memory in the cygwin.dll, which can cause fork()s
+to fail, wreaking havoc on many of the tools.
+
+@section Are GNU-WIN32 and CYGWIN32 deliberately lame names?
+
+We're trying to phase out GNU-WIN32 in the source, because
+of two pretty good reasons - a) it's not all GNU code and b)
+it doesn't present a WIN32 API.
+
+We're using cygwin32 as the configuration cookie for the moment.
+But this may be changed if a better name becomes available.
+
+There is some logic in this naming scheme.  The entire suite of tools
+is referred to as 'gnu-win32', and the library/API which
+they run on is the Cygwin32 API.  One day, someone else may write
+some more code - for example, maybe 'bsd-win32'.  It would still
+run on top of the Cygwin32 API.
+
+@section Why did we change the preprocessor defines in beta 16?
+
+They were too confusing and very well defined prior to this release.
+Now there's _WIN32 for access to the Win32 API and __CYGWIN32__ for
+access to the cygwin32 environment provided by the dll.
+
+We chose _WIN32 because this is what Microsoft defines in VC++ and
+we thought it would be a good idea for compatibility with VC++ code
+to follow their example.  We use _MFC_VER to indicate code that should
+be compiled with VC++.
+
+@section Why is gcc failing?
+
+If the error is "gcc: installation problem, cannot exec `cpp':
+No such file or directory", the GCC_EXEC_PREFIX environment variable
+hasn't been set correctly.  If this your problem, you should
+go read the README.txt that accompanied this release since there
+are other things like creating /tmp that you may not have done
+either.  You should not need to set GCC_EXEC_PREFIX if you installed
+the tools in the default location.
+
+@section Why is make behaving badly?
+
+The make included in beta 19 and later defaults to a win32 mode in
+which backslashes in filenames are permitted and cmd.exe/command.com
+is used as the sub-shell.  In this mode, escape characters aren't
+allowed among other restrictions.  For this reason, you must set
+the environment variable MAKE_MODE to UNIX to run make on ordinary Unix
+Makefiles.
+
+@section GDB from beta 19 won't run!  What's wrong?
+
+If the error says "Tcl_Init failed: Can't find a usable init.tcl...",
+then your TCL_LIBRARY environment variable is probably set wrong.
+If you installed the distribution in g:\cygnus\b19, TCL_LIBRARY should
+be set to G:/cygnus/b19/share/tcl8.0, using all forward slashes.
+
+If the error says "Unable to find main.tcl...", your GDBTK_LIBRARY
+environment variable isn't a valid path.  If you installed the
+distribution in g:\cygnus\b19, GDBTK_LIBRARY should be set to
+G:/cygnus/b19/share/gdbtcl with all forward slashes.
+
+If the error says something like "invalid command name
+'create_command_window'", your GDBTK_LIBRARY environment
+variable probably contains backslashes instead of all
+forward slashes.
+
+If you installed the tools in the default install location you should not
+need to set any of these environment variables.
+
+@section Where did the man/info pages go?
+
+In order to save space and download times, we have stopped providing
+the man/info files for the tools with the binary install since we are
+not yet providing a man page or info reader.  Both types of
+documentation are available in a tar file available from the project ftp
+site.  Or consult the online documentation over the WWW.
+
+@section Where can I download the config files for other processor
+types?
+
+In order to save space and download times, we have stripped config
+directories for processors other than the x86 from the sources available
+from the project ftp site.  If you would like to rebuild the tools for
+other hosts, you should obtain the latest sources for each tool in
+question from the Free Software Foundation (FSF).
+
+@section What is V?
+
+(excerpted from @file{http://www.cs.unm.edu/~wampler/aboutv.html})
+
+V is a portable C++ GUI Framework intended to develop a wide variety of
+applications on different graphical interface platforms. While it is
+probably not suitable for developing state-of-the art commercial
+applications with all the latest interface components, it is very
+complete and suitable for a large majority of custom GUI applications.
+Applications developed using V will have the look and feel of the native
+platform, yet will be portable across platforms.
+
+Most standard GUI objects are supported by V, including windows with
+menus, status bars, tool bars, and a drawing canvas; modal and modeless
+dialogs with the most common controls (buttons, lists, labels, text
+entry, check and radio buttons, etc.); and portable printing support.
+
+...
+
+V is also an excellent tool for developing many custom applications. It
+is a suitable tool for research labs, small custom software shops,
+engineering firms, or individuals that need to develop an application
+that needs a graphical user interface, especially for multiple
+platforms. Because of its design, V is far easier to learn and use than
+the native GUI tool kits. It is also easier to learn than larger
+frameworks such as MFC or OWL.  Since it is freeware, licensed under the
+GNU Library General Public License, it will always be available with its
+source code for public use.
+
+For more information, please check out the V WWW page at
+@file{http://www.cs.unm.edu/~wampler/vgui/vgui.html}.
+
+@section Why not use DJGPP ?
+
+DJGPP is a similar idea, but for DOS instead of Win95 and Windows NT.
+DJGPP uses a "DOS extender" to provide a more reasonable operating
+interface for its applications.  GNU-WIN32 doesn't have to do that as
+all the applications are native WIN32.   GNU-WIN32 can call all the
+Win32 API functions, so you can write programs which use the Windows
+GUI.  Perhaps one day GNU-WIN32 will run on the Alpha and MIPS
+processors as well.
+
+You can get more info on DJGPP by following
+@file{http://www.delorie.com}.

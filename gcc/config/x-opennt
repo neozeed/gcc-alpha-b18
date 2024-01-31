@@ -1,0 +1,51 @@
+# These are host overrides
+# From config dir
+
+# OpenNT doesn't yet have alloca; it's better to use the portable C version for
+# bootstrapping.  Do this by defining ALLOCA.
+
+ALLOCA = alloca.o
+
+# See all the declarations.
+FIXPROTO_DEFINES = -D_XOPEN_SOURCE
+
+STMP_FIXPROTO =
+RANLIB = :
+RANLIB_TEST = false
+OLDCC = cc
+MAKE = make
+SHELL = sh
+SYMLINK = cp
+INSTALL = $(srcdir)/install.sh -c
+
+# This is redundant; configure overrides it.
+prefix = $${OPENNT_ROOT}/usr/contrib
+
+# We really need BISON, so we can't use OpenNT's YACC
+
+CC = @CC@
+X_CFLAGS=
+CLIB = 
+LDFLAGS = 
+
+LIBGCC2_INCLUDES = -idirafter $${OPENNT_ROOT}/usr/include
+# Headers come from a funny place
+SYSTEM_HEADER_DIR=$${OPENNT_ROOT}/usr/include
+
+# Header files that are made available under the same name
+# to programs compiled with GCC.  
+# For OpenNT these are really only used during the built-in regression,
+# and we don't want to override any of the standard names.
+USER_H =  \
+    $(srcdir)/ginclude/varargs.h $(srcdir)/ginclude/va-alpha.h \
+    $(srcdir)/ginclude/va-h8300.h $(srcdir)/ginclude/va-i860.h \
+    $(srcdir)/ginclude/va-i960.h $(srcdir)/ginclude/va-mips.h \
+    $(srcdir)/ginclude/va-m88k.h $(srcdir)/ginclude/va-mn10300.h \
+    $(srcdir)/ginclude/va-pa.h \
+    $(srcdir)/ginclude/va-pyr.h $(srcdir)/ginclude/va-sparc.h \
+    $(srcdir)/ginclude/va-clipper.h $(srcdir)/ginclude/va-spur.h \
+    $(srcdir)/ginclude/va-m32r.h $(srcdir)/ginclude/va-sh.h \
+    $(srcdir)/ginclude/iso646.h $(srcdir)/ginclude/va-ppc.h \
+    $(srcdir)/ginclude/va-d10v.h \
+    $(srcdir)/ginclude/proto.h $(EXTRA_HEADERS) \
+    $(LANG_EXTRA_HEADERS)

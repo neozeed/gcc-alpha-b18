@@ -1,0 +1,145 @@
+#! /bin/sh
+
+#srcroot=$1
+
+exec < to-be-built
+
+while read type arg
+do
+	case x$type in
+	xTARGET)
+		target=$arg
+		continue  ;;
+	xPWD)
+		case $arg in
+		$curdir)
+			;;
+		*)
+			case $seendirs in
+			*" $arg "*)
+				curdir=$arg
+				exec >> $curdir/nmake.mak
+				;;
+			*)
+				curdir=$arg
+				seendirs="$seendirs $arg "
+				exec > $curdir/nmake.mak
+				;;
+			esac
+			;;
+		esac
+		continue  ;;
+	xSRCROOT)
+		srcroot=$arg
+		continue  ;;
+	xCMD)
+		cmd=$arg ;;
+	x)
+		type=BLANK
+		continue  ;;
+	*)
+		echo Unknown line "'$type $arg'" 1>&2
+		continue  ;;
+	esac
+
+	set $cmd
+	cmd=$1
+	shift
+
+	set `echo x $@ | sed -e 's/\.ores/.res/g' -e 's/\.o/.obj/g' -e 's/\.a/.lib/g' -e "s|$srcroot|\$(SRCROOT)|g" -e 's/&/"&"/g'`
+	shift
+	args=$@
+
+	target=`echo $target | sed -e 's/\.ores/.res/g' -e 's/\.o/.obj/g' -e 's/\.a/.lib/g'`
+
+	echo
+
+	deps=
+	while [ $# -gt 0 ]
+	do
+		case $1 in
+		-*) ;;
+		*.obj | *.lib | *.c | *.cpp | *.res | *.rc)
+			deps="$deps $1"	;;
+		esac
+	shift
+	done
+
+	deps=`echo $deps | sed -e "s|$target[ 	]||"`
+
+	case $cmd in
+	recordit-cc)
+		case $target in
+		*.obj) ;;
+		*) target=${target}.exe ;;
+		esac
+
+		args="\$(CC) $args"
+		;;
+	recordit-ar)
+		args="\$(AR) -out:$target $deps"
+		;;
+	recordit-rc)
+		args="\$(RC) $args"
+		;;
+	*)
+		echo "Unknown compiler command $1!!!" 1>&2
+	esac
+
+	echo "$target: $deps
+	$args"
+
+	case $target in
+	gdb.exe | *.lib)
+		echo
+		echo "all:	$target"
+		echo
+		;;
+	esac
+done
+
+# Now, build up the top level nmake.mak file
+
+exec > nmake.mak
+
+cat <<END
+!include "setvars.mak"
+
+gdbdir=$(objdir)/gdb
+INCLUDE=-I$(msvc)/include -I$(msvc)/mfc/include
+
+all:	setvars all-gdb
+
+setvars:
+	set CL=-nologo -G4 -MT -W3 -GX -Zi -YX -Od -FR$(gdbdir) -Fp$(gdbdir)/gdb.pch -Fd$(gdbdir)/gdb.pdb $(INCLUDE) -DALMOST_STDC -DWIN32 -D_WINDOWS -D_MBCS
+
+	set AR=lib -nologo
+	set SRCROOT=$(SRCROOT)
+	set RC=rc $(INCLUDE) -l 0x409 -d _DEBUG
+	set LIB=$(msvc)/lib;$(msvc)/mfc/lib
+#	set LINK=-debug -subsystem:console
+	set LINK=-debug -subsystem:windows -machine:I386 -incremental:yes -nologo -pdb:$(gdbdir)/gdb.pdb
+
+END
+
+curdir=`pwd`
+
+dirlist=`echo $seendirs | sed -e "s|$curdir/||g"`
+deps=all-`echo $dirlist | sed -e "s|/|-|g" -e "s|[ 	][ 	]*| all-|g" -e "s|all-gdb||"`
+
+for dir in $dirlist
+do
+	dep=`echo $dir | sed -e "s|/|-|"`
+	case $dir in
+	gdb) idep=$deps ;;
+	*) idep= ;;
+	esac
+	dir=`echo $dir | tr / '\\\\'`
+	echo "all-$dep: setvars $idep
+	cd $dir
+	nmake -nologo -f nmake.mak all"
+	dir=`echo $dir | sed -e "s|[^\\][^\\]*|..|g"`
+	echo "	cd $dir
+"
+done
+

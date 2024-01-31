@@ -1,0 +1,35 @@
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+
+configure:622: checking host system type
+configure:643: checking target system type
+configure:661: checking build system type
+configure:1454: checking for gcc
+configure:1531: checking whether the C compiler (gcc  ) works
+configure:1545: gcc -o conftest    conftest.c  1>&5
+configure:1565: checking whether the C compiler (gcc  ) is a cross-compiler
+configure:1570: checking whether we are using GNU C
+configure:1594: checking whether gcc accepts -g
+configure:1632: checking for a BSD compatible install
+configure:1683: checking how to run the C preprocessor
+configure:1747: checking for string.h
+configure:1747: checking for stdlib.h
+configure:1747: checking for memory.h
+configure:1747: checking for strings.h
+configure:1747: checking for unistd.h
+configure:1747: checking for stdarg.h
+configure:1747: checking for varargs.h
+configure:1747: checking for errno.h
+configure:1747: checking for sys/types.h
+configure:1787: checking whether compiling a cross-assembler
+configure:1802: checking for working alloca.h
+configure:1835: checking for alloca
+configure:2029: checking for inline
+configure:2073: checking for unlink
+configure:2130: checking for sbrk
+configure:2187: checking for working assert macro
+configure:2249: checking whether declaration is required for strstr
+configure:2286: checking whether declaration is required for malloc
+configure:2323: checking whether declaration is required for free
+configure:2360: checking whether declaration is required for sbrk
+configure:2400: checking whether declaration is required for errno

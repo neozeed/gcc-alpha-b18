@@ -1,0 +1,9 @@
+# Warning this fragment is automatically generated
+# RANLIB = ranlib
+
+# If the C include files are C++-ready (with extern "C"), uncomment next line:
+# WRAP_C_INCLUDES =
+
+# Flags to pass to gen-params when building _G_config.h.
+# For example: G_CONFIG_ARGS = size_t="unsigned long"
+G_CONFIG_ARGS =

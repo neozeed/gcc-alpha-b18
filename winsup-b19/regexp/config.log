@@ -1,0 +1,11 @@
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+
+configure:530: checking for gcc
+configure:607: checking whether we are using GNU C
+configure:616: gcc -E conftest.c
+configure:631: checking whether gcc accepts -g
+configure:706: checking host system type
+configure:727: checking target system type
+configure:745: checking build system type
+configure:810: checking for a BSD compatible install

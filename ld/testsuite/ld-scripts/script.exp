@@ -1,0 +1,69 @@
+# Test basic linker script functionality
+# By Ian Lance Taylor, Cygnus Support
+
+set testname "script"
+
+if ![ld_assemble $as $srcdir/$subdir/script.s tmpdir/script.o] { 
+    unresolved $testname
+    return
+}
+
+proc check_script { useImageBase } {
+    global nm
+    global testname
+    global nm_output
+
+    if ![ld_nm $nm tmpdir/script] {
+	unresolved $testname
+    } else {
+	if {![info exists nm_output(text_start)] \
+	     || ![info exists nm_output(text_end)] \
+	     || ![info exists nm_output(data_start)] \
+	     || ![info exists nm_output(data_end)]} {
+	    send_log "bad output from nm\n"
+	    verbose "bad output from nm"
+	    fail $testname
+	} else {
+	    if {$useImageBase && [info exists nm_output(__image_base__)]} {
+		set ImageBase $nm_output(__image_base__)
+	    } else {
+		set ImageBase 0
+	    }
+	    if {[expr $nm_output(text_start)] != [expr $ImageBase + 0x100]} {
+		send_log "text_start == $nm_output(text_start)\n"
+		verbose "text_start == $nm_output(text_start)"
+		fail $testname
+	    } else {if {[expr $nm_output(text_end)] < [expr 0x104 + $ImageBase]\
+		    || [expr $nm_output(text_end)] > [expr 0x110 + $ImageBase]} {
+		send_log "text_end == $nm_output(text_end)\n"
+		verbose "text_end == $nm_output(text_end)"
+		fail $testname
+	    } else { if {[expr $nm_output(data_start)] != [expr 0x1000 + $ImageBase]} {
+		send_log "data_start == $nm_output(data_start)\n"
+		verbose "data_start == $nm_output(data_start)"
+		fail $testname
+	    } else {if {[expr $nm_output(data_end)] < [expr 0x1004 + $ImageBase]\
+		    || [expr $nm_output(data_end)] > [expr 0x1010 + $ImageBase]} {
+		send_log "data_end == $nm_output(data_end)\n"
+		verbose "data_end == $nm_output(data_end)"
+		fail $testname
+	    } else {
+		pass $testname
+	    } } } }
+	}
+    }
+}
+
+if ![ld_simple_link $ld tmpdir/script "-T $srcdir/$subdir/script.t tmpdir/script.o"] {
+    fail $testname
+} else {
+    check_script 1
+}
+
+set testname "MRI script"
+
+if ![ld_simple_link $ld tmpdir/script "-c $srcdir/$subdir/scriptm.t"] {
+    fail $testname
+} else {
+    check_script 0
+}

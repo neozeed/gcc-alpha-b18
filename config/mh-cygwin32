@@ -1,0 +1,2 @@
+# custom installation rules for cygwin32 (append .exe to binaries, etc.)
+INSTALL_DOSREL=install-dosrel

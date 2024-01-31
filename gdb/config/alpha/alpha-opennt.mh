@@ -1,0 +1,9 @@
+# Host: Alpha running Opennt
+XDEPFILES= 
+NATDEPFILES= corelow.o fork-child.o procfs.o alphaopennt-nat.o
+XM_FILE= xm-opennt.h
+NAT_FILE= nm-opennt.h
+
+# The below may be temporary; mmalloc relies on sbrk() at the moment
+MMALLOC=
+MMALLOC_CFLAGS=-DNO_MMALLOC

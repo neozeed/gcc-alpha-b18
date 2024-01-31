@@ -1,0 +1,7 @@
+(j:\GCC-MS\CYGWIN\sh.exe 1044) Exception trapped!
+(j:\GCC-MS\CYGWIN\sh.exe 1044) exception C0000005 at 425430
+(j:\GCC-MS\CYGWIN\sh.exe 1044) exception: SP 0 FP 0 A0 0 A1 10000
+(j:\GCC-MS\CYGWIN\sh.exe 1044) exception: a2 0 a3 0 a4 0 a5 10000
+(j:\GCC-MS\CYGWIN\sh.exe 1044) exception: gp 0 ra 425494
+(j:\GCC-MS\CYGWIN\sh.exe 1044) exception is: STATUS_ACCESS_VIOLATION
+(j:\GCC-MS\CYGWIN\sh.exe 1044) Stack trace not yet supported on this machine.

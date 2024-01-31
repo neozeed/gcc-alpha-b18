@@ -1,0 +1,5 @@
+EXPORTS
+	DeregisterEventSource@4
+	RegisterEventSourceA@8
+	ReportEventA@36
+	SetLastError@4

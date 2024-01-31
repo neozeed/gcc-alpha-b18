@@ -1,0 +1,626 @@
+***************
+*** 1,5
+  \input texinfo      @c -*-texinfo-*-
+! @c Copyright 1988 1989 1990 1991 1992 1993 1994 1995
+  @c Free Software Foundation, Inc.
+  @c
+  @c %**start of header 
+--- 1,5 -----
+  \input texinfo      @c -*-texinfo-*-
+! @c Copyright 1988 1989 1990 1991 1992 1993 1994 1995 1997
+  @c Free Software Foundation, Inc.
+  @c
+  @c %**start of header 
+***************
+*** 34,40
+  @set EDITION 4.12
+  
+  @c !!set GDB manual's revision date
+! @set DATE January 1994
+  
+  @c GDB CHANGELOG CONSULTED BETWEEN:
+  @c Fri Oct 11 23:27:06 1991  John Gilmore  (gnu at cygnus.com)
+--- 34,40 -----
+  @set EDITION 4.12
+  
+  @c !!set GDB manual's revision date
+! @set DATE July 1997
+  
+  @c GDB CHANGELOG CONSULTED BETWEEN:
+  @c Fri Oct 11 23:27:06 1991  John Gilmore  (gnu at cygnus.com)
+***************
+*** 61,67
+  of @cite{Debugging with @value{GDBN}: the @sc{gnu} Source-Level Debugger}
+  for @value{GDBN} Version @value{GDBVN}.
+  
+! Copyright (C) 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995
+  Free Software Foundation, Inc.
+  
+  Permission is granted to make and distribute verbatim copies of
+--- 61,67 -----
+  of @cite{Debugging with @value{GDBN}: the @sc{gnu} Source-Level Debugger}
+  for @value{GDBN} Version @value{GDBVN}.
+  
+! Copyright (C) 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1997
+  Free Software Foundation, Inc.
+  
+  Permission is granted to make and distribute verbatim copies of
+***************
+*** 105,111
+  @end tex
+  
+  @vskip 0pt plus 1filll
+! Copyright @copyright{} 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995
+  Free Software Foundation, Inc. 
+  @sp 2
+  Published by the Free Software Foundation @*
+--- 105,111 -----
+  @end tex
+  
+  @vskip 0pt plus 1filll
+! Copyright @copyright{} 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1997
+  Free Software Foundation, Inc. 
+  @sp 2
+  Published by the Free Software Foundation @*
+***************
+*** 210,221 ****
+  
+  @ifclear CONLY
+  You can use @value{GDBN} to debug programs written in C or C++.
+! @c "MOD2" used as a "miscellaneous languages" flag here.
+! @c This is acceptable while there is no real doc for Chill and Pascal.
+! @ifclear MOD2
+  For more information, see @ref{Support,,Supported languages}.
+  @end ifclear
+! @ifset MOD2
+  For more information, see @ref{C,,C and C++}.
+  
+  Support for Modula-2 and Chill is partial.  For information on Modula-2,
+--- 210,219 ----
+  
+  @ifclear CONLY
+  You can use @value{GDBN} to debug programs written in C or C++.
+! @ifclear OTHERLANG
+  For more information, see @ref{Support,,Supported languages}.
+  @end ifclear
+! @ifset OTHERLANG
+  For more information, see @ref{C,,C and C++}.
+  
+  Support for Modula-2 and Chill is partial.  For information on Modula-2,
+***************
+*** 416,422 ****
+  There is absolutely no warranty for @value{GDBN}; type "show warranty" 
+   for details.
+  
+! @value{GDBN} @value{GDBVN}, Copyright 1995 Free Software Foundation, Inc...
+  (@value{GDBP})
+  @end smallexample
+  
+--- 414,420 ----
+  There is absolutely no warranty for @value{GDBN}; type "show warranty" 
+   for details.
+  
+! @value{GDBN} @value{GDBVN}, Copyright 1997 Free Software Foundation, Inc...
+  (@value{GDBP})
+  @end smallexample
+  
+***************
+*** 2403,2408 ****
+  given point in time.
+  
+  @table @code
+  @kindex catch
+  @item catch @var{exceptions}
+  You can set breakpoints at active exception handlers by using the
+--- 2401,2412 ----
+  given point in time.
+  
+  @table @code
++ @ifset ADA
++ @item break exception 
++ Ada mode uses @code{break exception} to breakpoints on exception handlers.
++ @xref{Ada Exceptions}.
++ 
++ @end ifset
+  @kindex catch
+  @item catch @var{exceptions}
+  You can set breakpoints at active exception handlers by using the
+***************
+*** 5139,5145 ****
+  @chapter Using @value{GDBN} with Different Languages
+  @cindex languages
+  
+! @ifset MOD2
+  Although programming languages generally have common aspects, they are
+  rarely expressed in the same manner.  For instance, in ANSI C,
+  dereferencing a pointer @code{p} is accomplished by @code{*p}, but in
+--- 5143,5149 ----
+  @chapter Using @value{GDBN} with Different Languages
+  @cindex languages
+  
+! @ifset OTHERLANG
+  Although programming languages generally have common aspects, they are
+  rarely expressed in the same manner.  For instance, in ANSI C,
+  dereferencing a pointer @code{p} is accomplished by @code{*p}, but in
+***************
+*** 5243,5257 ****
+  If you wish, you may set the language manually.  To do this, issue the
+  command @samp{set language @var{lang}}, where @var{lang} is the name of
+  a language, such as 
+! @ifclear MOD2
+  @code{c}.
+  @end ifclear
+! @ifset MOD2
+  @code{c} or @code{modula-2}.
+  @end ifset
+  For a list of the supported languages, type @samp{set language}.
+  
+! @ifset MOD2
+  Setting the language manually prevents @value{GDBN} from updating the working
+  language automatically.  This can lead to confusion if you try
+  to debug a program when the working language is not the same as the
+--- 5247,5261 ----
+  If you wish, you may set the language manually.  To do this, issue the
+  command @samp{set language @var{lang}}, where @var{lang} is the name of
+  a language, such as 
+! @ifclear OTHERLANG
+  @code{c}.
+  @end ifclear
+! @ifset OTHERLANG
+  @code{c} or @code{modula-2}.
+  @end ifset
+  For a list of the supported languages, type @samp{set language}.
+  
+! @ifset OTHERLANG
+  Setting the language manually prevents @value{GDBN} from updating the working
+  language automatically.  This can lead to confusion if you try
+  to debug a program when the working language is not the same as the
+***************
+*** 5485,5496 ****
+  @node Support
+  @section Supported languages
+  
+  @ifset MOD2
+! @value{GDBN} 4 supports C, C++, and Modula-2.
+  @end ifset
+! @ifclear MOD2
+! @value{GDBN} 4 supports C, and C++.
+! @end ifclear
+  Some @value{GDBN} features may be used in expressions regardless of the
+  language you use: the @value{GDBN} @code{@@} and @code{::} operators,
+  and the @samp{@{type@}addr} construct (@pxref{Expressions,
+--- 5489,5505 ----
+  @node Support
+  @section Supported languages
+  
++ @value{GDBN} 4 supports 
+  @ifset MOD2
+! Modula-2,
+  @end ifset
+! @ifset FORTRAN
+! Fortran,
+! @end ifset
+! @ifset ADA
+! Ada,
+! @end ifset
+! C, and C++.
+  Some @value{GDBN} features may be used in expressions regardless of the
+  language you use: the @value{GDBN} @code{@@} and @code{::} operators,
+  and the @samp{@{type@}addr} construct (@pxref{Expressions,
+***************
+*** 5505,5514 ****
+  books written on each of these languages; please look to these for a
+  language reference or tutorial.
+  
+! @ifset MOD2
+  @menu
+  * C::                           C and C++
+  * Modula-2::                    Modula-2
+  @end menu
+  
+  @node C
+--- 5514,5528 ----
+  books written on each of these languages; please look to these for a
+  language reference or tutorial.
+  
+! @ifset OTHERLANG
+  @menu
+  * C::                           C and C++
++ @ifset MOD2
+  * Modula-2::                    Modula-2
++ @end ifset
++ @ifset ADA
++ * Ada::                         Ada
++ @end ifset
+  @end menu
+  
+  @node C
+***************
+*** 5520,5526 ****
+  to both languages.  Whenever this is the case, we discuss those languages
+  together.
+  @end ifset
+! @ifclear MOD2
+  @c Cancel this below, under same condition, at end of this chapter!
+  @raisesections
+  @end ifclear
+--- 5534,5540 ----
+  to both languages.  Whenever this is the case, we discuss those languages
+  together.
+  @end ifset
+! @ifclear OTHERLANG
+  @c Cancel this below, under same condition, at end of this chapter!
+  @raisesections
+  @end ifclear
+***************
+*** 6014,6020 ****
+  available choices, or to finish the type list for you.
+  @xref{Completion,, Command completion}, for details on how to do this.
+  @end table
+! @ifclear MOD2
+  @c cancels "raisesections" under same conditions near bgn of chapter
+  @lowersections
+  @end ifclear
+--- 6028,6034 ----
+  available choices, or to finish the type list for you.
+  @xref{Completion,, Command completion}, for details on how to do this.
+  @end table
+! @ifclear OTHERLANG
+  @c cancels "raisesections" under same conditions near bgn of chapter
+  @lowersections
+  @end ifclear
+***************
+*** 6460,6465 ****
+  @cindex @code{#} in Modula-2
+  In @value{GDBN} scripts, the Modula-2 inequality operator @code{#} is
+  interpreted as the beginning of a comment.  Use @code{<>} instead.
+  @end ifset
+  @end ifclear
+  
+--- 6474,6819 ----
+  @cindex @code{#} in Modula-2
+  In @value{GDBN} scripts, the Modula-2 inequality operator @code{#} is
+  interpreted as the beginning of a comment.  Use @code{<>} instead.
++ @end ifset
++ 
++ @ifset ADA
++ @node Ada
++ @subsection Ada
++ @cindex Ada
++ 
++ The extensions made to @value{GDBN} for Ada only support
++ output from the @sc{gnu} Ada (GNAT) compiler (which is currently being
++ developed).  Other Ada compilers are not currently supported, and
++ attempting to debug executables produced by them is most likely
++ to be difficult.
++ 
++ @cindex expressions in Ada
++ @menu
++ * Ada Mode Intro::              General remarks on the Ada syntax 
++                                    and semantics supported by Ada mode 
++                                    in @value{GDBN}
++ * Omissions from Ada::          Restrictions on the Ada expression syntax.
++ * Additions to Ada::            Extensions of the Ada expression syntax.
++ * Ada Exceptions::              Setting breakpoints on exception handlers.
++ * Ada Tasks::                   Listing and setting breakpoints in tasks.
++ * Ada Glitches::                Known peculiarities of Ada mode.
++ @end menu
++ 
++ @node Ada Mode Intro
++ @subsubsection Introduction
++ @cindex Ada mode, general
++ 
++ The Ada mode of @value{GDBN} supports a fairly large subset of Ada expression 
++ syntax, with some extensions.
++ The philosophy behind the design of this subset is 
++ 
++ @itemize @bullet
++ @item
++ That @value{GDBN} should provide basic literals and access to operations for 
++ arithmetic, dereferencing, field selection, indexing, and subprogram calls, 
++ leaving more sophisticated computations to subprograms written into the
++ program (which therefore may be called from @value{GDBN}).
++ 
++ @item 
++ That type safety and strict adherence to Ada language restrictions
++ are not particularly important to the @value{GDBN} user.
++ 
++ @item 
++ That brevity is important to the @value{GDBN} user.
++ @end itemize
++ 
++ Thus, for brevity, the debugger acts as if there were 
++ implicit @code{with} and @code{use} clauses in effect for all user-written 
++ packages, thus making it unnecessary to fully qualify most names with 
++ their packages, regardless of context.  Where this causes ambiguity, 
++ @value{GDBN} asks the user's intent.
++ 
++ The debugger will start in Ada mode if it detects an Ada main program. 
++ As for other languages, it will enter Ada mode when stopped in a program that
++ was translated from an Ada source file.
++ 
++ While in Ada mode, you may use `@t{-}@t{-}' for comments.  This is useful 
++ mostly for documenting command files.  The standard @value{GDBN} comment 
++ (@code{#}) still works at the beginning of a line in Ada mode, but not in the 
++ middle (to allow based literals).
++ 
++ 
++ @node Omissions from Ada
++ @subsubsection Omissions from Ada
++ @cindex Ada, omissions from
++ 
++ Here are the notable omissions from the subset:
++ 
++ @itemize @bullet
++ @item
++ Only a subset of the attributes are supported:
++ 
++ @itemize @minus
++ @item
++ @t{'First}, @t{'Last}, and @t{'Length}
++  on array objects (not on types and subtypes).
++ 
++ @item
++ @t{'Min} and @t{'Max}.  
++ 
++ @item 
++ @t{'Pos} and @t{'Val}. 
++ 
++ @item
++ @t{'Tag}.
++ 
++ @item
++ @t{'Range} on array objects (not subtypes), but only  as the right
++ operand of the membership (@code{in}) operator.
++ 
++ @item 
++ @t{'Access}, @t{'Unchecked_Access}, and 
++ @t{'Unrestricted_Access} (a GNAT extension).
++ @end itemize
++ 
++ @item
++ The names in
++ @code{Characters.Latin_1} are not available and
++ concatenation is not implemented.  Thus, escape characters in strings are 
++ not currently available.
++ 
++ @item
++ The component-by-component array operations (@b{and}, @b{or}, 
++ @b{xor}, @b{not}, and relational and equality tests) are not implemented. 
++ 
++ @item 
++ There are no record or array aggregates.
++ 
++ @item
++ Dispatching subprogram calls are not implemented.
++ 
++ @item
++ The overloading algorithm is much more limited (i.e., less selective)
++ than that of real Ada.  It does not use the context in which a subexpression
++ appears to resolve its meaning, and it is much looser in its rules for allowing
++ type matches.  As a result, some function calls will be ambiguous, and the user
++ will be asked to choose the proper resolution.
++ 
++ @item 
++ Fixed-point types (literals, arithmetic, and printing) are not yet implemented.
++ Support for ``long long'' formats is spotty.
++ 
++ @item
++ The @b{new} operator is not implemented.
++ 
++ @item
++ Entry calls are not implemented.
++ 
++ @item
++ Certain objects having dynamic types (i.e., whose size requires run-time
++ data to determine) are not handled.
++ @end itemize
++ 
++ @node Additions to Ada
++ @subsubsection Additions to Ada
++ @cindex Ada, deviations from 
++ 
++ As it does for other languages, @value{GDBN} makes certain generic
++ extensions to Ada: the operators @samp{@@}, @samp{::}, and 
++ `@{@var{type}@} @var{addr}' (@pxref{Expressions}); convenience variables 
++ (@pxref{Convenience Vars}); and machine registers (@pxref{Registers}).
++ 
++ In addition, it provides a few other shortcuts and outright additions specific 
++ to Ada:
++ 
++ @itemize @bullet
++ @item 
++ The assignment statement is allowed as an expression, returning
++ its right-hand operand as its value.  Thus, you may enter
++ 
++ @example
++ set x := y + 3
++ print A(tmp := y + 1)
++ @end example
++ 
++ @item 
++ The semicolon is allowed as an ``operator,''  returning as its value 
++ the value of its right-hand operand.
++ This allows, for example,
++ complex conditional breaks:
++ 
++ @example
++ break f
++ condition 1 (report(i); k += 1; A(k) > 100)
++ @end example
++ 
++ @item
++ The subtype used as a prefix for the attributes @t{'Pos}, @t{'Min}, and
++ @t{'Max} is optional (and is ignored in any case).  For example, it is legal
++ to write
++ 
++ @example
++ print 'max(x, y)
++ @end example
++ 
++ @item
++ When printing arrays, @value{GDBN} uses positional notation when the 
++ array has a lower bound of 1, and uses a modified named notation otherwise.
++ For example, a one-dimensional array of three integers with a lower bound of 3 might print as
++ 
++ @example
++ (3 => 10, 17, 1)
++ @end example
++ 
++ @noindent
++ That is, in contrast to valid Ada, only the first component has a @code{=>} 
++ clause.
++ @end itemize
++ 
++ @node Ada Exceptions
++ @subsubsection Breaking on Ada Exceptions
++ @cindex Ada, exceptions
++ 
++ In Ada mode, you can set breakpoints that trip when your program raises 
++ selected exceptions.
++ 
++ @table @code
++ @item break exception
++ Set a breakpoint that trips whenever (any task in the) program raises
++ any exception.
++ 
++ @item break exception @var{name}
++ Set a breakpoint that trips whenever (any task in the) program raises
++ the exception @var{name}.
++ 
++ @item break exception unhandled
++ Set a breakpoint that trips whenever (any task in the) program raises an
++ exception for which there is no handler.
++ @end table
++ 
++ @node Ada Tasks
++ @subsubsection Extensions for Ada Tasks
++ @cindex Ada, tasking
++ 
++ Support for Ada tasks is analogous to that for threads (@pxref{Threads}).
++ When in Ada mode (that is, when the ``current language'' is Ada), @value{GDBN} 
++ allows the following task-related commands:
++ 
++ @table @code
++ @kindex info tasks
++ @item info tasks
++ This command shows a list of current Ada tasks, as in the following example:
++ 
++ @example
++ (gdb) info tasks
++ TASK NAME       ID        STATE            THREAD
++ * 1  t3         698a8     Active           7        
++   2  t2         66af8     Active           8        
++   3  t1         63d48     Active           9        
++   4  main_task  5a1d8     Await_Dependents 1        
++ @end example
++ 
++ @noindent
++ In this listing, the asterisk before the first task indicates it to be the
++ currently running task.
++ 
++ @table @asis
++ @item TASK
++ represents gdb's internal task number, used to refer to the task in conditional
++ breakpoints.
++ 
++ @item NAME
++ name of the task in the program.
++ 
++ @item ID
++ The Ada @code{Thread_ID}.
++ 
++ @item STATE  
++ current state of the task.
++ 
++ @item THREAD 
++ corresponding thread identifier (C thread library).
++ @end table
++ 
++ @item break @var{linespec} task @var{taskno}
++ @itemx break @var{linespec} task @var{taskno} if @dots{}
++ @cindex breakpoints and tasks
++ @cindex task breakpoints
++ @kindex break @dots{} task @var{taskno}
++ These commands are like the @code{break @dots{} thread @dots{}} 
++ (@pxref{Thread Stops}).
++ @var{linespec} specifies source lines, as described 
++ in @ref{Set Breaks,,Setting breakpoints}.
++ 
++ Use the qualifier @samp{thread @var{threadno}} with a breakpoint command
++ to specify that you only want @value{GDBN} to stop the program when a
++ particular Ada task reaches this breakpoint.  @var{taskno} is one of the
++ numeric task identifiers assigned by @value{GDBN}, shown in the first
++ column of the @samp{info tasks} display.
++ 
++ If you do not specify @samp{task @var{taskno}} when you set a
++ breakpoint, the breakpoint applies to @emph{all} tasks of your
++ program.
++ 
++ You can use the @code{task} qualifier on conditional breakpoints as
++ well; in this case, place @samp{task @var{taskno}} before the
++ breakpoint condition (before the @code{if}).
++ 
++ For example,
++ 
++ @example
++ (gdb) info tasks
++ TASK NAME       ID        STATE            THREAD
++   1  main_task  140022020 Await_Dependents 0x3ffc01835c8
++   2  t2         140045060 Active           0x1400358f0
++   3  t1         140044840 Active           0x140040030
++ * 4  t3         140056040 Active           0x140023930
++ (gdb) b 15 task 2
++ Breakpoint 5 at 0x120044cb0: file test_task_debug.adb, line 15.
++ (gdb) cont
++ Continuing.
++ task # 1 running
++ task # 2 running
++ 
++ Breakpoint 5, test_task_debug.tB.1 (_task=0x11ffffc60)
++     at test_task_debug.adb:15
++ 15               flush;
++ (gdb) info tasks
++ TASK NAME       ID        STATE            THREAD
++   1  main_task  140022020 Await_Dependents 0x3ffc01835c8
++ * 2  t2         140045060 Active           0x1400358f0
++   3  t1         140044840 Active           0x140040030
++   4  t3         140056040 Active           0x140023930
++ @end example
++ @end table
++ 
++ @node Ada Glitches
++ @subsubsection Known Peculiarities of Ada Mode
++ @cindex Ada, problems
++ 
++ Besides the omissions listed previously (@pxref{Omissions from Ada}),
++ we know of several problems with and limitations of Ada mode in @value{GDBN}, 
++ some of which will be fixed with planned future releases of the debugger 
++ and the GNU Ada compiler.
++ 
++ @itemize @bullet
++ @item
++ Currently, the debugger 
++ has insufficient information to determine whether certain pointers represent
++ pointers to objects or the objects themselves.
++ Thus, the user may have to tack an extra @b{.all} after an expression
++ to get it printed properly.
++ 
++ @item 
++ Static constants that the compiler chooses not to materialize as objects in 
++ storage are invisible to the debugger.
++ 
++ @item
++ Renaming declarations are invisible to the debugger.
++ 
++ @item
++ Named parameter associations in function argument lists are ignored (the
++ argument lists are treated as positional).
++ 
++ @item
++ Many useful library packages are currently invisible to the debugger.
++ @end itemize
++ 
+  @end ifset
+  @end ifclear
+  

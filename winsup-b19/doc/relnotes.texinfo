@@ -1,0 +1,37 @@
+@chapter Known/potential problems
+
+@section Fixed-length arrays in the dll
+There are still some places in the dll where fixed-length arrays are
+used instead of dynamic structures which makes us use more memory than
+necessary or limits the capabilities of the Cygwin32 layer.
+
+@section Programs can't deal with // pathname scheme in arguments
+gcc and other tools aren't fully compatible with the current pathname
+scheme: it can't grok an argument of -I//d/foo which means it is vital
+that when attempting to self-host, that only normal paths with single
+slashes are used.
+
+@section DOS special filenames
+Files cannot be named com1, lpt1, or aux (to name a few); either as
+the root filename or as the extension part.  If you do, you'll have
+trouble.  Unix programs don't avoid these names which can make things
+interesting.  Eg, the perl distribution has a file called @code{aux.sh}.
+The perl configuration tries to make sure that @code{aux.sh} is there,
+but an operation on a file with the magic letters 'aux' in it will hang.
+
+@section User defined mallocs.
+If you define a function called @code{malloc} in your own code, and link
+with the DLL, the DLL @emph{will} call your @code{malloc}.  You'd better
+make sure that your malloc more or less works.
+
+If you run any programs from the DOS command prompt, rather than from in
+bash, the DLL will try and expand the wildcards on the command line.
+This process uses @code{malloc} @emph{before} your main line is started.
+If you have written your own @code{malloc} to need some initialization
+to occur after @code{main} is called, then this will surely break.
+
+@section Mixed case filenames.
+The perl config causes some other problems too; the config<foo>.SH
+scripts generate a file called "Makefile", and use and delete a file
+called "makefile" on the way.  Because of NT's case insensitivity, this
+will nuke Makefile, leaving you with nothing.

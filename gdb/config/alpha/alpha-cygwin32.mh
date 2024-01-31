@@ -1,0 +1,7 @@
+XM_FILE=xm-cygwin32.h
+XDEPFILES=
+TERMCAP= 
+NATDEPFILES= alphant-nat.o win32-nat.o
+NAT_FILE=nm-cygwin32.h
+XM_CLIBS=
+MMALLOC_CFLAGS = -I$(MMALLOC_SRC) -DMMCHECK_FORCE=1

@@ -1,0 +1,23 @@
+# These are host overrides
+# ??? Some may belong in the target overrides file???
+# From config dir
+
+# OpenNT doesn't yet have alloca; it's better to use the portable C version for
+# bootstrapping.  Do this by defining ALLOCA.
+
+ALLOCA = alloca.o
+RANLIB = :
+RANLIB_TEST = false
+OLDCC = gcc
+MAKE = make
+SHELL = sh
+CFLAGS= -O2 
+CC = gcc
+BISON=byacc
+LEX=flex
+# Don't run fixproto
+STMP_FIXPROTO =
+# Don't need collect2
+USE_COLLECT2 =
+exeext = .exe
+INSTALL = ginstall

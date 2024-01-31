@@ -1,0 +1,13 @@
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+
+configure:603: gcc -E conftest.c
+configure:874: gcc -o conftest -g -O   conftest.c  1>&5
+configure:918: gcc -o conftest -g -O   conftest.c  1>&5
+J:\GCC-MS\tmp\cc0011191.o: In function `t':
+/image/mmalloc/configure:912: undefined reference to `valloc'
+configure:918: gcc -o conftest -g -O   conftest.c  1>&5
+configure:1017: gcc -o conftest -g -O   conftest.c  1>&5
+configure:1056: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:1104: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:1104: gcc -E  conftest.c >/dev/null 2>conftest.out

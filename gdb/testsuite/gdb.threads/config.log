@@ -1,0 +1,14 @@
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+
+configure:573: checking host system type
+configure:594: checking target system type
+configure:612: checking build system type
+configure:636: checking how to run the C preprocessor
+configure:700: checking for pthread.h
+configure:710: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:706: pthread.h: No such file or directory
+configure: failed program was:
+#line 705 "configure"
+#include "confdefs.h"
+#include <pthread.h>

@@ -1,0 +1,1 @@
+make check RUNTESTFLAGS="--tool_opts -mtrap-precision=i"

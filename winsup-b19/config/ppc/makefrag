@@ -1,0 +1,11 @@
+# makefrag: included by the main Cygwin32 Makefile.in
+
+# Copyright 1996 Cygnus Solutions.
+
+# This file is part of Cygwin32.
+
+# This software is a copyrighted work licensed under the terms of the
+# Cygwin32 license.  Please consult the file "CYGWIN32_LICENSE" for
+# details.
+
+EXTRA_DLL_OFILES=setjmp.o longjmp.o

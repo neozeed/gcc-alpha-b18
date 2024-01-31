@@ -1,0 +1,6 @@
+# Look at, e.g. ../arm/t-* for more models
+CROSS_LIBGCC1 = libgcc1-asm.a
+LIBGCC1 = libgcc1-asm.a
+
+LIB1ASMSRC = alpha/lib1funcs.asm
+LIB1ASMFUNCS = _divqu _divq _divlu _divl _remqu _remq _remlu _reml

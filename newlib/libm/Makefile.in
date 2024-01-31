@@ -1,0 +1,164 @@
+# Makefile for newlib/libm.
+# Copyright (c) 1994, 1995, 1997 Cygnus Support.
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms are permitted
+# provided that the above copyright notice and this paragraph are
+# duplicated in all such forms and that any documentation,
+# advertising materials, and other materials related to such
+# distribution and use acknowledge that the software was developed
+# at Cygnus Support, Inc.  Cygnus Support, Inc. may not be used to
+# endorse or promote products derived from this software without
+# specific prior written permission.
+# THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
+VERSION=1.8-B19
+
+srcdir = .
+
+prefix = /usr/local
+
+exec_prefix = $(prefix)
+bindir = $(exec_prefix)/bin
+libdir = $(exec_prefix)/lib
+
+datadir = $(prefix)/share
+
+mandir = $(prefix)/man
+man1dir = $(mandir)/man1
+man2dir = $(mandir)/man2
+man3dir = $(mandir)/man3
+man4dir = $(mandir)/man4
+man5dir = $(mandir)/man5
+man6dir = $(mandir)/man6
+man7dir = $(mandir)/man7
+man8dir = $(mandir)/man8
+man9dir = $(mandir)/man9
+infodir = $(prefix)/info
+includedir = $(prefix)/include
+
+SHELL = /bin/sh
+
+INSTALL = install -c
+INSTALL_PROGRAM = $(INSTALL)
+INSTALL_DATA = $(INSTALL)
+
+AR_FLAGS = qv
+BISON = bison
+MAKEINFO = makeinfo
+TEXI2DVI = texi2dvi
+TEXIDIR=$(srcdir)/../../texinfo
+SET_TEXINPUTS = TEXINPUTS=${TEXIDIR}:.:$(srcdir):$$TEXINPUTS
+
+TOP = ..
+SRCTOP = ..
+TARGETDOC = `echo $${rootpre}./targetdep.tex`
+
+.NOEXPORT:
+MAKEOVERRIDES=
+
+#### Host, target, and site specific Makefile fragments come in here.
+###
+
+# These are roughly topologically sorted in order to make porting more
+# streamlined.
+FLAGS_TO_PASS = \
+	"CC=$(CC)" \
+	"CFLAGS=$(CFLAGS)" \
+	"BISON=$(BISON)" \
+	"AR=$(AR)" \
+	"AR_FLAGS=$(AR_FLAGS)" \
+	"AS=$(AS)" \
+	"CROSS_CFLAGS=$(CROSS_CFLAGS)" \
+	"TARGET_CFLAGS=$(TARGET_CFLAGS)" \
+	"INCLUDES=$(INCLUDES)" \
+	"CHEW=$(CHEW)" \
+	"TARGETDOC=$(TARGETDOC)"
+
+SUBDIRS = math
+SUBLIBS = \
+	math/lib.a
+
+all: libm.a
+libm.a: $(SUBLIBS)
+	rm -f $@
+	rm -rf tmp
+	mkdir tmp
+	rootpre=`pwd`/; export rootpre; \
+	srcrootpre=`cd $(srcdir); pwd`/; export srcrootpre ; \
+	cd tmp ; \
+		for i in $(SUBLIBS) ; do \
+			$(AR) x ../$$i ; \
+		done ; \
+		$(AR) $(AR_FLAGS) ../$@ *.o
+	$(RANLIB) $@
+	rm -rf tmp
+
+$(SUBLIBS): force
+	@rootpre=`pwd`/; export rootpre; \
+	srcrootpre=`cd $(srcdir); pwd`/; export srcrootpre; \
+	(cd `echo $@ | sed -e 's:/[^/]*$$::'` ; \
+		$(MAKE) $(FLAGS_TO_PASS) all) \
+	|| exit 1
+
+.PHONY: subdir_do
+subdir_do:
+	@for i in $(DODIRS); do \
+		if [ -f ./$$i/Makefile ] ; then \
+			echo "cd $$i; make $(DO)" ; \
+			(cd $$i ; $(MAKE) $(FLAGS_TO_PASS) $(DO)) || exit 1 ; \
+		else true ; fi ; \
+	done
+
+clean-here:
+	rm -f core *~ libm.a
+	rm -f libm.cp libm.dvi targetdep.tex libm.log libm.cps
+	rm -f libm.aux libm.toc libm.fn libm.vr libm.tp libm.ky
+	rm -f libm.pg libm.fns libm.kys libm.pgs libm.tps libm.vrs
+
+clean mostlyclean: clean-here
+	@rootpre=`pwd`/; export rootpre; \
+	srcrootpre=`cd $(srcdir); pwd`/; export srcrootpre; \
+	$(MAKE) DO=$@ DODIRS="$(SUBDIRS)" $(FLAGS_TO_PASS) subdir_do
+
+distclean maintainer-clean realclean: clean-here
+	@rootpre=`pwd`/; export rootpre; \
+	srcrootpre=`cd $(srcdir); pwd`/; export srcrootpre; \
+	$(MAKE) DO=$@ DODIRS="$(SUBDIRS)" $(FLAGS_TO_PASS) subdir_do
+	rm -f Makefile config.status
+
+info:
+	-rm -f targetdep.tex
+	@rootpre=`pwd`/; export rootpre; \
+	srcrootpre=`cd $(srcdir); pwd`/; export srcrootpre; \
+	$(MAKE) $(FLAGS_TO_PASS) targetdep.tex
+	$(MAKEINFO) -o libm.info $(srcdir)/libm.texinfo
+
+targetdep.tex:
+	touch targetdep.tex
+	@rootpre=`pwd`/; export rootpre; \
+	srcrootpre=`cd $(srcdir); pwd`/; export srcrootpre; \
+	$(MAKE) DO=doc DODIRS="$(SUBDIRS)" $(FLAGS_TO_PASS) subdir_do
+
+docs: dvi
+
+dvi:
+	-rm -f targetdep.tex
+	@rootpre=`pwd`/; export rootpre; \
+	srcrootpre=`cd $(srcdir); pwd`/; export srcrootpre; \
+	$(MAKE) $(FLAGS_TO_PASS) targetdep.tex
+	$(SET_TEXINPUTS) $(TEXI2DVI) $(srcdir)/libm.texinfo
+
+install:
+
+install-info:
+	-for i in libm.info*; do \
+	    $(INSTALL_DATA) $$i $(infodir)/$$i; \
+	  done
+
+force:
+
+Makefile: Makefile.in $(host_makefile_frag) $(target_makefile_frag)
+	$(SHELL) config.status

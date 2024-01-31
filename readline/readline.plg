@@ -1,0 +1,70 @@
+--------------------Configuration: readline - Win32 Release--------------------
+Begining build with project "J:\image\readline\readline.dsp", at root.
+Active configuration is Win32 (ALPHA) Static Library (based on Win32 (ALPHA) Static Library)
+
+Project's tools are:
+			"C/C++ Compiler for Alpha" with flags "/nologo /ML /Gt0 /GX /O2 /I "." /I "./../" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /Fp"AlphaRel/readline.pch" /YX /Fo"AlphaRel/" /Fd"AlphaRel/" /FD /c "
+			"Browser Database Maker" with flags "/nologo /o"AlphaRel/readline.bsc" "
+			"Library Manager" with flags "/nologo /out:"AlphaRel\readline.lib" "
+			"Custom Build" with flags ""
+			"<Component 0xa>" with flags ""
+
+Creating temp file "E:\TEMP\RSP1B1.tmp" with contents </nologo /ML /Gt0 /GX /O2 /I "." /I "./../" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /Fp"AlphaRel/readline.pch" /YX /Fo"AlphaRel/" /Fd"AlphaRel/"  /c 
+"J:\image\readline\bind.c"
+"J:\image\readline\complete.c"
+"J:\image\readline\display.c"
+"J:\image\readline\funmap.c"
+"J:\image\readline\history.c"
+"J:\image\readline\isearch.c"
+"J:\image\readline\keymaps.c"
+"J:\image\readline\parens.c"
+"J:\image\readline\readline.c"
+"J:\image\readline\rltty.c"
+"J:\image\readline\search.c"
+"J:\image\readline\signals.c"
+"J:\image\readline\tilde.c"
+"J:\image\readline\vi_mode.c"
+"J:\image\readline\xmalloc.c"
+>
+Creating command line "cl.exe @E:\TEMP\RSP1B1.tmp" 
+Creating temp file "E:\TEMP\RSP1B2.tmp" with contents </nologo /out:"AlphaRel\readline.lib" 
+.\AlphaRel\bind.obj
+.\AlphaRel\complete.obj
+.\AlphaRel\display.obj
+.\AlphaRel\funmap.obj
+.\AlphaRel\history.obj
+.\AlphaRel\isearch.obj
+.\AlphaRel\keymaps.obj
+.\AlphaRel\parens.obj
+.\AlphaRel\readline.obj
+.\AlphaRel\rltty.obj
+.\AlphaRel\search.obj
+.\AlphaRel\signals.obj
+.\AlphaRel\tilde.obj
+.\AlphaRel\vi_mode.obj
+.\AlphaRel\xmalloc.obj>
+Creating command line "link.exe -lib @E:\TEMP\RSP1B2.tmp" 
+Compiling...
+bind.c
+complete.c
+display.c
+J:\image\readline\display.c(579) : warning C4002: too many actual parameters for macro 'ScreenGetCursor'
+J:\image\readline\display.c(580) : warning C4002: too many actual parameters for macro 'ScreenSetCursor'
+funmap.c
+history.c
+isearch.c
+keymaps.c
+J:\image\readline\keymaps.c(126) : warning C4033: 'rl_discard_keymap' must return a value
+parens.c
+readline.c
+rltty.c
+search.c
+signals.c
+tilde.c
+vi_mode.c
+xmalloc.c
+Creating library...
+
+
+
+readline.lib - 0 error(s), 3 warning(s)

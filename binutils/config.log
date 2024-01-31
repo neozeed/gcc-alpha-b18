@@ -1,0 +1,37 @@
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+
+configure:611: checking host system type
+configure:632: checking target system type
+configure:650: checking build system type
+configure:708: checking for gcc
+configure:785: checking whether the C compiler (gcc  ) works
+configure:799: gcc -o conftest    conftest.c  1>&5
+configure:819: checking whether the C compiler (gcc  ) is a cross-compiler
+configure:824: checking whether we are using GNU C
+configure:848: checking whether gcc accepts -g
+configure:887: checking for ranlib
+configure:924: checking for a BSD compatible install
+configure:1028: checking how to run the C preprocessor
+configure:1092: checking for string.h
+configure:1092: checking for strings.h
+configure:1092: checking for stdlib.h
+configure:1092: checking for unistd.h
+configure:1092: checking for fcntl.h
+configure:1092: checking for sys/file.h
+configure:1129: checking for sys/wait.h that is POSIX.1 compatible
+configure:1173: checking for working alloca.h
+configure:1206: checking for alloca
+configure:1402: checking for sbrk
+configure:1402: checking for utimes
+configure:1456: checking for ANSI C header files
+configure:1560: checking for pid_t
+configure:1594: checking for vfork.h
+configure:1629: checking for working vfork
+configure:1857: checking for time_t in time.h
+configure:1890: checking for time_t in sys/types.h
+configure:1925: checking for utime.h
+configure:1962: checking whether fprintf must be declared
+configure:2010: checking whether strstr must be declared
+configure:2058: checking whether sbrk must be declared
+configure:2106: checking whether getenv must be declared

@@ -1,0 +1,361 @@
+\input texinfo 
+@chapter Release notes for beta 19
+@setfilename readme.txt
+
+@section Release Beta 19 (Feb 26 1998)
+
+This is a major release.  It includes a much-updated version of the
+Cygwin32 library.  Because the Cygwin API has changed in incompatible
+ways, the dll has been renamed cygwinb19.dll to avoid invalidating
+previously built executables.
+
+Note that a B19-compiled application exec()ing a B18-compiled
+application will treat the B18-compiled executable as an ordinary
+Win32 executable.  This means that open file descriptors and some other
+internals will not be inheritted on exec() calls.  The reason for this
+is that different shared memory areas are used by the different versions
+of the cygwin library.  This may or may not be of importance to you
+depending on what you're doing.
+
+The Beta 19 release of the Cygwin32 library continues to be licensed
+under the GNU General Public License (GPL).
+
+The PE format definition used by the compiler tools now matches
+Microsoft's more closely.  This should allow better interoperability
+with other vendors' development tools although more work probably
+remains to be done in this area.  This change invalidates all previously
+built object (.o) and static library (.a) files so be sure to
+delete/rebuild old .o and .a files you are using!
+
+Finally, old symlinks are invalidated by this release.  The "system"
+attribute is now used to mark symlinks which significantly speeds
+up fstat and other file related calls.  Either recreate old ones or
+set their "system" attribute flag so they will be recognized properly.
+
+The new installer takes care of all environment variable settings
+automatically by installing a shortcut in program files that pulls
+up a bash prompt with all the correct environment variables set.
+As a result, the setup process should be much cleaner than in the last
+release.
+
+For those of you who end up moving the tools around, the batch file
+that sets up the default environment is called cygnus.bat and is
+installed in the root of the install directory.  Because the tools have
+been compiled to install in /cygnus/b19, when installed in this
+location, the tools should "just work" if the bin directory is in your
+path (no special environment variables are needed).  The only exception
+is MAKE_MODE which needs to be set if you want to get ordinary Unix-like
+make behavior -- see the make notes below for more information.
+
+@subsection Changes in specific tools:
+
+Ian Lance Taylor has written a resource compiler called "windres".
+It can be used to compile windows resources from a textual rc file
+into a COFF file.  The sources are in the binutils subdirectory of
+the sources.
+
+We have upgraded many of the utilities.  Beta 19 includes bash 2.01.1,
+fileutils 3.16, gawk 3.0.3, patch 2.5, shellutils 1.16, tar 1.12,
+textutils 1.22, and texinfo 3.11.  Bash under Cygwin32 now includes
+working job control among other improvements.
+
+The sh executable is now ash 0.2 from the Debian Linux distribution.
+Using this more minimal shell as /bin/sh.exe speeds up configures
+significantly.
+
+Bison 1.25 has been added.
+
+Tcl/tk are upgraded to version 8.0.  Compatible versions of tix and
+itcl have been added.  These all include Cygwin32-compatible configury
+files so you can do a Unix-style build of the Win32 ports of tcl/tk.
+
+Expect 5.21.3 is included and basically works.
+
+The binaries have been compiled with i686 optimizations turned on
+which may result in a speed increase on Pentium-based systems
+although the tools should work on i386 and later chips.
+
+The linker (ld) has been enhanced -- it will now add the idata3
+terminator automatically when linking dlls.
+
+kill now supports signal names in arguments.  ps now shows process
+start time information.
+
+Although the default install of the tools should hide this detail, the
+make utility now defaults to a Win32 mode which uses cmd.exe/command.com
+as the subshell.  This mode allows the use of backslashes in filenames.
+To build Unix programs, you need to set the MAKE_MODE environment
+variable to "UNIX".  This way you will get the old behavior of using
+sh.exe as the subshell.
+
+@subsection Changes in the Cygwin32 API (cygwin.dll):
+
+The interface is now better defined.  It contains libc, libm, and
+Unix compatability calls.  It no longer contains exports for libgcc.a.
+This should result in a more stable interface.  See the calls.texinfo
+document for interface documentation.
+
+There is now only one environment variable called CYGWIN32 that controls
+the overall behavior of the dll:
+
+        set CYGWIN32=[no]title [no]strip_title [no]binmode [no]glob
+                strace=mask:cache,file [no]tty
+
+So if you "set CYGWIN32=title tty", then you would get tty support
+(see below) and have the current running process listed in the title
+bar.
+
+B19 adds support for:
+
+* tty and pseudo-tty devices.  For now, ttys default to off because
+taking over the console causes problems with using non-Cygwin console
+programs in a Cygwin console.  To turn it on, set the environment
+variable CYGWIN32 to include "tty".
+* Hard links (requires NT on an NTFS filesystem).  When not possible (on
+non-NTFS filesystems), link() will make a copy of the file in question
+as it has done in previous releases.
+* The SIGWINCH signal.  If tty handling is enabled then the process will
+receive a SIGWINCH signal when the screen size changes.
+* Additional terminal escape sequences recognized: scroll region setting via
+<ESC>[n1;n2r and setting the console title using xterm escape sequence:
+<ESC>[2;new title^G .
+
+The following calls have been added:
+
+* ptsname, grantpt, unlockpt
+* login, logout, ttyslot, ctermid
+* cfgetispeed, cfgetospeed, cfsetispeed, cfsetospeed
+* setitimer, getitimer, ftime, tzset
+* wait3, wait4, pause, sigpause
+* getpgid, killpg, setegid (stub)
+* strlwr, strupr
+* sexecve, sexecl, sexecle, sexeclp, sexeclpe, sexecv, sexecp, sexecvpe
+* rcmd, rresvport, rexec
+* strsignal, strtosigno
+* dlopen, dlsym, dlclose, dlerror
+* inet_netof, inet_makeaddr
+* socketpair
+* fpathconf, realpath, chroot (stub)
+* initgroups (stub), getgroups
+* random, srandom
+
+The following calls have been removed:
+
+* ScreenCols, ScreenGetCursor, ScreenRows, ScreenSetCursor
+* getkey, kbhit
+* crypt (stub)
+* all libgcc.a exports
+
+The Winsock dll (wsock32.dll) is no longer implicitly linked into
+the Cygwin32 dll.  Instead, it is explicitly loaded with LoadLibrary
+the first time a process calls a Cygwin32 networking function.  This
+speeds up most processes significantly (configures by about 20%).
+
+The signal-related code has been rewritten from scratch.  Ditto for
+most of the path handling code.
+
+The globbing and getopt code has been replaced with BSD-derived
+code.  The regexp code has been replaced with Harry Spencer's PD
+implementation.
+
+Doug Lea's malloc is now being used as the default malloc exported by
+cygwin.  This malloc balances speed and compactness very nicely but is
+more unforgiving when attempts are made to free already freed memory,
+i.e., a segmentation violation will occur.
+
+The bsearch call has been rewritten.
+
+Alt Gr-key behavior has been changed in this release.  The left alt-key
+still produces ESC-key sequence.  The right alt (Alt Gr)-key now
+produces characters according to national keyboard layouts.
+
+Processes no longer write their name in the title bar unless you include
+"title" in the CYGWIN32 environment variable (see above).
+
+Multiple cygwin.dlls no longer use the same memory space unless they are
+identical (built at the same time).  This allows multiple dlls with
+incompatible shared memory usage to be run simultaneously.  It also
+facilitates debugging a buggy cygwin.dll.  By keeping only a single copy
+of the latest cygwin.dll on your system, you can be assured of having
+all cygwin processes exist in the same shared memory space.
+
+The slash mount no longer defaults to C:.  It now defaults to the
+system drive letter (where the OS is installed).
+
+The standard dl* dynamic library loader functions are now available.
+Cygwin32 B19 now correctly copies data after a fork and automatically
+reloads any DLLs loaded in the parent process.  In addition, dlls will
+now be correctly initialized when loaded and global constructors will
+be called.  Global destructors will be called when the DLL is detached.
+Handles gotten from dlopen or dlsym in the parent will be accessible in a
+forked child.  The LD_LIBRARY_PATH environment variable is used in the dlopen
+search.
+
+Include the file <cygwin32/cygwin_dll.h> in a cygwin32 created .dll and
+use the line DECLARE_CYGWIN_DLL(dll-entry-point) to produce .dlls that
+can be used with these functions.
+
+@chapter GNU-Win32 FTP Sites
+
+The primary ftp site is
+@file{ftp://go.cygnus.com/pub/ftp.cygnus.com/gnu-win32}.  There
+are also several mirrors:
+
+@itemize @code
+@item North America:
+@itemize @code
+@item Alberta: @file{ftp://ftp.reversion.ca/pub/mirrors/gnu-win32}
+@item California: @file{ftp://ftp.cygnus.com/pub/gnu-win32}
+@item Texas: @file{ftp://ftp.deninc.com/pub}
+@end itemize
+
+@item Worldwide:
+@itemize @code
+@item Austria: @file{ftp://gd.tuwien.ac.at/pub/gnu/gnu-win32}
+@item France: @file{ftp://ftp.fwntug.org/gnu}, @file{ftp://ftp.inria.fr/INRIA/Projects/Meta2/Scilab/Windows/cygwin/}
+@item Greece: @file{ftp://ftp.ntua.gr/pub/pc/gnu-win32}
+@item Italy: @file{ftp://aaue.matrice.it/pub/gnu-win32}
+@item Japan: @file{ftp://ftp.crl.go.jp/pub/GNU/cygnus/gnu-win32}
+@item Slovenia: @file{ftp://sunsite.fri.uni-lj.si/pub/gnu-win32}
+@item Spain: @file{ftp.rediris.es/mirror/gnu-win32}
+@item UK:
+@file{ftp://sunsite.doc.ic.ac.uk/packages/gnu/cygnus/gnu-win32}
+@end itemize
+@end itemize
+
+@section Contents
+
+The following packages are included in the full release:
+
+Cygnus Developer's Kit (CDK):
+binutils, bison, byacc, dejagnu, diff, expect, flex, gas, gcc, gdb,
+itcl, ld, libg++, libstdc++, make, patch, tcl, tix, tk
+
+user tools:
+ash, bash, diff, fileutils, findutils, gawk, grep, gzip, m4, sed,
+shellutils, tar, textutils, time
+
+The user tools release only contains the user tools.
+
+Full source code is available for these tools.  It is split into
+these two units.  Ash is provided separately for now.
+
+@section Installing the binary release:
+
+Important!  Be sure to move out of the way any older versions of
+the gnu-win32 tools that exist in your $PATH (or delete them).
+
+Connect to one of the ftp servers listed above and cd to the directory
+containing the latest release.  On our primary server, that would be:
+
+@file{ftp://go.cygnus.com/pub/ftp.cygnus.com/gnu-win32/latest}.
+
+If you want the development tools and the programs necessary to run
+the GNU configure mechanism, you should download the whole release
+called @file{cdk.exe}.  If you only care about the user tools listed
+above, download @file{usertools.exe}.
+
+If you have an unreliable connection, download the binary in
+smaller chunks instead.  For the split cdk installer, get the files in
+the @file{cdk-split} subdirectory.  Once downloaded, combine the split
+files at the command prompt by doing a:
+
+@smallexample
+copy /b xaa + xab + xac + ... + xai + xaj cdk.exe
+del xa*.*
+@end smallexample
+
+The same process can be used for the user tools.
+
+Once you have an install executable on your system, run it.
+First off, the installer will prompt you for a location to
+extract the temporary files it needs to install the release on your
+system.  The default should be fine for most people.
+
+Next it will ask you to choose a default install location,
+@file{<system-drive>:\cygnus\b19}.  Feel free to choose another
+location if you would prefer.
+
+Finally, it will ask you for the name of the Program Files folder
+shortcut to add.  The default is @file{Cygwin32 Beta 19}.  When this
+step is completed, it will install the tools and exit.
+
+At this point, you should be able to look under the start menu and
+select "Cygwin32 Beta 19" (or whatever you named it).  This will
+pop up a bash shell with all special environment variables set up
+for you.  If you are running Windows 95 and are faced with the error
+message "Out of environment space", you need to increase the amount
+of environment space in your config.sys and try again.  Adding the line
+@code{shell=C:\command.com /e:4096 /p} should do the trick if @code{C:}
+is your system drive letter.
+
+There are two remaining thing you should do from this prompt.
+First, you need to type @code{mkdir -p /tmp} to ensure that a
+temp directory exists for programs that expect to find one there.
+
+Second, if you are installing the full distribution (@file{cdk.exe}),
+various programs will need to be able to find @file{/bin/sh}.  You
+should @file{mkdir -p /bin} and put a copy of @file{sh.exe} there,
+removing the older version, if present.  You can use the @file{mount}
+utility to select which drive letter is mounted as @file{/}. See the
+Frequently Asked Questions (FAQ) file for more information on
+@file{mount}.
+
+And you should be done!
+
+If you should ever want to uninstall the tools, you may do so
+via the "Add/Remove Programs" control panel.
+
+@section Installing the source code
+
+Before downloading the source code corresponding to the release,
+you should install the latest release of the tools (either the full
+release or just the user tools).
+
+Create the directory that will house the source code.  @file{cd}
+there.
+
+Connect to one of the ftp servers listed above and cd to the directory
+containing the latest release.  On our primary server, that would be:
+
+@file{ftp://go.cygnus.com/pub/ftp.cygnus.com/gnu-win32/latest}.
+
+If you want the user tools source code, @file{cd} into the
+@file{usertools-src} subdirectory.  Download the files there.  If you
+want the Cygnus Developer's Kit sources, @file{cd} into the
+@file{cdk-src} subdirectory.  Download the files there.
+
+Back in the command.com, for the user tools source:
+
+@smallexample
+copy /b xba + xbb + xbc + xbd + xbe + xbf + xbg usersrc.tar.gz
+del xb*.*
+gunzip -d usersrc.tar.gz
+tar xvf usersrc.tar
+@end smallexample
+
+For the compiler tools source:
+
+@smallexample
+copy /b xca + xcb + xcc + xcd + ... + xck + xcl cdksrc.tar.gz
+del xc*.*
+gunzip -d cdksrc.tar.gz
+tar xvf cdksrc.tar
+@end smallexample
+
+Both will expand into a directory called @file{src}.
+
+And you should be done...
+
+@section Cygnus Resources Online
+
+The main WWW page for the GNU-Win32 project is:
+
+	http://www.cygnus.com/misc/gnu-win32/
+
+Tool-specific information can be found here:
+
+        http://www.cygnus.com/library/
+
+Links to additional documentation are accessible from the main
+web page.

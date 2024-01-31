@@ -1,0 +1,5 @@
+#!/bin/sh
+# This file was generated automatically by configure.  Do not edit.
+# This directory was configured as follows:
+../configure --build=alpha-cygwin32 --host=alpha-cygwin32 --target=alpha-cygwin32 --norecursion 
+# using "xhost-mkfrag"

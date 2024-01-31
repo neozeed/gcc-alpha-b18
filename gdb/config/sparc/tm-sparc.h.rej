@@ -1,0 +1,51 @@
+***************
+*** 1,6
+  /* Target machine sub-parameters for SPARC, for GDB, the GNU debugger.
+     This is included by other tm-*.h files to define SPARC cpu-related info.
+!    Copyright 1986, 1987, 1989, 1991, 1992, 1993, 1994
+     Free Software Foundation, Inc.
+     Contributed by Michael Tiemann (tiemann@mcc.com)
+  
+--- 1,6 -----
+  /* Target machine sub-parameters for SPARC, for GDB, the GNU debugger.
+     This is included by other tm-*.h files to define SPARC cpu-related info.
+!    Copyright 1986, 1987, 1989, 1991, 1992, 1993, 1994, 1997
+     Free Software Foundation, Inc.
+     Contributed by Michael Tiemann (tiemann@mcc.com)
+  
+***************
+*** 20,25 ****
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
+  
+  #define TARGET_BYTE_ORDER BIG_ENDIAN
+  
+  /* Floating point is IEEE compatible.  */
+--- 20,27 ----
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
+  
++ /* Modified for GNAT by P. N. Hilfinger */
++ 
+  #define TARGET_BYTE_ORDER BIG_ENDIAN
+  
+  /* Floating point is IEEE compatible.  */
+***************
+*** 248,253 ****
+  
+  #define STORE_STRUCT_RETURN(ADDR, SP) \
+    { target_write_memory ((SP)+(16*4), (char *)&(ADDR), 4); }
+  
+  /* Extract from an array REGBUF containing the (raw) register state
+     a function return value of type TYPE, and copy that, in virtual format,
+--- 250,259 ----
+  
+  #define STORE_STRUCT_RETURN(ADDR, SP) \
+    { target_write_memory ((SP)+(16*4), (char *)&(ADDR), 4); }
++ 
++ /* With GCC 2.6.1, always pass structures in memory. */
++ 
++ #define USE_STRUCT_CONVENTION(gcc_p, type) 1
+  
+  /* Extract from an array REGBUF containing the (raw) register state
+     a function return value of type TYPE, and copy that, in virtual format,

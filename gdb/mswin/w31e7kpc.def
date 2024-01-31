@@ -1,0 +1,22 @@
+LIBRARY	w31e7kpc
+DESCRIPTION  'win32s 32-bit thunks to 16-bit wine7kpc.dll'
+;EXETYPE WINDOWS
+
+;CODE    PRELOAD FIXED DISCARDABLE
+;DATA    PRELOAD FIXED SINGLE
+CODE         PRELOAD MOVEABLE DISCARDABLE
+DATA         PRELOAD MOVEABLE SHARED
+
+;HEAPSIZE 1024
+
+EXPORTS
+    win_load_e7kpc	@2
+    win_unload_e7kpc	@3
+    win_mem_get		@4
+    win_mem_put		@5
+    win_remote_debug	@6
+
+SECTIONS
+    .bss     SHARED READ WRITE
+    .data    SHARED READ WRITE
+

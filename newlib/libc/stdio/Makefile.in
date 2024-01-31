@@ -1,0 +1,214 @@
+# Makefile for newlib/libc/stdio.
+# Copyright (c) 1994 Cygnus Support.
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms are permitted
+# provided that the above copyright notice and this paragraph are
+# duplicated in all such forms and that any documentation,
+# advertising materials, and other materials related to such
+# distribution and use acknowledge that the software was developed
+# at Cygnus Support, Inc.  Cygnus Support, Inc. may not be used to
+# endorse or promote products derived from this software without
+# specific prior written permission.
+# THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
+srcdir = .
+
+SHELL = /bin/sh
+
+TOP = ../..
+SRCTOP = ../..
+TARGETDOC = ../targetdep.tex
+
+#### Host, target, and site specific Makefile fragments come in here.
+###
+
+OFILES= \
+	clearerr.o 			\
+	fclose.o 			\
+	fdopen.o 			\
+	feof.o 				\
+	ferror.o 			\
+	fflush.o 			\
+	fgetc.o 			\
+	fgetpos.o 			\
+	fgets.o 			\
+	fileno.o			\
+	findfp.o 			\
+	fiprintf.o 			\
+	flags.o 			\
+	fopen.o 			\
+	fprintf.o 			\
+	fputc.o 			\
+	fputs.o 			\
+	fread.o 			\
+	freopen.o 			\
+	fscanf.o 			\
+	fseek.o 			\
+	fsetpos.o 			\
+	ftell.o 			\
+	fvwrite.o 			\
+	fwalk.o 			\
+	fwrite.o 			\
+	getc.o 				\
+	getchar.o 			\
+	gets.o 				\
+	iprintf.o 			\
+	makebuf.o			\
+	mktemp.o 			\
+	perror.o 			\
+	printf.o 			\
+	putc.o 				\
+	putchar.o 			\
+	puts.o 				\
+	refill.o 			\
+	remove.o 			\
+	rename.o 			\
+	rewind.o 			\
+	rget.o 				\
+	scanf.o 			\
+	setbuf.o 			\
+	setvbuf.o 			\
+	siprintf.o 			\
+	sprintf.o 			\
+	sscanf.o 			\
+	stdio.o 			\
+	tmpfile.o 			\
+	tmpnam.o 			\
+	ungetc.o 			\
+	vfiprintf.o 			\
+	vfprintf.o 			\
+	vfscanf.o 			\
+	vprintf.o 			\
+	vsprintf.o 			\
+	wbuf.o 				\
+	wsetup.o 
+
+
+CHEWOUT_FILES=\
+	clearerr.def		\
+	fclose.def		\
+	fdopen.def		\
+	feof.def		\
+	ferror.def		\
+	fflush.def		\
+	fgetc.def		\
+	fgetpos.def		\
+	fgets.def		\
+	fileno.def		\
+	fiprintf.def		\
+	fopen.def		\
+	fputc.def		\
+	fputs.def		\
+	fread.def		\
+	freopen.def		\
+	fseek.def		\
+	fsetpos.def		\
+	ftell.def		\
+	fwrite.def		\
+	getc.def		\
+	getchar.def		\
+	gets.def		\
+	iprintf.def		\
+	mktemp.def		\
+	perror.def		\
+	putc.def		\
+	putchar.def		\
+	puts.def		\
+	remove.def		\
+	rename.def		\
+	rewind.def		\
+	setbuf.def		\
+	setvbuf.def		\
+	siprintf.def		\
+	sprintf.def		\
+	sscanf.def		\
+	tmpfile.def		\
+	tmpnam.def		\
+	vfprintf.def
+
+
+all: lib.a
+lib.a: $(OFILES)
+	rm -f $@
+	$(AR) $(AR_FLAGS) $@ $(OFILES)
+
+vfiprintf.o: vfprintf.c
+	cp $(srcdir)/vfprintf.c vfiprintf.c
+	$(CC) $(CFLAGS) $(CROSS_CFLAGS) $(TARGET_CFLAGS) $(NEWLIB_CFLAGS) $(INCLUDES) -DINTEGER_ONLY -I$(srcdir) -c vfiprintf.c
+
+doc: $(CHEWOUT_FILES)
+	cat $(srcdir)/stdio.tex >> $(TARGETDOC)
+
+clean mostlyclean:
+	$(RM) $(OFILES) *~ core $(CHEWOUT_FILES) *.o.* *.ref
+	$(RM) vfiprintf.c lib.a
+
+distclean maintainer-clean realclean: clean
+	rm -f Makefile config.status
+
+Makefile: Makefile.in $(host_makefile_frag) $(target_makefile_frag)
+	$(SHELL) config.status
+
+# to support SunOS VPATH
+clearerr.o: clearerr.c
+fclose.o: fclose.c local.h
+fdopen.o: fdopen.c local.h
+feof.o: feof.c
+ferror.o: ferror.c
+fflush.o: fflush.c local.h
+fgetc.o: fgetc.c
+fgetpos.o: fgetpos.c
+fgets.o: fgets.c
+fileno.o: fileno.c
+findfp.o: findfp.c local.h
+fiprintf.o: fiprintf.c
+flags.o: flags.c
+fopen.o: fopen.c local.h
+fprintf.o: fprintf.c
+fputc.o: fputc.c
+fputs.o: fputs.c fvwrite.h
+fread.o: fread.c local.h
+freopen.o: freopen.c local.h
+fscanf.o: fscanf.c
+fseek.o: fseek.c local.h
+fsetpos.o: fsetpos.c
+ftell.o: ftell.c local.h
+fvwrite.o: fvwrite.c local.h fvwrite.h
+fwalk.o: fwalk.c local.h
+fwrite.o: fwrite.c local.h fvwrite.h
+getc.o: getc.c
+getchar.o: getchar.c
+gets.o: gets.c
+iprintf.o: iprintf.c
+makebuf.o: makebuf.c local.h
+mktemp.o: mktemp.c
+perror.o: perror.c
+printf.o: printf.c
+putc.o: putc.c
+putchar.o: putchar.c
+puts.o: puts.c fvwrite.h
+refill.o: refill.c local.h
+remove.o: remove.c
+rename.o: rename.c
+rewind.o: rewind.c
+rget.o: rget.c
+scanf.o: scanf.c local.h
+setbuf.o: setbuf.c local.h
+setvbuf.o: setvbuf.c local.h
+siprintf.o: siprintf.c local.h
+sprintf.o: sprintf.c local.h
+sscanf.o: sscanf.c local.h
+stdio.o: stdio.c local.h
+tmpfile.o: tmpfile.c
+tmpnam.o: tmpnam.c
+ungetc.o: ungetc.c local.h
+vfiprintf.o: vfprintf.c local.h
+vfprintf.o: vfprintf.c local.h
+vfscanf.o: vfscanf.c local.h floatio.h
+vprintf.o: vprintf.c
+vsprintf.o: vsprintf.c
+wbuf.o: wbuf.c local.h fvwrite.h
+wsetup.o: wsetup.c local.h

@@ -1,0 +1,60 @@
+After much grief and aggravation with the old build procedure, I have perfected
+(ok, it's probably not perfect) a new way to build WinGDB, which doesn't
+require using the MSVC GUI.  The new procedure basically uses a unix box to
+generate a set of makefiles which can be invoked manually under NT or Win95.
+This scheme has several advantages over the old way:
+
+	1) It no longer requires that we stash away pre-built files such as
+	   bfd.h, c-exp.tab.c, etc...  These files are now generated under unix
+	   during the initial phase of the build.
+	2) The srcdir and objdir can reside anywhere accessible to the NT box.
+	   This includes SMB volumes. 
+	3) The resultant make files are very easy to understand.
+	4) You can login to the NT box via rlogin, and run the build remotely.
+	5) The new procedure is much more immune to file name changes,
+	   deletions and additions.
+
+To use this procedure, you need to do the following:
+
+Under unix:
+
+	1) rm $SRCDIR/gdb/mswin/{config.h sysdep.h nm.h tm.h xm.h}
+	   I can't remove these from devo as that would toast other build schemes.
+
+	2) mkdir $OBJDIR ; cd $OBJDIR
+
+	3) setenv CC gcc
+	   This fools configure into thinking that it can run the MSVC compiler.
+
+	4) $SRCDIR/configure --target $TARGET --build sun4 --host i386-windows --cache config.cache
+	   build should match the host you are running configure on.  Currently
+	   only SunOS and Linux are known to work.  host must be i386-windows.
+
+	5) make
+	   This will generate a bunch of nmake.mak files, which can be used
+	   with MSVC's nmake program (which is pretty similar to unix make).
+
+	6) login to an NT or 95 box, and mount $OBJDIR and $SRCDIR.
+
+	7) Create a file called ${OBJDIR}/setvars.mak, which is used by the
+	   nmake files to set up a few things needed for the build.  Here's an
+	   example:
+
+	   SRCROOT=h:/devo
+	   msvc=e:/msvc20
+	   objdir=g:/build/i386win-sparclite-elf
+
+	   `SRCROOT' is the top of your devo tree.  `msvc' points at the top of
+	   your MSVC tree ($msvc\bin\cl.exe should be where your C compiler
+	   lives).  `objdir' is the location of the object directory.
+
+The rest is done on the NT or 95 system:
+
+	8) Add MSVC binaries to your path.  Ie: path $msvc\bin;%path%
+	   (Actually, since $msvc isn't set at this point, you will need to use
+	    an explicit path.)
+
+	9) nmake -f nmake.mak >> make.log
+	   You can watch the log on a unix box.
+
+Eventually, you should get a gdb.exe.

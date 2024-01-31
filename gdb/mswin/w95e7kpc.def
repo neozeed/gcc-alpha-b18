@@ -1,0 +1,14 @@
+LIBRARY	w95e7kpc
+DESCRIPTION  'win95 32-bit thunks to 16-bit wine7kpc.dll'
+EXETYPE	WINDOWS
+
+CODE	PRELOAD FIXED DISCARDABLE
+DATA	PRELOAD FIXED SINGLE
+HEAPSIZE 1024
+
+EXPORTS
+    win_load_e7kpc	@1
+    win_unload_e7kpc	@2
+    win_mem_get		@3
+    win_mem_put		@4
+    win_remote_debug	@5

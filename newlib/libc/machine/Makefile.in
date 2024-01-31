@@ -1,0 +1,83 @@
+# Makefile for newlib/libc/machine.
+# Copyright (c) 1994 Cygnus Support.
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms are permitted
+# provided that the above copyright notice and this paragraph are
+# duplicated in all such forms and that any documentation,
+# advertising materials, and other materials related to such
+# distribution and use acknowledge that the software was developed
+# at Cygnus Support, Inc.  Cygnus Support, Inc. may not be used to
+# endorse or promote products derived from this software without
+# specific prior written permission.
+# THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
+srcdir = .
+
+SHELL = /bin/sh
+
+AR_FLAGS = qv
+BISON = bison
+MAKEINFO = makeinfo
+
+TOP = ../..
+SRCTOP = ../..
+TARGETDOC = `echo $${rootpre}../targetdep.tex`
+
+.NOEXPORT:
+MAKEOVERRIDES=
+
+machine_dir =
+
+#### Host, target, and site specific Makefile fragments come in here.
+###
+
+# These are roughly topologically sorted in order to make porting more
+# streamlined.
+FLAGS_TO_PASS = \
+	"CC=$(CC)" \
+	"CFLAGS=$(CFLAGS)" \
+	"AR=$(AR)" \
+	"AR_FLAGS=$(AR_FLAGS)" \
+	"AS=$(AS)" \
+	"CROSS_CFLAGS=$(CROSS_CFLAGS)" \
+	"TARGET_CFLAGS=$(TARGET_CFLAGS)" \
+	"TARGET_ASFLAGS=$(TARGET_ASFLAGS)" \
+	"INCLUDES=$(INCLUDES)"
+
+all: lib.a
+lib.a: $(machine_dir)/lib.a
+	rm -f $@
+	ln $(machine_dir)/lib.a $@ >/dev/null 2>/dev/null || \
+	 cp $(machine_dir)/lib.a $@
+
+$(machine_dir)/lib.a: force
+	@rootpre=`pwd`/; export rootpre; \
+	srcrootpre=`cd $(srcdir); pwd`/; export srcrootpre; \
+	(cd $(machine_dir); $(MAKE) $(FLAGS_TO_PASS) all) || exit 1
+
+clean-here:
+	rm -rf lib.a
+
+clean mostlyclean: clean-here
+	@rootpre=`pwd`/; export rootpre; \
+	srcrootpre=`cd $(srcdir); pwd`/; export srcrootpre; \
+	cd $(machine_dir); $(MAKE) $(FLAGS_TO_PASS) $@
+
+distclean maintainer-clean realclean: clean-here
+	@rootpre=`pwd`/; export rootpre; \
+	srcrootpre=`cd $(srcdir); pwd`/; export srcrootpre; \
+	cd $(machine_dir); $(MAKE) $(FLAGS_TO_PASS) $@
+	rm -f Makefile config.status
+
+doc:
+	@rootpre=`pwd`/; export rootpre; \
+	srcrootpre=`cd $(srcdir); pwd`/; export srcrootpre; \
+	cd $(machine_dir); $(MAKE) "CHEW=$(CHEW)" "TARGETDOC=$(TARGETDOC)" doc
+
+force:
+
+Makefile: Makefile.in $(host_makefile_frag) $(target_makefile_frag)
+	$(SHELL) config.status

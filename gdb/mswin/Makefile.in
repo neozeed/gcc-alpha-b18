@@ -1,0 +1,110 @@
+# Copyright 1996 Free Software Foundation, Inc.
+
+# This file is part of GDB.
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+SHELL = /bin/sh
+
+AR = @AR@
+AR_FLAGS = qv
+RANLIB = @RANLIB@
+
+# If you are compiling with GCC, make sure that either 1) You have the
+# fixed include files where GCC can reach them, or 2) You use the
+# -traditional flag.  Otherwise the ioctl calls in inflow.c
+# will be incorrectly compiled.  The "fixincludes" script in the gcc
+# distribution will fix your include files up.
+CC=@CC@
+
+# Directory containing source files.
+srcdir = @srcdir@
+VPATH = @srcdir@
+
+# Set this up with gcc if you have gnu ld and the loader will print out
+# line numbers for undefined references.
+#CC_LD=gcc -static
+CC_LD=$(CC)
+
+# Where is our "include" directory?  Typically $(srcdir)/../include.
+# This is essentially the header file directory for the library
+# routines in libiberty.
+INCLUDE_DIR =  $(srcdir)/../../include
+INCLUDE_CFLAGS = -I$(INCLUDE_DIR)
+
+OP_INCLUDE = $(INCLUDE_DIR)/opcode
+OPCODES_CFLAGS = -I$(OP_INCLUDE)
+
+# Where is the READLINE library?  Typically in ../readline.
+READLINE_DIR = ../readline
+READLINE_SRC = $(srcdir)/$(READLINE_DIR)
+READLINE_CFLAGS = -I$(READLINE_SRC)
+
+MMALLOC_DIR = ../../mmalloc
+MMALLOC_SRC = $(srcdir)/$(MMALLOC_DIR)
+MMALLOC_CFLAGS = -I$(MMALLOC_SRC)
+
+# Where is the BFD library?  Typically in ../bfd.
+BFD_DIR = ../../bfd
+BFD = $(BFD_DIR)/libbfd.a
+BFD_SRC = $(srcdir)/$(BFD_DIR)
+BFD_CFLAGS = -I$(BFD_DIR) -I$(BFD_SRC)
+
+MSWIN_CFLAGS = -I. -I.. -I$(srcdir) -I$(srcdir)/.. -I$(srcdir)/../config $(DEFS)
+
+# INTERNAL_CFLAGS is the aggregate of all other *CFLAGS macros.
+INTERNAL_CFLAGS = $(CFLAGS) $(GLOBAL_CFLAGS) $(PROFILE_CFLAGS) \
+	$(MSWIN_CFLAGS) $(OPCODES_CFLAGS) $(READLINE_CFLAGS) \
+	$(BFD_CFLAGS) $(MMALLOC_CFLAGS) $(INCLUDE_CFLAGS)
+
+# LDFLAGS is specifically reserved for setting from the command line
+# when running make.
+
+.SUFFIXES: .cpp .ores .rc
+
+.c.o:
+	$(CC) -c $(INTERNAL_CFLAGS) $<
+
+.cpp.o:
+	$(CC) -c $(INTERNAL_CFLAGS) $<
+
+.rc.ores:
+	$(RC) -fo$@ -I$(srcdir) $<
+
+OFILES = gui.o dirpkr.o mini.o ser-win32s.o serdll32.o change.o colinfo.o option.o srcb.o srcsel.o mainfrm.o browserl.o fontinfo.o aboutbox.o transbmp.o ginfodoc.o gdbwinxx.o regdoc.o bptdoc.o gdbdoc.o bpt.o srcd.o srcwin.o regview.o expwin.o framevie.o infoframe.o log.o iface.o gdbwin.o gui.ores
+
+TARGETLIB = libwingdb.a
+
+all:	$(TARGETLIB)
+
+$(TARGETLIB): $(OFILES)
+	rm -f $(TARGETLIB)
+	$(AR) $(AR_FLAGS) $(TARGETLIB) $(OFILES)
+	$(RANLIB) $(TARGETLIB)
+
+clean mostlyclean:
+	rm -f $(OFILES) $(TARGETLIB) *~ core
+
+distclean: clean
+	rm -f config.status config.h stamp-h
+	rm -f config.log config.cache
+	rm -f Makefile
+
+maintainer-clean realclean: clean
+	@echo "This command is intended for maintainers to use;"
+	@echo "it deletes files that may require special tools to rebuild."
+	rm -f config.status
+	rm -f config.log config.cache
+	rm -f Makefile

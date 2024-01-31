@@ -1,0 +1,14 @@
+LIBRARY	w31e7k16
+DESCRIPTION  'Win32s UT dll for accessing real memory for the e7000 pc'
+EXETYPE	WINDOWS
+STUB    'WINSTUB.EXE'
+
+CODE  PRELOAD FIXED            
+DATA  PRELOAD SINGLE FIXED                         
+HEAPSIZE 1024
+
+; Export callbacks
+EXPORTS
+	WEP     @1 RESIDENTNAME
+	UTINIT  @2
+	UTPROC  @3

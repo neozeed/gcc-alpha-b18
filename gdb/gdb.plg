@@ -1,0 +1,115 @@
+--------------------Configuration: gdb - Win32 Debug--------------------
+Begining build with project "J:\image\gdb\gdb.dsp", at root.
+Active configuration is Win32 (ALPHA) Console Application (based on Win32 (ALPHA) Console Application)
+
+Project's tools are:
+			"C/C++ Compiler for Alpha" with flags "/nologo /MLd /Gt0 /GX /Zi /Od /I "." /I "./config" /I "./../include/opcode" /I "./../readline" /I "../bfd" /I "./../bfd" /I "./../mmalloc" /I "./../include" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D NO_MMALLOC=1 /D "ALMOST_STDC" /Fp"AlphaDbg/gdb.pch" /YX /Fo"AlphaDbg/" /Fd"AlphaDbg/" /FD /c "
+			"Win32 Resource Compiler" with flags "/l 0x409 /d "_DEBUG" "
+			"Browser Database Maker" with flags "/nologo /o"AlphaDbg/gdb.bsc" "
+			"COFF Linker for Alpha" with flags "../alphadbg/bfd.lib ../alphadbg/readline.lib ../alphadbg/opcodes.lib ../alphadbg/libiberty.lib /nologo /base:"0x2aa00000" /subsystem:console /pdb:"AlphaDbg/gdb.pdb" /debug /machine:ALPHA /out:"AlphaDbg/gdb.exe" "
+			"Custom Build" with flags ""
+			"<Component 0xa>" with flags ""
+
+Creating temp file "E:\TEMP\RSPE.tmp" with contents </nologo /MLd /Gt0 /GX /Zi /Od /I "." /I "./config" /I "./../include/opcode" /I "./../readline" /I "../bfd" /I "./../bfd" /I "./../mmalloc" /I "./../include" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D NO_MMALLOC=1 /D "ALMOST_STDC" /Fp"AlphaDbg/gdb.pch" /YX /Fo"AlphaDbg/" /Fd"AlphaDbg/"  /c 
+"J:\image\gdb\coffread.c"
+>
+Creating command line "cl.exe @E:\TEMP\RSPE.tmp" 
+Creating temp file "E:\TEMP\RSPF.tmp" with contents <../alphadbg/bfd.lib ../alphadbg/readline.lib ../alphadbg/opcodes.lib ../alphadbg/libiberty.lib /nologo /base:"0x2aa00000" /subsystem:console /pdb:"AlphaDbg/gdb.pdb" /debug /machine:ALPHA /out:"AlphaDbg/gdb.exe" 
+".\AlphaDbg\ada-exp.tab.obj"
+".\AlphaDbg\ada-lang.obj"
+".\AlphaDbg\ada-tasks.obj"
+".\AlphaDbg\ada-typeprint.obj"
+".\AlphaDbg\ada-valprint.obj"
+".\AlphaDbg\alpha-tdep.obj"
+".\AlphaDbg\alphant-nat.obj"
+.\AlphaDbg\annotate.obj
+.\AlphaDbg\bcache.obj
+.\AlphaDbg\blockframe.obj
+.\AlphaDbg\breakpoint.obj
+.\AlphaDbg\buildsym.obj
+".\AlphaDbg\c-exp.tab.obj"
+".\AlphaDbg\c-lang.obj"
+".\AlphaDbg\c-typeprint.obj"
+".\AlphaDbg\c-valprint.obj"
+".\AlphaDbg\ch-exp.obj"
+".\AlphaDbg\ch-lang.obj"
+".\AlphaDbg\ch-typeprint.obj"
+".\AlphaDbg\ch-valprint.obj"
+.\AlphaDbg\coffread.obj
+.\AlphaDbg\command.obj
+.\AlphaDbg\complaints.obj
+.\AlphaDbg\copying.obj
+.\AlphaDbg\corefile.obj
+".\AlphaDbg\cp-valprint.obj"
+.\AlphaDbg\dbxread.obj
+.\AlphaDbg\dcache.obj
+.\AlphaDbg\demangle.obj
+.\AlphaDbg\dwarf2read.obj
+.\AlphaDbg\dwarfread.obj
+.\AlphaDbg\elfread.obj
+.\AlphaDbg\environ.obj
+.\AlphaDbg\eval.obj
+.\AlphaDbg\exec.obj
+.\AlphaDbg\expprint.obj
+".\AlphaDbg\f-exp.tab.obj"
+".\AlphaDbg\f-lang.obj"
+".\AlphaDbg\f-typeprint.obj"
+".\AlphaDbg\f-valprint.obj"
+.\AlphaDbg\findvar.obj
+.\AlphaDbg\gdbtypes.obj
+".\AlphaDbg\gnu-regex.obj"
+.\AlphaDbg\infcmd.obj
+.\AlphaDbg\inflow.obj
+.\AlphaDbg\infrun.obj
+.\AlphaDbg\init.obj
+.\AlphaDbg\language.obj
+".\AlphaDbg\m2-exp.tab.obj"
+".\AlphaDbg\m2-lang.obj"
+".\AlphaDbg\m2-typeprint.obj"
+".\AlphaDbg\m2-valprint.obj"
+.\AlphaDbg\main.obj
+.\AlphaDbg\maint.obj
+.\AlphaDbg\mdebugread.obj
+".\AlphaDbg\mem-break.obj"
+.\AlphaDbg\minsyms.obj
+.\AlphaDbg\mipsread.obj
+.\AlphaDbg\nlmread.obj
+.\AlphaDbg\objfiles.obj
+.\AlphaDbg\os9kread.obj
+.\AlphaDbg\parse.obj
+.\AlphaDbg\printcmd.obj
+".\AlphaDbg\remote-utils.obj"
+.\AlphaDbg\remote.obj
+".\AlphaDbg\scm-exp.obj"
+".\AlphaDbg\scm-lang.obj"
+".\AlphaDbg\scm-valprint.obj"
+.\AlphaDbg\serial.obj
+.\AlphaDbg\source.obj
+.\AlphaDbg\stabsread.obj
+.\AlphaDbg\stack.obj
+.\AlphaDbg\symfile.obj
+.\AlphaDbg\symmisc.obj
+.\AlphaDbg\symtab.obj
+.\AlphaDbg\target.obj
+.\AlphaDbg\thread.obj
+.\AlphaDbg\top.obj
+.\AlphaDbg\typeprint.obj
+.\AlphaDbg\utils.obj
+.\AlphaDbg\valarith.obj
+.\AlphaDbg\valops.obj
+.\AlphaDbg\valprint.obj
+.\AlphaDbg\values.obj
+.\AlphaDbg\version.obj
+".\AlphaDbg\win32-nat.obj">
+Creating command line "link.exe @E:\TEMP\RSPF.tmp" 
+Compiling...
+coffread.c
+J:\image\gdb\coffread.c(2374) : warning C4113: 'void (__cdecl *)(void)' differs in parameter lists from 'void (__cdecl *)(struct _bfd *,struct sec *,void *)'
+J:\image\gdb\coffread.c(2390) : warning C4113: 'struct section_offsets *(__cdecl *)(void)' differs in parameter lists from 'struct section_offsets *(__cdecl *)(struct objfile *,unsigned long )'
+J:\image\gdb\coffread.c(2392) : warning C4113: 'int (__cdecl *)(void)' differs in parameter lists from 'int (__cdecl *)(struct _bfd *,struct section_table ** ,struct section_table ** )'
+Linking...
+LINK : warning LNK4076: invalid incremental status file "AlphaDbg/gdb.ilk"; linking nonincrementally
+
+
+
+gdb.exe - 0 error(s), 4 warning(s)

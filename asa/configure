@@ -1,0 +1,1 @@
+sed -e "s,@CC@,$CC," <Makefile.in >Makefile

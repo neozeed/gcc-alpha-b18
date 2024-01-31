@@ -1,0 +1,97 @@
+# Makefile for newlib/libc/ctype.
+# Copyright (c) 1994 Cygnus Support.
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms are permitted
+# provided that the above copyright notice and this paragraph are
+# duplicated in all such forms and that any documentation,
+# advertising materials, and other materials related to such
+# distribution and use acknowledge that the software was developed
+# at Cygnus Support, Inc.  Cygnus Support, Inc. may not be used to
+# endorse or promote products derived from this software without
+# specific prior written permission.
+# THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
+srcdir = .
+
+SHELL = /bin/sh
+
+TOP = ../..
+SRCTOP = ../..
+TARGETDOC = ../targetdep.tex
+
+#### Host, target, and site specific Makefile fragments come in here.
+###
+
+OFILES=	ctype_.o \
+	isalnum.o \
+	isalpha.o \
+	isascii.o \
+	iscntrl.o \
+	isdigit.o \
+	islower.o \
+	isupper.o \
+	isprint.o \
+	ispunct.o \
+	isspace.o \
+	isxdigit.o \
+	toascii.o \
+	tolower.o \
+	toupper.o \
+	_tolower.o \
+	_toupper.o
+
+CHEWOUT_FILES=\
+	isalnum.def	\
+	isalpha.def	\
+	isascii.def	\
+	iscntrl.def	\
+	isdigit.def	\
+	islower.def	\
+	isprint.def	\
+	ispunct.def	\
+	isspace.def	\
+	isupper.def	\
+	isxdigit.def	\
+	toascii.def	\
+	tolower.def	\
+	toupper.def	
+
+all: lib.a
+lib.a: $(OFILES)
+	rm -f $@
+	$(AR) $(AR_FLAGS) $@ $(OFILES)
+
+doc: $(CHEWOUT_FILES)
+	cat $(srcdir)/ctype.tex >> $(TARGETDOC)
+
+clean mostlyclean:
+	rm -f $(OFILES) *~ *# $(CHEWOUT_FILES) *.ref *.o.* lib.a
+
+distclean maintainer-clean realclean: clean
+	rm -f Makefile config.status
+
+Makefile: Makefile.in $(host_makefile_frag) $(target_makefile_frag)
+	$(SHELL) config.status
+
+# to support SunOS VPATH
+ctype_.o: ctype_.c
+isalnum.o: isalnum.c
+isalpha.o: isalpha.c
+isascii.o: isascii.c
+iscntrl.o: iscntrl.c
+isdigit.o: isdigit.c
+islower.o: islower.c
+isupper.o: isupper.c
+isprint.o: isprint.c
+ispunct.o: ispunct.c
+isspace.o: isspace.c
+isxdigit.o: isxdigit.c
+toascii.o: toascii.c
+tolower.o: tolower.c
+toupper.o: toupper.c
+_tolower.o: _tolower.c
+_toupper.o: _toupper.c
+

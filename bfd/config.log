@@ -1,0 +1,42 @@
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+
+configure:634: checking host system type
+configure:655: checking target system type
+configure:673: checking build system type
+configure:741: checking for gcc
+configure:818: checking whether the C compiler (gcc  ) works
+configure:832: gcc -o conftest    conftest.c  1>&5
+configure:852: checking whether the C compiler (gcc  ) is a cross-compiler
+configure:857: checking whether we are using GNU C
+configure:881: checking whether gcc accepts -g
+configure:910: checking for POSIXized ISC
+configure:944: checking for ar
+configure:975: checking for ranlib
+configure:1048: checking for a BSD compatible install
+configure:1156: checking how to run the C preprocessor
+configure:1220: checking for stddef.h
+configure:1220: checking for string.h
+configure:1220: checking for strings.h
+configure:1220: checking for stdlib.h
+configure:1220: checking for time.h
+configure:1220: checking for unistd.h
+configure:1260: checking for fcntl.h
+configure:1260: checking for sys/file.h
+configure:1260: checking for sys/time.h
+configure:1297: checking whether time.h and sys/time.h may both be included
+configure:1334: checking for fcntl
+configure:1334: checking for getpagesize
+configure:1334: checking for setitimer
+configure:1334: checking for sysconf
+configure:1397: checking whether strstr must be declared
+configure:1445: checking whether malloc must be declared
+configure:1493: checking whether realloc must be declared
+configure:1541: checking whether free must be declared
+configure:1589: checking whether getenv must be declared
+configure:1887: checking for sys/procfs.h
+configure:2213: checking for unistd.h
+configure:2252: checking for getpagesize
+configure:2305: checking for working mmap
+configure:2478: checking for madvise
+configure:2478: checking for mprotect

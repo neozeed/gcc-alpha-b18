@@ -1,0 +1,452 @@
+# This file is a shell script fragment that supplies the information
+# necessary to tailor a template configure script into the configure
+# script appropriate for this directory.  For more information, check
+# any existing configure script.
+
+# We need multilib support.
+# For now default to enabled.
+if [ "${enable_multilib}" = "" ]; then
+	enable_multilib=yes
+fi
+
+srctrigger=Makefile.in
+srcname="libc"
+target_dependent=true
+
+# newlib is configured for a particular target.  It must be built with
+# a build environment providing tools for that target.  This means
+# that "configure sun4 -target vxworks68" will build a library which
+# can be used on vxworks68; the sun4 is essentially ignored, and there
+# must be a build environment which will generate vxworks68 tools.  A
+# simple "configure sun4" will build a library which can be used on a
+# sun4.
+
+# Unfortunately, newlib does have one program which must run on the
+# host, namely makedoc, which is used to build documentation.
+
+# newlib does not test any features of the build environment (the
+# host).  It needs cc, as, ar, and ranlib for the target.
+
+if [ -z "${with_multisubdir}" ]; then
+  configdirs="doc"
+fi
+
+# per-host:
+
+# This is basically a hack so that we don't have to replicate the same
+# defines in all the Makefiles.  We put a standard set of definitions
+# in host/any, and use them everywhere.
+
+host_makefile_frag=host/any
+
+# per-target:
+
+newlib_target=
+
+target_cflags="-O2"
+
+unix_dir=
+libc_unix_lib=
+posix_dir=
+libc_posix_lib=
+signal_dir=signal
+libc_signal_lib=
+machine_dir=
+libc_machine_lib=
+sys_dir=
+libc_sys_lib=
+syscall_dir=
+libc_syscall_lib=
+
+files=
+links=
+
+# Get the source directories to use for the CPU type.
+# machine_dir should supply CPU dependent routines, such as setjmp.
+# target_cflags is passed to gcc when compiling.
+# THIS TABLE IS SORTED.  KEEP IT THAT WAY.
+
+case "${target_cpu}" in
+  a29k)
+	machine_dir=a29k
+	;;
+  arc)
+	machine_dir=
+	;;
+  alpha)
+        machine_dir=alpha
+        ;;
+  arm)
+	machine_dir=arm
+	;;
+  d10v*)
+	machine_dir=d10v
+	;;
+  h8300)
+	machine_dir=h8300
+	;;
+  h8500)
+	machine_dir=h8500
+	;;
+  hppa*)
+	machine_dir=hppa
+	;;
+  i960)
+	machine_dir=i960
+	;;
+  i[3456]86)
+	machine_dir=i386
+	;;
+  m32r*)
+	machine_dir=m32r
+	;;
+  m68*)
+	machine_dir=m68k
+	;;
+  m88k)
+	machine_dir=m88k
+	target_cflags="-m88000"
+	;;
+  m88110)
+	machine_dir=m88k
+	target_cflags="-m88110"
+	;;
+  mips*)
+	machine_dir=mips
+	;;
+  mn10200)
+	machine_dir=mn10200
+	;;
+  mn10300)
+	machine_dir=mn10300
+	;;
+  powerpc*)
+	machine_dir=powerpc
+	;;
+  sh)
+	machine_dir=sh
+	;;
+  sparc*)
+	machine_dir=sparc
+	# FIXME: Might wish to make MALLOC_ALIGNMENT more generic.
+	target_cflags="${target_cflags} -DMALLOC_ALIGNMENT=8"
+	;;
+  v70)
+	;;
+  v810)
+	;;
+  v850)
+	machine_dir=v850
+	;;
+  w65*)
+	fp_dir=ieeefp
+	machine_dir=w65
+	;;
+  z8k)
+	machine_dir=z8k
+	;;
+  *)
+	echo '***' "Newlib does not support target cpu ${target_cpu}" 1>&2
+	exit 1
+	;;
+esac
+
+# Get the source directories to use for the target.  unix_dir is set
+# to unix to get some standard Unix routines.  posix_dir is set to get some
+# standard Posix routines.  sys_dir should supply system dependent routines
+# including crt0.
+# THIS TABLE IS SORTED.  KEEP IT THAT WAY.
+
+case "${target}" in
+  *-*-cygwin32)
+	sys_dir=cygwin32
+	posix_dir=posix
+	;;
+  *-*-netware*)
+	signal_dir=
+	sys_dir=netware
+	;;
+  *-*-rtems*)			# generic RTEMS support
+	sys_dir=rtems
+	;;
+  a29k-*-*)
+	sys_dir=a29khif
+	signal_dir=
+	;;
+  arc-*-*)
+	sys_dir=arc
+	;;
+  arm-*-*)
+	sys_dir=arm 
+	;;
+  d10v*)
+	sys_dir=d10v
+	;;
+  h8300-*-hms*)
+	sys_dir=h8300hms
+	;;
+  h8300-*-xray*)
+	sys_dir=h8300xray
+	;;
+  h8500-*-hms*)
+	sys_dir=h8500hms
+	;;
+  i[3456]86-*-go32)
+	sys_dir=go32
+	;;
+  i[3456]86-*-sco*)
+	sys_dir=sysvi386
+	unix_dir=unix
+	;;
+  m68k-sun-sunos*)
+	unix_dir=unix
+	;;
+  m8*-bug-*)
+	sys_dir=m88kbug
+	;;
+  mn10?00-*-*)
+	sys_dir=sysmec
+	;;
+  mips*-dec-*)
+	sys_dir=decstation
+	;;
+  powerpcle-*-pe)
+	sys_dir=cygwin32
+	posix_dir=posix
+	;;
+  sh*-*)
+	sys_dir=sh
+	;;
+  sparc-sun-sunos*)
+	sys_dir=sun4
+	unix_dir=unix
+	;;
+  sparc64*)
+	sys_dir=sparc64
+	unix_dir=unix
+	;;
+  v70-nec-*)
+	sys_dir=sysvnecv70
+	;;
+  v810-*-*)
+	sys_dir=sysnec810
+	;;
+  v850-*-*)
+	sys_dir=sysnecv850
+	;;
+  w65-*-*)
+	sys_dir=w65
+	;;
+  z8k-*-coff)
+	sys_dir=z8ksim
+	;;
+esac
+
+# Target specific flag settings -- usually for features that are not
+# general enough or broad enough to be handled above.
+# THIS TABLE IS SORTED.  KEEP IT THAT WAY.
+
+case "${target}" in
+  *-*-cygwin32)
+	target_cflags="${target_cflags} -DHAVE_OPENDIR -DHAVE_RENAME -DSIGNAL_PROVIDED"
+	syscall_dir=syscalls
+	fake_sys_dir=
+	;;
+# RTEMS supplies its own versions of some routines:
+#       malloc()            (reentrant version)
+#       exit()              RTEMS has a "global" reent to flush
+#       signal()/raise()    RTEMS has its own including pthread signals
+#       _XYZ_r()            RTEMS has its own reentrant routines
+#
+#  NOTE: When newlib malloc uses a semaphore, RTEMS will switch to that.
+  *-*-rtems*)
+	target_cflags="${target_cflags} -DHAVE_GETTIMEOFDAY -DMALLOC_PROVIDED -DEXIT_PROVIDED -DMISSING_SYSCALL_NAMES -DSIGNAL_PROVIDED -DREENTRANT_SYSCALLS_PROVIDED"
+	;;
+# VxWorks supplies its own version of malloc, and the newlib one
+# doesn't work because VxWorks does not have sbrk.
+  *-wrs-vxworks*)
+	target_cflags="${target_cflags} -DMALLOC_PROVIDED -DMISSING_SYSCALL_NAMES"
+	;;
+# UDI doesn't have exec, so system() should fail the right way
+  a29k-amd-udi)
+	target_cflags="${target_cflags} -DNO_EXEC"
+	syscall_dir=syscalls
+	;;
+  arc-*-*)
+	syscall_dir=syscalls
+	;;
+  arm-*-*)
+	syscall_dir=syscalls
+	target_cflags="${target_cflags} -DABORT_PROVIDED"
+	;;
+  d10v*)
+	target_cflags="${target_cflags} -DSMALL_MEMORY"
+	syscall_dir=syscalls
+	;;
+  h8300*-*-*)
+	syscall_dir=syscalls	
+	target_cflags="${target_cflags} -DSMALL_DTOA -DSMALL_MEMORY"
+	;;	
+  h8500-*-*)
+	syscall_dir=syscalls	
+	target_cflags="${target_cflags} -DSMALL_DTOA -DSMALL_MEMORY"
+	;;	
+  i[3456]86-*-sco*)
+	target_cflags="${target_cflags} -DSIGNAL_PROVIDED"
+	;;
+  i[3456]86-*-netware*)
+	target_cflags="${target_cflags} -DMISSING_SYSCALL_NAMES -DNO_EXEC -DABORT_PROVIDED -DCLOCK_PROVIDED -DMALLOC_PROVIDED"
+	;;
+  i[3456]86-*-go32)
+	target_cflags="${target_cflags} -DMISSING_SYSCALL_NAMES -DNO_EXEC"
+	fake_sys_dir=
+	;;
+  m32r-*-*)
+	# Pass -msdata=sdata so _impure_ptr goes in .sdata.
+	# We don't generate sda relocs however for upward compatibility.
+	# FIXME: This is necessary because the default multilib doesn't
+	# use --print-multi-lib.
+	target_cflags="${target_cflags} -msdata=sdata"
+	syscall_dir=syscalls
+	;;
+  mn10?00-*-*)
+	syscall_dir=syscalls
+	;;
+  powerpc*-*-eabi* | \
+  powerpc*-*-elf* | \
+  powerpc*-*-linux* | \
+  powerpc*-*-rtem* | \
+  powerpc*-*-sysv* | \
+  powerpc*-*-solaris*)
+	target_cflags="${target_cflags} -mrelocatable-lib -mno-eabi -mstrict-align -DMISSING_SYSCALL_NAMES"
+	;;
+  powerpcle-*-pe)
+	target_cflags="${target_cflags} -DHAVE_OPENDIR -DHAVE_RENAME"
+	syscall_dir=syscalls
+	;;
+  sh*-*-*)
+	syscall_dir=syscalls
+	;;
+  sparc-sun-sunos*)
+	target_cflags="${target_cflags} -DSIGNAL_PROVIDED"
+	;;
+  sparc64-*-*)
+	target_cflags="${target_cflags} -DREENTRANT_SYSCALLS_PROVIDED -DHAVE_BLKSIZE -DHAVE_GETTIMEOFDAY"
+	# This either belongs elsewhere or nowhere. But I need *something*,
+	# so for now it's here ...
+	case "${target_os}" in
+	  aoutv8 | *32p)
+		target_cflags="${target_cflags} -DTARGET_PTR_SIZE=32" ;;
+	  *)
+		target_cflags="${target_cflags} -DTARGET_PTR_SIZE=64" ;;
+	esac
+	;;
+  v850-*-*)
+	syscall_dir=syscalls
+	;;
+  w65-*-*)
+	syscall_dir=syscalls	
+	target_cflags="${target_cflags} -DSMALL_DTOA -DSMALL_MEMORY"
+	;;	
+  z8k-*-*)
+	syscall_dir=syscalls
+	;;
+  *)
+	target_cflags="${target_cflags} -DMISSING_SYSCALL_NAMES"
+	syscall_dir=
+	;;
+esac
+
+# Determine subdirs based on unix_dir, posix_dir, signal_dir, machine_dir
+# and sys_dir.  Subdirs is the list of directories whose Makefiles we edit.
+
+subdirs="libc libc/ctype libc/errno libc/locale libc/misc libc/reent libc/stdio libc/stdlib libc/string libc/time libm libm/math"
+
+for i in testsuite testsuite/libm.paranoia testsuite/libm.sac ; do
+	if [ -d ${srcdir}/$i ] ; then
+		subdirs="${subdirs} $i"
+	fi
+done
+
+if [ ! -z "${unix_dir}" ]; then
+	subdirs="${subdirs} libc/${unix_dir}"
+	libc_unix_lib=${unix_dir}/lib.a
+fi
+
+if [ ! -z "${posix_dir}" ]; then
+	subdirs="${subdirs} libc/${posix_dir}"
+	libc_posix_lib=${posix_dir}/lib.a
+fi
+
+if [ ! -z "${signal_dir}" ]; then
+	subdirs="${subdirs} libc/${signal_dir}"
+	libc_signal_lib=${signal_dir}/lib.a
+fi
+
+if [ ! -z "${machine_dir}" ]; then
+	subdirs="${subdirs} libc/machine libc/machine/${machine_dir}"
+	libc_machine_lib=machine/lib.a
+fi
+
+if [ ! -z "${sys_dir}" ]; then
+	subdirs="${subdirs} libc/sys libc/sys/${sys_dir}"
+	libc_sys_lib=sys/lib.a
+fi
+
+if [ ! -z "${syscall_dir}" ]; then
+	subdirs="${subdirs} libc/${syscall_dir}"
+	libc_syscall_lib=${syscall_dir}/lib.a
+fi
+
+# If newlib_target is set, it is a target specific Makefile fragment.
+# At the moment, no target needs one.
+if [ ! -z "${newlib_target}" ]; then
+	target_makefile_frag=config/${newlib_target}.mt
+	echo "USING ${target_makefile_frag}..."
+fi
+
+# if sys_dir is set, then crt0 is built there.
+if [ ! -z "${sys_dir}" ] ; then
+	crt0=crt0.o
+	crt0_dir=libc
+fi
+
+# end of per-target determination
+
+# post-target:
+
+# We want the Makefile to know machine_dir, sys_dir, signal_dir,
+# and TARGET_CFLAGS, but we don't want to use a tiny Makefile fragment
+# for each one.  So we use sed to edit the Makefile directly.  This
+# isn't the way most of the tools work, but it saves Makefile fragments.
+
+# Actually, this is pretty silly.  In general, each of these is used
+# by only one makefile.  Keeping them here rather than with their
+# associated makefiles is rather wasteful and counterintuitive.
+
+sed -e "s:^machine_dir[ 	]*=.*$:machine_dir = ${machine_dir}:" \
+    -e "s:^sys_dir[ 	]*=.*$:sys_dir = ${sys_dir}:" \
+    -e "s:^signal_dir[ 	]*=.*$:signal_dir = ${signal_dir}:" \
+    -e "s:^TARGET_CFLAGS[ 	]*=.*$:TARGET_CFLAGS = ${target_cflags}:" \
+   -e "s:^LIBC_UNIX_LIB[ 	]*=.*$:LIBC_UNIX_LIB = ${libc_unix_lib}:" \
+   -e "s:^LIBC_POSIX_LIB[ 	]*=.*$:LIBC_POSIX_LIB = ${libc_posix_lib}:" \
+   -e "s:^LIBC_SIGNAL_LIB[ 	]*=.*$:LIBC_SIGNAL_LIB = ${libc_signal_lib}:" \
+   -e "s:^LIBC_MACHINE_LIB[ 	]*=.*$:LIBC_MACHINE_LIB = ${libc_machine_lib}:" \
+   -e "s:^LIBC_SYS_LIB[ 	]*=.*$:LIBC_SYS_LIB = ${libc_sys_lib}:" \
+   -e "s:^LIBC_SYSCALL_LIB[ 	]*=.*$:LIBC_SYSCALL_LIB = ${libc_syscall_lib}:" \
+   -e "s:^CRT0[ 	]*=.*$:CRT0 = ${crt0}:" \
+   -e "s:^CRT0_DIR[ 	]*=.*$:CRT0_DIR = ${crt0_dir}:" \
+	${Makefile} > Makefile.tem
+rm -f ${Makefile}
+mv Makefile.tem ${Makefile}
+
+# We need multilib support.
+if [ "${srcdir}" = "." ] ; then
+  if [ "${with_target_subdir}" != "." ] ; then
+    . ${with_multisrctop}../../config-ml.in
+  else
+    . ${with_multisrctop}../config-ml.in
+  fi
+else
+  . ${srcdir}/../config-ml.in
+fi

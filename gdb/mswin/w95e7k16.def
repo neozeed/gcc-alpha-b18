@@ -1,0 +1,13 @@
+LIBRARY	w95e7k16
+DESCRIPTION  'Win95 flat thunk dll for accessing real memory for the e7000 pc'
+EXETYPE	WINDOWS
+STUB    'WINSTUB.EXE'
+
+CODE    PRELOAD FIXED            
+DATA    PRELOAD SINGLE FIXED                         
+HEAPSIZE 1024
+
+EXPORTS
+    WEP     @1 RESIDENTNAME 
+    set_mem	@2
+    get_mem	@3

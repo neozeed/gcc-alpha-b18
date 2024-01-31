@@ -1,0 +1,45 @@
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+
+configure:555: checking for a BSD compatible install
+configure:612: checking for gcc
+configure:689: checking whether we are using GNU C
+configure:698: gcc -E conftest.c
+configure:713: checking whether gcc accepts -g
+configure:746: checking for ranlib
+configure:778: checking how to run the C preprocessor
+configure:799: gcc -E  conftest.c >/dev/null 2>conftest.out
+cpp.exe: stdout: Bad file descriptor
+gcc: Internal compiler error: program cpp got fatal signal 33
+configure: failed program was:
+#line 793 "configure"
+#include "confdefs.h"
+#include <assert.h>
+Syntax Error
+configure:816: gcc -E -traditional-cpp  conftest.c >/dev/null 2>conftest.out
+cpp.exe: stdout: Bad file descriptor
+gcc: Internal compiler error: program cpp got fatal signal 33
+configure: failed program was:
+#line 810 "configure"
+#include "confdefs.h"
+#include <assert.h>
+Syntax Error
+configure:841: checking for working alloca.h
+configure:853: gcc -o conftest -g -O2   conftest.c  1>&5
+configure:847: alloca.h: No such file or directory
+gcc: Internal compiler error: program cpp got fatal signal 33
+configure: failed program was:
+#line 846 "configure"
+#include "confdefs.h"
+#include <alloca.h>
+int main() {
+char *p = alloca(2 * sizeof(int));
+; return 0; }
+configure:874: checking for alloca
+configure:902: gcc -o conftest -g -O2   conftest.c  1>&5
+configure:1095: checking host system type
+configure:1116: checking target system type
+configure:1134: checking build system type
+configure:1159: checking whether make sets ${MAKE}
+configure:1190: checking if newlib needed
+configure:1201: gcc -o conftest -g -O2   conftest.c  1>&5

@@ -1,0 +1,180 @@
+# Test Framework Driver for GDB driving a ROM monitor (via monitor.c).
+#   Copyright 1995, 1997 Free Software Foundation, Inc.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
+
+load_lib gdb.exp
+
+#
+# gdb_target_monitor
+# Set gdb to target the monitor
+#
+proc gdb_target_monitor { } {
+    global gdb_prompt
+    global exit_status
+    global timeout
+
+    set timeout 60
+
+    verbose "Timeout is now $timeout seconds" 2
+    if [target_info exists gdb_protocol] {
+	set targetname "[target_info gdb_protocol]"
+    } else {
+	perror "No protocol specified for [target_info name].";
+	return -1;
+    }
+    if [target_info exists baud] {
+	gdb_test "set remotebaud [target_info baud]" "" ""
+    }
+    if [target_info exists gdb_serial] {
+       set serialport "[target_info gdb_serial]";
+    } elseif [target_info exists netport] {
+	set serialport "[target_info netport]"
+    } else {
+	set serialport "[target_info serial]"
+    }
+
+    for {set j 1} {$j <= 2} {incr j} {
+	for {set i 1} {$i <= 3} {incr i} {
+	    send_gdb "target $targetname $serialport\n"
+	    gdb_expect {
+		-re "A program is being debugged already.*ill it.*y or n. $" {
+		    send_gdb "y\n";
+		    exp_continue;
+		}
+		-re ".*Couldn't establish connection to remote.*$gdb_prompt" {
+		    verbose "Connection failed"
+		}
+		-re "Remote MIPS debugging.*$gdb_prompt" {
+		    verbose "Set target to $targetname"
+		    return
+		}
+		-re "Remote debugging using $serialport.*$gdb_prompt" {
+		    verbose "Set target to $targetname"
+		    return
+		}
+		-re "Remote target $targetname connected to.*$gdb_prompt" {
+		    verbose "Set target to $targetname"
+		    return
+		}
+		-re "Ending remote.*$gdb_prompt" { }
+		-re "Connection refused.*$gdb_prompt" {
+		    verbose "Connection refused by remote target.  Pausing, and trying again."
+		    sleep 30
+		    continue
+		}
+		timeout {
+		    send_gdb "";
+		    break
+		}
+	    }
+	}
+	if { $j == 1 && ![reboot_target] } {
+	    break;
+	}
+    }
+
+    perror "Couldn't set target for $targetname, port is $serialport."
+    return -1;
+}
+
+proc gdb_target_exec { } {
+    gdb_test "target exec" "No exec file now." "" ".*Kill it.*y or n.*" "y"
+    
+}
+#
+# gdb_load -- load a file into the debugger.
+#             return a -1 if anything goes wrong.
+#
+proc gdb_load { arg } {
+    global verbose
+    global loadpath
+    global loadfile
+    global GDB
+    global gdb_prompt
+    global timeout
+
+    for { set j 1; } { $j <= 2 } {incr j; } {
+	if [target_info exists gdb,use_standard_load] {
+	    gdb_target_exec;
+	    remote_push_conn host;
+	    set state [remote_ld target $arg];
+	    remote_close target;
+	    remote_pop_conn host;
+	    if { $state == "pass" } {
+		if { $arg != "" } {
+		    if [gdb_file_cmd $arg] { return -1 }
+		}
+		gdb_target_monitor;
+		gdb_test "list main" ".*" ""
+		verbose "Loaded $arg into $GDB\n";
+		return 1;
+	    }
+	} else {
+	    if { $arg != "" } {
+		if [gdb_file_cmd $arg] { return -1 }
+	    }
+	    gdb_target_monitor
+
+	    if [is_remote host] {
+		# FIXME:
+		set arg a.out;
+	    }
+
+	    verbose "Loading $arg"
+	    send_gdb "load $arg\n"
+	    set timeout 1000
+	    verbose "Timeout is now $timeout seconds" 2
+	    gdb_expect {
+		-re ".*\[Ff\]ailed.*$gdb_prompt $" {
+		    verbose "load failed";
+		}
+		-re ".*$gdb_prompt $" {
+		    verbose "Loaded $arg into $GDB\n"
+		    return 1
+		}
+		timeout {
+		    if { $verbose > 1 } {
+			perror "Timed out trying to load $arg."
+		    }
+		}
+	    }
+	}
+
+	gdb_target_exec;
+
+	if { $j == 1 } {
+	    if { ![reboot_target] } {
+		break;
+	    }
+	}
+    }
+    perror "Couldn't load file into GDB.";
+    return -1;
+}
+
+proc gdb_start { } {
+    global timeout
+    global reboot
+
+    # reboot the board to get a clean start
+    if $reboot then {
+	reboot_target;
+    }
+    catch default_gdb_start;
+
+    set timeout 10
+    verbose "Timeout is now $timeout seconds" 2
+}

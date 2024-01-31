@@ -1,0 +1,8 @@
+ARCH=i386
+SCRIPT_NAME=pe
+OUTPUT_FORMAT="pei-i386"
+LINK_FORMAT="pe-i386" # for link -r
+TEMPLATE_NAME=pe
+ENTRY="___PosixProcessStartup"
+EXECUTABLE_NAME=a.out
+INITIAL_SYMBOL_CHAR=\"_\"

@@ -1,0 +1,103 @@
+--------------------Configuration: bfd - Win32 Debug--------------------
+Begining build with project "J:\image\bfd\bfd.dsp", at root.
+Active configuration is Win32 (ALPHA) Static Library (based on Win32 (ALPHA) Static Library)
+
+Project's tools are:
+			"C/C++ Compiler for Alpha" with flags "/nologo /MLd /Gt0 /GX /Z7 /Od /I "." /I "./../include" /D "ALMOST_STDC" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /Fp"AlphaDbg/bfd.pch" /YX /Fo"AlphaDbg/" /Fd"AlphaDbg/" /FD /c "
+			"Browser Database Maker" with flags "/nologo /o"AlphaDbg/bfd.bsc" "
+			"Library Manager" with flags "/nologo /out:"AlphaDbg\bfd.lib" "
+			"Custom Build" with flags ""
+			"<Component 0xa>" with flags ""
+
+Creating temp file "E:\TEMP\RSP49.tmp" with contents </nologo /MLd /Gt0 /GX /Z7 /Od /I "." /I "./../include" /D "ALMOST_STDC" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /Fp"AlphaDbg/bfd.pch" /YX /Fo"AlphaDbg/" /Fd"AlphaDbg/"  /c 
+"J:\image\bfd\archive.c"
+"J:\image\bfd\archures.c"
+"J:\image\bfd\bfd.c"
+"J:\image\bfd\binary.c"
+"J:\image\bfd\cache.c"
+"J:\image\bfd\coffgen.c"
+"J:\image\bfd\cofflink.c"
+"J:\image\bfd\corefile.c"
+"J:\image\bfd\cpu-alpha.c"
+"J:\image\bfd\elf.c"
+"J:\image\bfd\format.c"
+"J:\image\bfd\hash.c"
+"J:\image\bfd\ihex.c"
+"J:\image\bfd\init.c"
+"J:\image\bfd\libbfd.c"
+"J:\image\bfd\linker.c"
+"J:\image\bfd\opncls.c"
+"J:\image\bfd\pe-nt_alpha.c"
+"J:\image\bfd\pei-nt_alpha.c"
+"J:\image\bfd\reloc.c"
+"J:\image\bfd\section.c"
+"J:\image\bfd\srec.c"
+"J:\image\bfd\stab-syms.c"
+"J:\image\bfd\stabs.c"
+"J:\image\bfd\syms.c"
+"J:\image\bfd\targets.c"
+"J:\image\bfd\tekhex.c"
+>
+Creating command line "cl.exe @E:\TEMP\RSP49.tmp" 
+Creating temp file "E:\TEMP\RSP4A.tmp" with contents </nologo /out:"AlphaDbg\bfd.lib" 
+.\AlphaDbg\archive.obj
+.\AlphaDbg\archures.obj
+.\AlphaDbg\bfd.obj
+.\AlphaDbg\binary.obj
+.\AlphaDbg\cache.obj
+.\AlphaDbg\coffgen.obj
+.\AlphaDbg\cofflink.obj
+.\AlphaDbg\corefile.obj
+".\AlphaDbg\cpu-alpha.obj"
+.\AlphaDbg\elf.obj
+.\AlphaDbg\format.obj
+.\AlphaDbg\hash.obj
+.\AlphaDbg\ihex.obj
+.\AlphaDbg\init.obj
+.\AlphaDbg\libbfd.obj
+.\AlphaDbg\linker.obj
+.\AlphaDbg\opncls.obj
+".\AlphaDbg\pe-nt_alpha.obj"
+".\AlphaDbg\pei-nt_alpha.obj"
+.\AlphaDbg\reloc.obj
+.\AlphaDbg\section.obj
+.\AlphaDbg\srec.obj
+".\AlphaDbg\stab-syms.obj"
+.\AlphaDbg\stabs.obj
+.\AlphaDbg\syms.obj
+.\AlphaDbg\targets.obj
+.\AlphaDbg\tekhex.obj>
+Creating command line "link.exe -lib @E:\TEMP\RSP4A.tmp" 
+Compiling...
+archive.c
+archures.c
+bfd.c
+binary.c
+cache.c
+coffgen.c
+cofflink.c
+corefile.c
+cpu-alpha.c
+elf.c
+format.c
+hash.c
+ihex.c
+init.c
+libbfd.c
+linker.c
+opncls.c
+pe-nt_alpha.c
+pei-nt_alpha.c
+reloc.c
+section.c
+srec.c
+stab-syms.c
+stabs.c
+syms.c
+targets.c
+tekhex.c
+Creating library...
+
+
+
+bfd.lib - 0 error(s), 0 warning(s)

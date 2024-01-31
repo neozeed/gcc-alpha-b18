@@ -1,0 +1,9 @@
+# The alpha requires specific options to pass this test.
+# (So, probably, do most RISCs.)
+global target_triplet
+
+if [istarget "alpha-*-*"] {
+	set thistest_options "-mtrap-precision=i"
+}
+
+return 0

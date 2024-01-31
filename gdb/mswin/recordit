@@ -1,0 +1,126 @@
+#! /bin/sh
+
+if [ x$1 != "x-record" ]
+then
+	rm to-be-built > /dev/null 2>&1
+	curdir=`pwd`
+
+	case "$0" in
+	/*) me=$0 ;;
+	*) me=`pwd`/$0 ;;
+	esac
+
+	me="$me -record"
+
+	TO_BE_BUILT=$curdir/to-be-built
+	export TO_BE_BUILT
+	
+#	cat <<-END >> $TO_BE_BUILT
+#	srcroot=SRCROOT
+#	msvc=MSVC
+#	INCLUDE=-I$(msvc)/include -I$(msvc)/mfc/include
+#	CC=cl -Zi $(INCLUDE) -nologo -DALMOST_STDC
+#	AR=lib -nologo
+#
+#	all: gdb/gdb
+#
+#	END
+
+	make all CC="$me recordit-cc" AS="$me recordit-as" LD="$me recordit-ld" AR="$me recordit-ar" RANLIB="$me recordit-ranlib" RC="$me recordit-rc" MAKE="$me recordit-make"
+
+	exit 0
+else
+	shift
+fi
+
+saved_pwd=`pwd`
+saved_srcroot=$s
+saved_cmd=$@
+
+cmd=$1
+shift
+target=
+
+case $cmd in
+recordit-cc)
+	o_target=
+	c_target=
+	saw_minus_c=
+
+	while [ $# -gt 0 ]
+	do
+		case $1 in
+		-o)
+			o_target=$2
+			shift
+			;;
+		-c)
+			saw_minus_c=yes;
+			;;
+		*.c | *.cpp)
+			if [ x$c_target = x ]
+			then
+				case $1 in
+				*.c) c_target=`basename $1 .c`.o ;;
+				*.cpp) c_target=`basename $1 .cpp`.o ;;
+				esac
+			fi
+			;;
+		esac
+		shift
+	done
+
+	if [ -n "$o_target" ]
+	then
+		target=$o_target
+	elif [ -n "$saw_minus_c" ]
+	then
+		target=$c_target
+	else
+		target=a.out
+	fi
+
+	case $target in
+	*.o) touch $target ;;
+	*) rm -f $target ; ln -s /bin/true $target ;;
+	esac
+	;;
+recordit-ar)
+	while [ $# -gt 0 ]
+	do
+		case $1 in
+		*.a)
+			target=$1
+			touch $target
+			;;
+		esac
+		shift
+	done
+	;;
+recordit-rc)
+	while [ $# -gt 0 ]
+	do
+		case $1 in
+		-fo*)
+			target=`echo $1 | sed -e 's|-fo||'`
+			touch $target
+			;;
+		esac
+		shift
+	done
+	;;
+recordit-ranlib)
+	touch $1
+	exit 0
+	;;
+recordit-make)
+	make "$@"
+	exit 0
+	;;
+esac
+
+echo "
+TARGET $target
+PWD $saved_pwd
+SRCROOT $saved_srcroot
+CMD $saved_cmd" >> $TO_BE_BUILT

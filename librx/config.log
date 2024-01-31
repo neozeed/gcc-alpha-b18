@@ -1,0 +1,8 @@
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+
+configure:645: gcc -E conftest.c
+configure:703: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:1091: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:1156: gcc -o conftest -g -O   conftest.c  1>&5
+configure:1188: gcc -E  conftest.c >/dev/null 2>conftest.out

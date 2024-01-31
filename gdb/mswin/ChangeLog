@@ -1,0 +1,687 @@
+Fri Apr  4 08:03:15 1997  Stu Grossman  (grossman@critters.cygnus.com)
+
+	* ser-win32s.c (win32s_open):  Assert DTR and RTS, ignore CTS and
+	DSR to fix d10v board serial I/O problem.  Fixes PR 11697.
+
+Tue Mar 11 23:28:00 1997  Dawn Perchik  <dawn@cygnus.com>
+
+	* config.mak: Don't define DEBUG as default.  Fix test for REL.
+	Minor formatting changes.
+	* sh.mak, h8300.mak: Remove rules for windows e7kpc support and 
+	include e7kpc.mak instead.
+	* e7kpc.mak: New.  Windows support for building win-e7kpc dlls moved 
+	into this file from sh.mak and h8300.mak.
+	* sim.mak: Fix rule for code.c and gencode simulator.  Include 
+	fnmatch.obj if new release.  Add $(BFDREL_OBJS) to LIBBFD_OBJS.
+	* regenerate: Add sparclet to target list.  
+	Generate elf64-target.h in mips prebuilt directory.
+
+Tue Feb 18 11:28:00 1997  Dawn Perchik  <dawn@cygnus.com>
+
+	* aboutbox.cpp: Remove commented out code for loading bitmap.
+	Comment out code for big icon.
+	* common.mak: Update location of debugify.c and debugify.h.
+	Link with new objects dwarf2read.obj fnmatch.obj if recent release.
+	* config.mak: Update release makefile variable to 971.
+	* gdbwin.c: Include log.h.
+	* gui.clw: Add browser class resource.
+	* gui.rc: Update release and version.
+	Add release, version and contact information to about dialog box.
+	Update company name to Cygnus Solutions.
+	* log.cpp: Fix insertion code to allow editting of commands.
+	Fix editting controls to not allow user to backspace or left-arrow 
+	over prompt.
+	Add command history class.
+	Fix up and down arrows to use command history.
+	Change variable names to be descriptive.
+	Remove hardcoded prompt and prompt sizes.
+	* log.h: Replace // comments around macro with ifdef to eliminate 
+	compiler warning.
+	* resource.h: Add new dialog.
+	Add defines for language for new MSVC versions.
+	* res/N_gdbico.bmp: Remove blemishes.
+	* res/bitmap1.bmp: Replace Steve's fave with Cygnus logo and gdb icon.
+
+Wed Feb 12 16:16:48 1997  Dawn Perchik  <dawn@cygnus.com>
+
+	* debugify.c, debugify.h: Moved to gdb directory.
+
+Wed Feb 12 08:51:43 1997  Dawn Perchik  <dawn@cygnus.com>
+
+	* sh.mak: Build additional dlls for e7000pc support.
+	Fix build of w31e7kpc.dll to call Dll initialization routine.
+	Specify base addresses for e7000 dlls to linker.
+	* serdll.mak: Include win32 libraries.  Modify sertest rules to 
+	allow option to test serdll32 if serdll32 is statically linked.
+	Fix build of serdll32.dll to build from definitions file.
+	* common.mak: Add rules for debugify.obj.
+	* config.mak: Add makefile varable STATIC_LINK to link serdll32 in
+	with gdb.  Link with serdll32.obj if STATIC_LINK is set, and 
+	remove dependancies for 32-bit serial dlls.
+	Tweak settings for compile and link options.
+	Remove unnessessary defines for 16-bit compilation.
+	Remove additional spaces.
+
+Tue Feb 11 23:50:37 1997  Dawn Perchik  <dawn@cygnus.com>
+
+	* change.h: Fix declaration of sname.
+	* framevie.h: (cosmetic) Remove nl in declaration of m_name_listbox.
+	* gdbtypes.h(CTargetAddr): Init addr.
+	* gdbwin.h: (cosmetic) Add comments.
+	* log.h: Add member function flush.
+	Add hooks for future code improvements.
+	* pageset.h: (cosmetic) Add comment.
+	* serdll32.h: Add prototypes for load_serdll16 and unload_serdll16.
+	* srcd.h(CSrcFileByAddress::CSrcFileByAddress): Initialize address.
+	* tabstop.h: (cosmetic) Add comment.
+	* win-e7kpc.h: Add define for selector address.
+	Add documentation on how the e7000pc support is designed.
+	* windefs.h: (cosmetic) Remove comment.
+	* xm.h: (cosmetic) Add comments.
+	* change.cpp: Initialize sname.
+	* dirpkr.cpp: Initialize m_bDlgJustCameUp.
+	* expwin.cpp: Initialize openview.  Fix indentation.
+	* fontinfo.cpp: Initialize m_fontheight.
+	* gdbwinxx.cpp: Return 0 if linetable is null.
+	* gdbwin.c: Add comments.
+	* ginfodoc.cpp: Init buf, offset & pagenumber.
+	Remove duplicate init for idx.
+	* gui.cpp: Save away wingdb_hInstance so that serdll32 can load
+	serdll16 outside of DllInit.
+	(win32pollquit): Fix test for cntl-C and set quit_flag.
+	Fix so as not to remove meesage from queue if not processed.
+	Catch cntl-A and cntl-B as documentation states.
+	Initialize m_uiMyListClipFormat, m_CmdLogTemplate, m_srcTemplate,
+	m_expTemplate, m_infoTemplate, m_cmdTemplate, m_IOLogTemplate,
+	m_regTemplate, m_srcsTemplate, m_bptTemplate, m_asmTemplate,	
+	m_localTemplate, m_srcbrowserTemplate, m_watchTemplate,	
+	Complete prototypes for _beginthreadex and _endthreadex.
+	* iface.cpp: Flush wingdb's output buffer when newline printed.
+	* infoframe.cpp: Initialize scroll_view & list_view.
+	(CGnuInfoSView::CGnuInfoSView): Initialize 
+	maxcx, maxcy, n_hotspots, last_page, font_height & frame.
+	(CGnuInfoFrame::RecalcLayout):
+	Add test for text_view.inited around calls which require text_view
+	to be initialized to allow toolbar to safely be called from OnSize.
+	* log.cpp: Document how the log windows work.  
+	Rename nl to cmd_entered and make static.  Add ASSERTs.
+	Add method CGenericLogView::flush() to flush pending output.
+	Oninitialization, post a VK_RETURN here so we'll get a prompt 
+	and wait for a command.  Fix indentation.
+	Swap order of prompt string and gdb command execution.
+	Add hooks for future code improvements.
+	Initialize shown in constructor.
+	* mainfrm.cpp: Initialize theframe in constructor.
+	* mini.cpp: Initialize m_bSysTracking & m_bInSys.
+	* option.cpp(COptionsFont::COptionsFont): Initialize tfont, showup, 
+	first_call, pass, iteration, doshow, prev_font_style_index, and 
+	prev_font_size_index.
+	(COptionsSerial::COptionsSerial): Initialize m_baud, 
+	m_parity, m_com, m_databits, and m_stopbits.
+	* regview.cpp: Initialize mx, my, m_ronline, and m_numlines.
+	* regdoc.cpp: Initialize m_regs, m_regchanged, and doclist.
+	* srcd.cpp: Initialize getrecentname, path_now, and line.
+	* srcsel.cpp: Initialize parent.
+	* srcwin.cpp: Add checks to prevent devide by zero.
+	(CSrcSplit::CSrcSplit): Initialize sel, active, and src.
+	(CSrcScroll1::CSrcScroll1): Initialize winindex, width, 
+	splatx, srcx, zone, srcline_index, depth, line_with_pc, 
+	line_with_show_line, parent, and want_to_show_line.  
+	* win-e7kpc.c: Add code to ensure that the 16-bit e7000 dlls are 
+	unloaded when gdb exits.
+	Subtract selector offset before calling windows memory access routines.
+	Add code to handle 2-bytes at a time (currently not used).
+	Move initialization code from DllIinit to win_load_e7kpc.
+	Add documentation on how the e7000pc support is designed.
+	Correct loading of 16-bit dll on Windsows 3.1; ensure that we have 
+	an instance handle.
+	Swap order of len & offset to match implementation.
+	Add debugging output.
+	* win-e7kpc16.c:  Make sure all resources are freed/unloaded on exit.
+	Add type casting and masking.
+	Add documentation.  Add debugging output.
+	* serstub.c: Add includes "gdbwin.h" "windefs.h".
+	Fix func defs to match those in gdb.  Supply extra funcs needed 
+	for new static link and dynamic loading of serial32.
+	* sertest.c: Supply extra funcs needed for new static link and 
+	dynamic loading of serial32.  Get instance handle and pass to comm 
+	routines.  Add comments. Unload dlls.
+	Rename (un)load_serdll to (un)load_serdll16.
+	Rename preprocessor define TESTDLL to BUILD_DLL.
+	* ser-win32s.c: Rename preprocessor define DYNLOAD_SERDLL to 
+	DYNAMIC_LOAD.  Add support to dynamically load serdll32 on win32s 
+	if BUILD_DLL is set.  Add code to ensure that the e7000 dlls are 
+	unloaded when gdb exits.  Add debugging output.
+	(_initialize_ser_win32s): Call load_serdll16 if serdll32 statically 
+	linked. 
+	* serdll16.c: Cleanup debugging output.
+	* serdll32.c: Remove need for serial dlls on Win95 & WinNT.
+	Support static linking of serdll32 with dynamic loading of serdll16.
+	Support dynamic loading of serdll32 (if BUILD_DLL set).
+	Fix test for fwin32s under Win95.
+	Ensure we unload & cleanup on exit.
+	Add conditionals for BUILD_DLL to create dlls for compatibility with 
+	older revisions.
+	* debugify.c, debugify.h: New files.  Write debug info to a file,
+	screen, or otherwise redirect it.  Used for windows problems
+	where stderr and stdout don't exist.
+	* w95e7k16.def: New file.  Definitions file the 16-bit dll w95e7k16.dll.
+	* w95e7kpc.def: Fix library name.
+	* w31e7k16.def: New file.  Definitions file the 16-bit dll w31e7k16.dll.
+	* w31e7kpc.def: New file.  Definitions file the 32->16-bit thunking dll 
+	w31e7k16.dll for Windows 3.1.
+	* w95thunk.def: New file.  Definitions for Win95's flat thunk APIs in 
+	kernel32.lib.
+
+Tue Feb 11 16:23:40 1997  Doug Evans  <dje@canuck.cygnus.com>
+
+	* gdbwin.c (reg_order): Add m32r entry.
+	* gui.cpp (CGuiApp:InitInstance): Likewise.
+	* initfake.c (initialize_all_files): Likewise.
+	* regdoc.h (MAXREGS): Likewise.
+	* recordit: rm $target before creating symlink to /bin/true.
+
+Mon Feb 10 19:46:00 1997  Dawn Perchik  (dawn@cygnus.com)
+
+	* a29k.mak, aboutbox.h, browserf.h, browserl.h, change.h,
+	colinfo.h, common.mak, config.mak, flash.h, framevie.h,
+	gdbdoc.h, gdbpeek.c, gdbtypes.h, gdbwrap.h, ginfodoc.h,
+	gm-gui.mak, gm.mak, gui.clw, gui.mak, gui.rc,
+	h8300.mak, i386.mak, iface.h, infofram.h, iostuff.def,
+	log.h, m68k.mak, mainfrm.h, mem.h, mips.mak,
+	option.h, pageset.h, resource.h, serdll.h, serdll.mak,
+	serdll16.def, serdll16.mak, serdll32.def, serdll32.h, 
+	serdll32.mak, sh.mak, sim.mak, sparclet.mak, sparclit.mak,
+	srcb.h, srcwin.h, stdafx.cpp, tabstop.h, transbmp.h,
+	w32sut.h, win-e7kpc.c, win-e7kpc.h, win-e7kpc16.c, wine7kpc.def,
+	winthunk.def: Remove cntl-Ms to make it easier to do diffs and 
+	merges.
+
+Thu Jan 23 03:01:09 1997  Angela Marie Thomas (angela@cygnus.com)
+
+	* srcwin.cpp (CSrcScroll1::scroll_to_show_line,
+	CSrcScroll1::line_from_0basedy): check if depth is 0.
+
+Sun Jan 05 08:35:39 1997  Mark Alexander  <marka@cygnus.com>
+
+These are additional changes for the truncated register display problem
+on 64-bit targets.
+
+	* regdoc.h (CRegDoc::m_regs): Change type from int to CORE_ADDR.
+	(CRegDoc::ChangeReg): Change type of val from int to CORE_ADDR.
+	* gdbwin.c (reg_order): Remove PC and SR from MIPS register list,
+	because they're already displayed separately in the register window.
+	* regdoc.cpp (CRegDoc::ChangeReg): Change type of val from int
+	to CORE_ADDR.
+	(CRegDoc::Sync): Change type of copy from int to CORE_ADDR.
+	* regview.cpp: General cleanup and 64-bit fixes.
+
+Sat Jan 04 20:26:37 1997  Mark Alexander  <marka@cygnus.com>
+
+These changes fix the empty source window on 64-bit targets.
+
+	* srcd.cpp (CSrcD::sync_pc, CSrcD::show_at): Pass pointer to PC
+	instead of PC itself to UpdateAllViews.
+	* srcsel.cpp (CTabView::OnUpdate): Change meaning of lHint to be
+	a pointer to the PC instead of the PC itself.
+	* srcwin.cpp (CSrcScroll1::OnUpdate): Ditto.
+
+Wed Jan 01 13:58:52 1997  Mark Alexander  <marka@cygnus.com>
+
+Yet another fix for divide-by-zero problems caused by uninitialized depth
+in srcwin.cpp.  The fix of 11/05 was lost on 11/10.
+
+	* srcwin.cpp (CSrcScroll1::CSrcScroll1): Initialize depth to zero.
+	(CSrcScroll1::CSrcScroll1, CSrcScroll1::get_top_line): Check for
+	zero depth.
+	
+Sun Dec 29 15:15:01 1996  Mark Alexander  <marka@cygnus.com>
+
+	* gui.rc, aboutbox.cpp: Censor out the ridiculous picture
+	in the "About GDB" dialog.
+
+Sat Dec 28 21:35:06 1996  Angela Marie Thomas (angela@cygnus.com)
+
+    * gdbwin.c, gui.cpp, initfake.c, regdoc.h: Wingdb support for d10v.
+
+Sat Dec 28 19:10:37 1996  Angela Marie Thomas (angela@cygnus.com)
+
+    * gdbwin.c: add win_host() function
+    * gdbwin.h: add win_host_type enum
+    * ser-win32s.c: use win_host() to dynamically call the right 32bit
+    serial dll.
+
+Mon Nov 11 19:01:00 1996  Dawn Perchik <dawn@critters.cygnus.com>
+
+    * windefs.h: Cleanup comments.
+
+Mon Nov 11 03:08:00 1996  Dawn Perchik <dawn@critters.cygnus.com>
+
+    * gdbwrap.cpp: Part of previous checkin for mips64 support.
+
+Mon Nov 11 02:51:00 1996  Dawn Perchik <dawn@critters.cygnus.com>
+
+    * prebuilt/a29k/bfdtarget.h: Fix definition of SELECT_ARCHITECTURES.
+    * prebuilt/gm/tm.h: Fix include.
+    * prebuilt/libiberty/alloca-conf.h: Cleanup.
+    * prebuilt/mips/bfdtarget.h, mips/tm.h, bfd.h: support for mips64.
+    * prebuilt/mips/elf64-target.h: Add support for 64-bit mips target.
+    * prebuilt/mips/engine.c: Generated with 64-bit support.
+
+Sun Nov 10 23:40:00 1996  Dawn Perchik <dawn@critters.cygnus.com>
+
+    * bpt.cpp, mem.cpp, srcwin.cpp, srcd.cpp, regview.h, regview.cpp, 
+    framevie.cpp, gdbwin.h, gdbwinxx.cpp:
+    support and bug fixes for 64-bit targets.
+    * config.h, expwin.cpp, framevie.cpp, gdbwin.c, gui.cpp, 
+    initfake.c, iostuff.c, log.h, ser-win32s.c, serdll16.c, 
+    serdll32.c, srcwin.h, stubs.c, win-e7kpc.h, xm.h, sysdep.h:
+    Code cleanup (add prototypes, remove compiler warnings, add support 
+    for compiling under __STDC__, include windefs.h instead of windows.h).
+    * srcwin.cpp: Fix bugs; check for unconstructed objects.
+    * windefs.h: Wrapper header file for windows.h; fixes namespace 
+    collision problems with MSVC header files.
+
+Sun Nov 10 22:57:00 1996  Dawn Perchik <dawn@critters.cygnus.com>
+
+    * sertest.c, serstub.c: New files for testing stand-alone serial 
+    communication on Windows-based hosts.
+
+Sun Nov 10 22:07:00 1996  Dawn Perchik <dawn@critters.cygnus.com>
+
+    * common.mak: Move makefile variables relating to targets, hosts, 
+    compilerand linker flags , etc into config.mak.
+    * serdll.mak: Add sertest target for doing stand-alone serial 
+    tests on Windows-based hosts.
+    * sh.mak: Add simulator.  Include config.mak.
+    * sparclet.mak: Add sparclet stub support.  Include config.mak.
+    * sim.mak: New file.  Makefile for stand-alone simulator.
+    * config.mak: New file. Contains configurable makefile variable 
+    settings used by other makefiles.
+    * mips.mak, gm.mak, h8300.mak, m68k.mak, i386.mak, sparclit.mak,
+    a29k.mak: New target sprcific makefiles.
+
+Tue Sep 17 16:02:00 1996  Dawn Perchik <dawn@critters.cygnus.com>
+
+	* sparclet.mak: Remove flag for bogus library.
+
+Tue Sep 17 15:25:00 1996  Dawn Perchik <dawn@critters.cygnus.com>
+
+	* serdll.mak: Fix serdll32.dll build for WinNT.
+	* sparclet.mak: Update flags and set default host to WinNT.
+
+Tue Sep 17 11:53:00 1996  Dawn Perchik <dawn@critters.cygnus.com>
+
+	* gui.cpp: Fix nasty memory bug in initialization code which 
+	can sometimes causes wingdb to crash.  
+	* sh.mak, sparclet.mak, serdll.mak, common.mak: Minor enhancements.
+
+Tue Sep 17 05:33:00 1996  Dawn Perchik <dawn@critters.cygnus.com>
+
+	* makefile: New file. More attempts to simplify wingdb
+	builds for releng.  makefile sets up default settings and can build
+	a release, include debug info, etc.
+	* sh.mak, common.mak: Enhancements for makfile.
+
+Tue Sep 17 02:55:00 1996  Dawn Perchik <dawn@critters.cygnus.com>
+
+	* common.mak, sh.mak: Modified to build win-e7kpc files.
+	Cleaned up makefiles to make builds esier for releng.
+	* serdll.mak: New file for building serial dlls for Win32s/
+	Win95/and NT.  Invoked from common.mak.
+	* win-e7kpc.c, win-e7kpc16.c, win-e7kpc.h, wine7kpc.def:
+	New files; Wingdb support for target e7000pc.
+	* winthunk.def: Definitions file for Win95 kernel thunking routines.
+
+Fri Sep 10 02:39:34 1996  Dawn Perchik <dawn@critters.cygnus.com>
+
+	* gdbwin.c, gui.cpp, initfake.c, regdoc.h, stubs.c:
+	Wingdb support for target Sparclet.
+	* prebuilt/bfd.h: Regenerated.
+	* common.mak: Makefile for common wingdb builds.
+	* sparclet.mak: Makefile for Sparclet target specific build.
+
+Wed Sep  9 17:34:13 1996  Dawn Perchik <dawn@critters.cygnus.com>
+
+	* makemake.c,makemake.bat: New files for creating msvc-free 
+	makefiles.  These files allow remote builds of wingdb.  See
+
+Fri Aug 16 17:24:05 1996  Dawn Perchik <dawn@critters.cygnus.com>
+
+	* infoframe.cpp,srcsel.cpp,srcsel.h,stdafx.h,mini.cpp,waitcur.h:
+	changes to support for new MFC v4.0
+
+Wed Aug  7 21:57:35 1996  Stu Grossman  (grossman@critters.cygnus.com)
+
+	* gdbwin.c:  include malloc.h to get proper definition of alloca.
+	* gdbwin.h:  Remove prototype for set_breakpoint_sal.  That's
+	defined in breakpoint.h.
+	* gdbwinxx.cpp:  Use "" instead of <> when including stdafx.h.
+
+Tue Jul 23 09:44:18 1996  Fred Fish  <fnf@cygnus.com>
+
+	* gdbwin.h (set_breakpoint_sal): Remove prototype, now in
+	breakpoint.h.
+
+Wed Jul 24 04:26:52 1996  Geoffrey Noer  <noer@cygnus.com>
+
+	* updated gui.mak
+	* xm.h: don't define __WINGDB__, that's done in gui.mak
+	* prebuilt/* regenerated
+
+Fri May 19 23:50:52 1996  Geoffrey Noer  <noer@cygnus.com>
+
+	* serdll95.mak: new makefile for Win 95/NT compatible
+	serdll32.dll.  It is not compat. with Windows for Workgroups.
+	serdll32.mak is NT/Win for Work compat and is what we normally
+	ship.
+
+Mon May 13 11:28:05 1996  Stan Shebs  <shebs@andros.cygnus.com>
+
+	* gdbwin.c (reg_order) [TARGET_SH]: Update for SH3-E.
+	* initfake.c: Call _initialize_sh3_rom instead of _initialize_sh3.
+
+Mon Apr  8 14:28:16 1996  Geoffrey Noer  <noer@cygnus.com>
+
+	* initfake.c, gui.mak: added e7000 support for sh and h8300
+	processors.
+	(prebuilt): regenerated prebuilt files
+
+Wed Mar 13 12:23:13 1996  Geoffrey Noer  <noer@cygnus.com>
+
+	* converted regenerate script to /bin/sh instead of bash
+
+Wed Feb 21 12:59:25 1996  Geoffrey Noer  <noer@cygnus.com>
+
+	* modified ser-win32s.c so that WIN32S_P is set correctly.
+
+Tue Feb 13 18:05:46 1996  Stan Shebs  <shebs@andros.cygnus.com>
+
+	* gui.mak: Update to compile in libiberty/basename.c.
+
+Tue Jan 23 09:01:17 1996  Doug Evans  <dje@charmed.cygnus.com>
+
+	* gdbwin.c (togdb_disassemble): Call INIT_DISASSEMBLE_INFO,
+	and pass fprintf_filtered to it.
+
+Tue Jan 16 17:44:18 1996  Geoffrey Noer  <noer@cygnus.com>
+
+	* change to bfd_target for sparclite in prebuilt so
+	that aout executables work too.
+
+Fri Jan 12 15:44:12 1996  Steve Chamberlain  <sac@slash.cygnus.com>
+
+	* parallel.cpp: New file.
+	* ser-win32.c, ser-win32s.cpp: Deleted.
+	* initfake.c (initialize_all_files): Initialize parallel code.
+
+Wed Jan 10 14:15:45 1996  Geoffrey Noer  <noer@cygnus.com>
+	* another update to regenerate script (removed generation of
+	ch-exp.tab.c and more robustification)
+	* removed prebuilt/gdb/chexptab.c (now just ch-exp.c, no
+	longer a generated file)
+
+Mon Jan  8 14:30:48 1996  Geoffrey Noer  <noer@cygnus.com>
+	* updated regenerate script to solidify it a bit
+
+
+Wed Jan  3 21:06:27 1996  steve chamberlain  <sac@slash.cygnus.com>
+
+	* resource.h, gui.rc (ID_SYM_DIALOG_BROWSE_DIR): Define correctly.
+	* log.cpp (CGenericLogView::OnSize): Set font.
+	* option.cpp (COptionsDir::OnOK): Remember setting.
+	(COptionsDir::Initialize): Read from INFOPATH.
+	* regdoc.h (TARGET_SH): Set MAXREGS to NUM_REGS.
+
+Tue Dec  5 14:28:03 1995  Geoffrey Noer  <noer@cygnus.com>
+
+	* prebuilt/mips/tm.h now references tm-embed.h instead of
+		tm-idt.h.
+	* initfake.c: added hook for initialize_sh3
+	* prebuilt/sh/bfd-target.h: added biendian support by adding
+		&shlcoff_vec
+
+
+Thu Nov 16 16:21:37 1995  Geoffrey Noer  <noer@cygnus.com>
+
+	* regenerate: new bash script to automatically regenerate/fix
+		files in mswin (mostly in prebuilt).
+	* ser-win32s.c: #include "../defs.h" added to prevent barfing
+		on serial.h
+	* some more regenerating of prebuilt files
+
+
+Wed Nov 15 13:01:21 1995  Geoffrey Noer  <noer@cygnus.com>
+
+	* updated gui.rc for upcoming 96q1 migration
+	* latest gui.mak updated to
+	* regenerated in prebuilt from unix build:
+		bfd.h
+		<target>/version.c
+		gdb/cexptab.c
+		gdb/chexptab.c
+		gdb/fexptab.c
+		gdb/m2exptab.c
+		libiberty/alloca-conf.h
+		libiberty/config.h
+		mips/elf32-target.h
+
+Sat Nov  4 12:14:09 1995  Fred Fish  <fnf@cygnus.com>
+
+	* gui.mak (LINK32_OBJS): Change core.obj to corefile.obj.
+	(SOURCE): Change core.c reference to corefile.c.
+	(BCS32_SBRS): Change core.sbr corefile.sbr.
+	* bfdcore.c: Include corefile.c, renamed from core.c.
+
+Mon Oct 30 20:57:24 1995  Fred Fish  <fnf@cygnus.com>
+
+	* prebuilt/mips/elf32-target.h: Change libelf.h reference
+	to elf-bfd.h.
+
+Thu Oct 26 12:18:51 1995   Geoffrey Noer  <noer@cygnus.com>
+
+	* prebuilt/gdb/cexptab.c, chexptab.c, fexptab.c, m2exptab.c:
+	regenerated from a unix build
+	* serdll32.c: modified so w32sut.h is looked for in mswin directory
+	instead of VC++ include dir.  Makes sense because w32sut.h not
+	included in VC++ and is now in mswin directory.
+
+Wed Oct 25 21:21:16 1995   Geoffrey Noer  <noer@cygnus.com>
+
+	* prebuilt/sh/code.c:
+	* prebuilt/sh/table.c: did a sunos x sh build to regenerate these
+
+Mon Oct 23 14:16:39 1995   Geoffrey Noer  <noer@cygnus.com>
+
+	* removed: prebuilt/gdb/version.c since I split version.c up into
+	one per target instead of one for all targets
+
+Thu Oct 19 16:00:11 1995   Geoffrey Noer  <noer@cygnus.com>
+
+	* updated gui.rc for new version number
+	* updated gui.mak
+
+Thu Oct 19 13:57:17 1995   Geoffrey Noer  <noer@cygnus.com>
+
+	* updated prebuilt/<target>/version.c to update version number
+
+Thu Oct 19 11:10:42 1995   Geoffrey Noer  <noer@cygnus.com>
+
+	Configuration files for a29k and i386 targets:
+	* prebuilt/a29k/bfdtarget.h
+	* prebuilt/a29k/tm.h
+	* prebuilt/i386/bfdtarget.h
+	* prebuilt/i386/tm.h
+
+Wed Oct 18 22:24:06 1995   Geoffrey Noer  <noer@cygnus.com>
+
+	* gui.rc: merged in changes from 95q3 branch to add help labels
+	for all buttons, changed all 95q3 references to 95q4.
+	* prebuilt/bfd.h: Regenerated
+	* prebuilt/<every target>/version.c: created and made different
+	for each target
+	* version.c: removed in favor of the above change.
+
+Wed Oct 18 17:28:30 1995  Geoffrey Noer  <noer@cygnus.com>
+
+	* prebuilt/m68k/bfdtarget.h: added &aout0_big_vec to
+	SELECT_VECS for wingdb m68k aout support.
+
+Fri Oct 13 14:07:35 1995  steve chamberlain  <sac@slash.cygnus.com>
+
+	* srcwin.cpp (CSrcScroll1::OnDraw): Don't show disabled
+	splats unless a breakpoint is possible.
+	* gui.mak: Include mips config.
+	* prebuilt/mips/elf32-target.h: Regenerated.
+
+Mon Oct  9 13:23:31 1995  steve chamberlain  <sac@slash.cygnus.com>
+
+	* bpt.cpp (update_buttons): Allow modification of 1st button.
+	* bptview.{h,cpp}: Deleted.
+	* expwin.cpp (MESSAGE_MAP): OnEditDelItem, New.
+	(OnCreate): Add delete button.
+	(OnSize): Resize better.
+	(OnEditPaste, OnEditDel): Don't SetModifiedFlag.
+	(OnEditDelItem): New.
+	* expwin.h (CExpView:del): New.
+	* fontinfo.{h,cpp} (RememberSize, HadInitialUpdate): Deleted.
+	* frameview.cpp (DoDataExchange): Update gbutton.
+	(MESSAGE_MAP): Add OnFrameGoto.
+	(fill_data): Don't attept if frame is null.
+	(OnSize): Resize better.
+	* frameview.h (CFrameDialog:gbutton) : New.
+	* log.cpp (cmdlogview, iologview): Rename.
+	* srcb.cpp (rethink): Toggle explode correctly.
+	* watchwin.{h,cpp}: Deleted.
+	* srcwin.cpp (OnCreateClient): Rename window.
+	(OnDraw): Use want_to_show_line.
+	(OnUpdate): Set want_to_show_line.
+	(new_pc): Set want_to_show_line.
+	* srcwin.h (CSrcScroll1: want_to_show_line): New.
+	* stubs.c (sleep): Rewrite to work on win32s.
+	* prebuilt/bfd.h: Regenerated.
+
+Wed Oct  4 18:03:31 1995  Stu Grossman  (grossman@cygnus.com)
+
+	* gdbwin.c: (my_sprintf togdb_disassemble):  Get rid of
+	my_sprintf.  It is both useless and wrong.  Also, tie off end of
+	as buffer with a null to keep my_fputs_unfiltered from strcat'ing
+	into garbage.
+	* Add address to assembly output.
+	* (togdb_fetchpc):  Make PC be frame dependant.
+	* log.cpp (void CGenericLogView::OnEditChange()), mainfrm.cpp (void
+	CMainFrame::OnS(), void CMainFrame::OnFinish(), void CMainFrame::OnN(),
+	void CMainFrame::OnRun(), void CMainFrame::OnTargetRemote())
+	srcwin.cpp (void CSrcScroll1::OnS(), void CSrcScroll1::OnN()):  Add
+	call to togdb_force_update ().
+	* ser-win32s.c (win32s_open):  Avoid modifying global variables
+	unless open succeeds.  Return more about errors to the user.
+	* (win32s_readchar):  Remove bogus code that converts infinite
+	timeouts to four seconds.
+	* stubs.c:  #include <windows.h> so we can make calls to windows
+	routines.  Don't define sys_nerr (already defined in windows.h).
+	Provide stub for isascii ().  Make stub for sleep () actually do a
+	sleep, not an abort()!
+
+Thu Sep 28 17:14:41 1995  steve chamberlain  <sac@slash.cygnus.com>
+
+	* mswin/prebuilt/*/bfdtarget.h (SELECT_ARCHITECTURES): Need leading &.
+
+Wed Sep 20 10:01:25 1995  steve chamberlain  <sac@slash.cygnus.com>
+
+	* xm.h (FCLOSE_PROVIDED, GETENV_PROVIDED, MALLOC_INCOMPATIBLE): New.
+	* gdbwin.h: Clean out.
+
+Tue Sep 19 16:50:22 1995  steve chamberlain  <sac@slash.cygnus.com>
+
+	* *: Remove useless debugging code.
+	* frameview.cpp (showsymbol): Don't crash if value not available.
+	* gdbwin.c (reg_order): 29k target support.
+	* gui.cpp (InitInstance): 29k target support.
+	(OnHelpIndex, OnHelp): Search INFOPATH for info stuff.
+	* gui.mak: Added mips, 29k, i386. 
+
+Tue Aug 15 09:23:55 1995  steve chamberlain  <sac@slash.cygnus.com>
+
+	* srcd.cpp (suck_document): Only take the first range of addresses
+	of a source line.
+	* gdbwin.c (run): Nest error jmp_bufs.
+
+Mon Aug 14 18:49:31 1995  steve chamberlain  <sac@slash.cygnus.com>
+ 
+ 	* framevie.h (catch_errors): Remove prototype.
+ 	* gdbwin.h (catch_errors): New.
+ 	* gdbwin.c (togdb_command_from_tty): Use catch_errors.
+ 	* srcd.cpp (suck_document): Don't crash if no source for the line.
+
+Mon Aug  7 13:54:33 1995  steve chamberlain  <sac@slash.cygnus.com>
+
+	* framevie.cpp. framevie.h (protected_rethink, call_protected_OnDrawItem, 
+	protected_OnDrawItem):	New.
+	(OnDrawItem): Call protected version.
+	* gdbwin.c (togdb_command_from_tty): New.
+	(my_target_output_hook): New.
+	* iface.cpp (gdbwin_fputs): Indirect though cmdwinptr.
+	* gui.h (mswin_query): Declare.
+	* xm.h (ROOTED_P): Fix.
+	* menurs.rc, menus/window.h: Add IO window option.
+	* option.cpp (cmdlogview_fontinfo, iologview_fontinfo): New
+	* regdoc.h (TARGET_MIPS): New.
+	* resource.h (IO_SYM_FRAME_IOLOGTYPE): New.
+
+Thu Aug  3 10:45:37 1995  Fred Fish  <fnf@cygnus.com>
+
+	* Update all FSF addresses except those in COPYING* files.
+
+Fri Jul  7 08:39:44 1995  Steve Chamberlain  <sac@slash.cygnus.com>
+
+	* regview.cpp (rethink): Larger buffer.
+	* gdbwinxx.cpp (calc_lineinfo): Add entry with the first address in file.
+
+Thu Jul  6 09:56:30 1995  Steve Chamberlain  <sac@slash.cygnus.com>
+
+	pr 7371, 7372
+	* gdbwin.c (_initialize_gdbwin): Patch query_hook.
+	* gdbwinxx.cpp (togdb_eval_as_string): Call togdb_eval_as_string_worker
+	correctly.
+	* gui.cpp, gui.h (mswin_query): New function.
+	* regdoc.cpp, regdoc.h (prepare): New function
+	* regview.cpp (OnDraw): Call prepare.
+
+Tue Jun 20 15:34:28 1995  Steve Chamberlain  <sac@slash.cygnus.com>
+
+	* initfake.c: Initialize dcache code.
+	* ser-win32s.c (win32s_readchar): If timeout forever,
+	really wait only 4 seconds.
+	* srcd.cpp (lookup_symtab): Symtabs with the same filename
+	are the same.
+
+Tue Jun 13 11:13:47 1995  Steve Chamberlain  <sac@slash.cygnus.com>
+
+	* mainfrm.cpp, mainfrm.h (OnUpdateSync):  New function; only
+	 enable sync button when target is attached.
+
+Mon Jun 12 19:32:29 1995  Steve Chamberlain  <sac@slash.cygnus.com>
+
+	* menus/debug.h: Added sync item.
+	* menus/menus.rc: Rebuilt.
+	* srcwin.cpp (calc_visible_lines): Give a bit of slack
+	so that redraw doesn't smear sometimes.
+	(addr_in_line): Don't deref a NULL p.
+	(OnDraw): Draw from juts before the first_visible_line to
+	just after, to avoide smearing.
+	(redraw_line): Invalidate a couple of lines in each direction.
+	* gdbwin.c, gdbwin.h (togdb_force_update): New function.
+	* gui.mak: Now expects source to live on G:
+	* mainfrm.cpp (OnSync): New function.
+
+Fri Jun  9 15:18:55 1995  Steve Chamberlain  <sac@slash.cygnus.com>
+
+	Serial stuff now cares about baudrates.
+	New dialog to set up serial params.
+	More menu items to select target and script.
+
+Sun Jan 15 15:25:21 1995  Steve Chamberlain  <sac@splat>
+
+	* And then there was light.
+

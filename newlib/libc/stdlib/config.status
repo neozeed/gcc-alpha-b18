@@ -1,0 +1,6 @@
+#!/bin/sh
+# This file was generated automatically by configure.  Do not edit.
+# This directory was configured as follows:
+cd ../../
+.././configure --verbose --build=i386-cygwin32 --host=i386-cygwin32 --target=i386-cygwin32 --cache-file=../config.cache --norecursion --norecursion --norecursion --norecursion --norecursion --norecursion --norecursion --norecursion --norecursion 
+# using "host/any"

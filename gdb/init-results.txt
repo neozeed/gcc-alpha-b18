@@ -1,0 +1,221 @@
+a29k-tdep.c:_initialize_a29k_tdep ()
+abug-rom.c:_initialize_abug_rom ()
+ada-lang.c:_initialize_ada_language ()
+ada-tasks.c:_initialize_tasks ()
+alpha-nat.c:_initialize_core_alpha ()
+alpha-tdep.c:_initialize_alpha_tdep ()
+annotate.c:_initialize_annotate ()
+arm-tdep.c:_initialize_arm_tdep ()
+blockframe.c:_initialize_blockframe ()
+breakpoint.c:_initialize_breakpoint ()
+buildsym.c:_initialize_buildsym ()
+c-lang.c:_initialize_c_language ()
+ch-lang.c:_initialize_chill_language ()
+coffread.c:_initialize_coffread ()
+command.c:_initialize_command ()
+complaints.c:_initialize_complaints ()
+convex-tdep.c:_initialize_convex_dep ()
+copying.c:_initialize_copying ()
+core-aout.c:_initialize_core_aout ()
+core-regset.c:_initialize_core_regset ()
+core-sol2.c:_initialize_core_solaris ()
+corefile.c:_initialize_core()
+corelow.c:_initialize_corelow()
+cp-valprint.c:_initialize_cp_valprint ()
+cpu32bug-rom.c:_initialize_cpu32bug_rom ()
+cxux-nat.c:_initialize_m88k_nat()
+d10v-tdep.c:_initialize_d10v_tdep ()
+dbug-rom.c:_initialize_dbug_rom ()
+dbxread.c:_initialize_dbxread ()
+dcache.c:_initialize_dcache ()
+delta68-nat.c:_initialize_delta68_nat ()
+demangle.c:_initialize_demangler ()
+dpx2-nat.c:_initialize_dpx2_nat ()
+dstread.c:_initialize_dstread ()
+elfread.c:_initialize_elfread ()
+exec.c:_initialize_exec()
+f-lang.c:_initialize_f_language ()
+f-valprint.c:_initialize_f_valprint ()
+gdbtk.c:_initialize_gdbtk ()
+gdbtypes.c:_initialize_gdbtypes ()
+gnu-nat.c:_initialize_gnu_nat ()
+h8300-tdep.c:_initialize_h8300m ()
+h8300-tdep.c:_initialize_h8300_tdep ()
+h8500-tdep.c:      _initialize_gdbtypes ();
+h8500-tdep.c:_initialize_h8500_tdep ()
+hp300ux-nat.c:_initialize_hp300ux_nat ()
+hppa-tdep.c:_initialize_hppa_tdep ()
+hpux-thread.c:_initialize_hpux_thread ()
+i386-tdep.c:_initialize_i386_tdep ()
+i386aix-nat.c:_initialize_core_i386aix ()
+i386mach-nat.c:_initialize_core_i386mach ()
+i960-tdep.c:_initialize_i960_tdep ()
+infcmd.c:_initialize_infcmd ()
+inflow.c:	 all!).  Can't do this in _initialize_inflow because SERIAL_FDOPEN
+inflow.c:_initialize_inflow ()
+infptrace.c:_initialize_kernel_u_addr ()
+infptrace.c:_initialize_infptrace ()
+infrun.c:_initialize_infrun ()
+inftarg.c:_initialize_inftarg ()
+init.c:  {extern void _initialize_blockframe PARAMS ((void)); _initialize_blockframe ();}
+init.c:  {extern void _initialize_breakpoint PARAMS ((void)); _initialize_breakpoint ();}
+init.c:  {extern void _initialize_stack PARAMS ((void)); _initialize_stack ();}
+init.c:  {extern void _initialize_thread PARAMS ((void)); _initialize_thread ();}
+init.c:  {extern void _initialize_source PARAMS ((void)); _initialize_source ();}
+init.c:  {extern void _initialize_values PARAMS ((void)); _initialize_values ();}
+init.c:  {extern void _initialize_valops PARAMS ((void)); _initialize_valops ();}
+init.c:  {extern void _initialize_valarith PARAMS ((void)); _initialize_valarith ();}
+init.c:  {extern void _initialize_valprint PARAMS ((void)); _initialize_valprint ();}
+init.c:  {extern void _initialize_printcmd PARAMS ((void)); _initialize_printcmd ();}
+init.c:  {extern void _initialize_symtab PARAMS ((void)); _initialize_symtab ();}
+init.c:  {extern void _initialize_symfile PARAMS ((void)); _initialize_symfile ();}
+init.c:  {extern void _initialize_symmisc PARAMS ((void)); _initialize_symmisc ();}
+init.c:  {extern void _initialize_infcmd PARAMS ((void)); _initialize_infcmd ();}
+init.c:  {extern void _initialize_infrun PARAMS ((void)); _initialize_infrun ();}
+init.c:  {extern void _initialize_command PARAMS ((void)); _initialize_command ();}
+init.c:  {extern void _initialize_gdbtypes PARAMS ((void)); _initialize_gdbtypes ();}
+init.c:  {extern void _initialize_copying PARAMS ((void)); _initialize_copying ();}
+init.c:  {extern void _initialize_alpha_tdep PARAMS ((void)); _initialize_alpha_tdep ();}
+init.c:  {extern void _initialize_ser_tcp PARAMS ((void)); _initialize_ser_tcp ();}
+init.c:  {extern void _initialize_ser_hardwire PARAMS ((void)); _initialize_ser_hardwire ();}
+init.c:  {extern void _initialize_inftarg PARAMS ((void)); _initialize_inftarg ();}
+init.c:  {extern void _initialize_remote PARAMS ((void)); _initialize_remote ();}
+init.c:  {extern void _initialize_dcache PARAMS ((void)); _initialize_dcache ();}
+init.c:  {extern void _initialize_sr_support PARAMS ((void)); _initialize_sr_support ();}
+init.c:  {extern void _initialize_parse PARAMS ((void)); _initialize_parse ();}
+init.c:  {extern void _initialize_language PARAMS ((void)); _initialize_language ();}
+init.c:  {extern void _initialize_buildsym PARAMS ((void)); _initialize_buildsym ();}
+init.c:  {extern void _initialize_exec PARAMS ((void)); _initialize_exec ();}
+init.c:  {extern void _initialize_maint_cmds PARAMS ((void)); _initialize_maint_cmds ();}
+init.c:  {extern void _initialize_demangler PARAMS ((void)); _initialize_demangler ();}
+init.c:  {extern void _initialize_dbxread PARAMS ((void)); _initialize_dbxread ();}
+init.c:  {extern void _initialize_coffread PARAMS ((void)); _initialize_coffread ();}
+init.c:  {extern void _initialize_elfread PARAMS ((void)); _initialize_elfread ();}
+init.c:  {extern void _initialize_mipsread PARAMS ((void)); _initialize_mipsread ();}
+init.c:  {extern void _initialize_stabsread PARAMS ((void)); _initialize_stabsread ();}
+init.c:  {extern void _initialize_core PARAMS ((void)); _initialize_core ();}
+init.c:  {extern void _initialize_c_language PARAMS ((void)); _initialize_c_language ();}
+init.c:  {extern void _initialize_chill_language PARAMS ((void)); _initialize_chill_language ();}
+init.c:  {extern void _initialize_f_language PARAMS ((void)); _initialize_f_language ();}
+init.c:  {extern void _initialize_m2_language PARAMS ((void)); _initialize_m2_language ();}
+init.c:  {extern void _initialize_scheme_language PARAMS ((void)); _initialize_scheme_language ();}
+init.c:  {extern void _initialize_complaints PARAMS ((void)); _initialize_complaints ();}
+init.c:  {extern void _initialize_typeprint PARAMS ((void)); _initialize_typeprint ();}
+init.c:  {extern void _initialize_cp_valprint PARAMS ((void)); _initialize_cp_valprint ();}
+init.c:  {extern void _initialize_f_valprint PARAMS ((void)); _initialize_f_valprint ();}
+init.c:  {extern void _initialize_nlmread PARAMS ((void)); _initialize_nlmread ();}
+init.c:  {extern void _initialize_serial PARAMS ((void)); _initialize_serial ();}
+init.c:  {extern void _initialize_mdebugread PARAMS ((void)); _initialize_mdebugread ();}
+init.c:  {extern void _initialize_os9kread PARAMS ((void)); _initialize_os9kread ();}
+init.c:  {extern void _initialize_annotate PARAMS ((void)); _initialize_annotate ();}
+init.c:  {extern void _initialize_inflow PARAMS ((void)); _initialize_inflow ();}
+irix4-nat.c:_initialize_core_irix4 ()
+irix5-nat.c:_initialize_solib()
+irix5-nat.c:_initialize_core_irix5 ()
+language.c:_initialize_language()
+lynx-nat.c:_initialize_core_lynx ()
+m2-lang.c:_initialize_m2_language ()
+m3-nat.c:_initialize_m3_nat ()
+m32r-rom.c:_initialize_m32r_rom ()
+m32r-tdep.c:_initialize_m32r_tdep ()
+m68k-tdep.c:_initialize_m68k_tdep ()
+m88k-tdep.c:_initialize_m88k_tdep ()
+mac-nat.c:_initialize_mac_nat ()
+maint.c:_initialize_maint_cmds ()
+mdebugread.c:_initialize_mdebugread ()
+mips-nat.c:_initialize_core_mips ()
+mips-tdep.c:_initialize_mips_tdep ()
+mipsread.c:_initialize_mipsread ()
+mn10200-tdep.c:_initialize_mn10200_tdep ()
+mn10300-tdep.c:_initialize_mn10300_tdep ()
+mn10300-tdep.c:/*  printf("_initialize_mn10300_tdep\n"); */
+mon960-rom.c:_initialize_mon960 ()
+monitor.c:_initialize_remote_monitors ()
+nlmread.c:_initialize_nlmread ()
+ns32k-tdep.c:_initialize_ns32k_tdep ()
+op50-rom.c:_initialize_op50n ()
+os9kread.c:_initialize_os9kread ()
+osfsolib.c:_initialize_solib()
+parse.c:_initialize_parse ()
+ppcbug-rom.c:_initialize_ppcbug_rom ()
+printcmd.c:_initialize_printcmd ()
+procfs.c:_initialize_procfs ()
+remote-adapt.c:_initialize_remote_adapt ()
+remote-array.c: * _initialize_remote_monitors -- setup a few addtitional commands that
+remote-array.c:_initialize_remote_monitors ()
+remote-array.c: * _initialize_array -- do any special init stuff for the target.
+remote-array.c:_initialize_array ()
+remote-bug.c:_initialize_remote_bug ()
+remote-e7000.c:_initialize_remote_e7000 ()
+remote-eb.c:_initialize_remote_eb ()
+remote-es.c:_initialize_es1800 ()
+remote-est.c:_initialize_est ()
+remote-hms.c:_initialize_remote_hms ()
+remote-hms.c:_initialize_remote_hms ()
+remote-mips.c:mips_initialize_cleanups (arg)
+remote-mips.c:  struct cleanup *old_cleanups = make_cleanup (mips_initialize_cleanups, NULL);
+remote-mips.c:_initialize_remote_mips ()
+remote-mm.c:_initialize_remote_mm()
+remote-nindy.c:_initialize_nindy ()
+remote-nrom.c:_initialize_remote_nrom ()
+remote-os9k.c:_initialize_remote_os9k ()
+remote-pa.c:_initialize_remote_hppro ()
+remote-rdp.c:_initialize_remote_rdp ()
+remote-sim.c:_initialize_remote_sim ()
+remote-st.c:_initialize_remote_st2000 ()
+remote-udi.c:_initialize_remote_udi ()
+remote-utils.c:_initialize_sr_support ()
+remote-vx.c:_initialize_vx ()
+remote-wiggler.c:_initialize_remote_wiggler ()
+remote.c:_initialize_remote ()
+rom68k-rom.c:_initialize_rom68k ()
+rs6000-nat.c:_initialize_core_rs6000 ()
+rs6000-tdep.c:_initialize_rs6000_tdep ()
+scm-lang.c:_initialize_scheme_language ()
+ser-e7kpc.c:_initialize_ser_e7000pc ()
+ser-e7kpc.c:_initialize_ser_e7000pc ()
+ser-go32.c:_initialize_ser_dos ()
+ser-mac.c:_initialize_ser_mac ()
+ser-tcp.c:_initialize_ser_tcp ()
+ser-unix.c:_initialize_ser_hardwire ()
+serial.c:_initialize_serial ()
+sh-tdep.c:_initialize_sh_tdep ()
+sh3-rom.c:_initialize_sh3_rom ()
+sol-thread.c:_initialize_sol_thread ()
+solib.c:_initialize_solib()
+somread.c:_initialize_somread ()
+somsolib.c:_initialize_som_solib ()
+source.c:_initialize_source ()
+sparc-nat.c:_initialize_core_sparc ()
+sparc-tdep.c:_initialize_sparc_tdep ()
+sparcl-tdep.c:_initialize_sparcl_tdep ()
+sparclet-rom.c:_initialize_sparclet ()
+stabsread.c:_initialize_stabsread ()
+stack.c:_initialize_stack ()
+standalone.c:_initialize_standalone ()
+sun3-nat.c:_initialize_core_sun3 ()
+symfile.c:_initialize_symfile ()
+symm-nat.c:_initialize_symm_nat ()
+symm-nat.c:		fatal("_initialize_symm_nat(): mptrace(XPT_MPDEBUGGER): %s",
+symm-nat.c:		fatal("_initialize_symm_nat(): sigaddset(SIGCHLD): %s",
+symm-nat.c:		fatal("_initialize_symm_nat(): sigprocmask(SIG_BLOCK): %s",
+symm-nat.c:		fatal("_initialize_symm_nat(): sigaction(SIGCHLD): %s",
+symmisc.c:   we initialize them in the _initialize_symmisc function at the bottom
+symmisc.c:_initialize_symmisc ()
+symtab.c:_initialize_symtab ()
+thread.c:_initialize_thread ()
+typeprint.c:_initialize_typeprint ()
+ultra3-nat.c:_initialize_core_ultra3 ()
+ultra3-xdep.c:_initialize_ultra3 ()
+valarith.c:_initialize_valarith ()
+valops.c:_initialize_valops ()
+valprint.c:_initialize_valprint ()
+values.c:_initialize_values ()
+vax-tdep.c:_initialize_vax_tdep ()
+w65-tdep.c:_initialize_w65_tdep ()
+w89k-rom.c:_initialize_w89k ()
+win32-nat.c:_initialize_inftarg ()
+xcoffread.c:_initialize_xcoffread ()
+xcoffsolib.c:_initialize_solib()
+z8k-tdep.c:      _initialize_gdbtypes ();
+z8k-tdep.c:_initialize_z8ktdep ()

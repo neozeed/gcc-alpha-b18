@@ -1,0 +1,54 @@
+@chapter Who's behind the project?
+
+I'm Geoffrey Noer (noer@@cygnus.com).  I am the current maintainer of the
+Cygwin32 library and manage the public beta releases, among other
+tasks.  I try to be as responsive as possible and deal with patches
+and questions as I get them, but realistically it's just not
+possible for me to answer all of my email.  Making net releases of the
+Win32 tools and helping out is not my primary job function, so some email
+will have to go unanswered.
+
+Steve Chamberlain (sac@@transmeta.com) was the original author of
+Cygwin32.  He wrote most of the original Win32-specific code, produced
+all of the releases up to beta 14, ported many of the other GNU tools
+to work under Win32, and ported V to work with the gnu-win32 tools.
+
+Sergey Okhapkin (sos@@prospect.com.ru) rewrote much of the signal
+and exception handling code, implemented the tty/pty support, and has
+made countless contributions throughout the library.
+
+Chris Faylor (cgf@@bbc.com) contributed significant fixes to
+the process control and environ code and reworked the strace
+mechanism.  Most recently, he rewrote the signal-related code
+from scratch.
+
+Philippe Giacinti (giac@@dalim.de) contributed our implementation of
+dlopen, dlclose, dlsym, dlfork, and dlerror.
+
+Ian Lance Taylor (ian@@cygnus.com) did a much-needed rework of the path
+handling code and has contributed many assorted fixes throughout
+the code.
+
+Tobin Brockett (tobin@@cygnus.com) wrote the InstallShield-based
+installer for the beta 19 release.
+
+Jeremy Allison (jra@@cygnus.com) made significant contributions
+in the area of file handling and process control, and rewrote
+select from scratch.
+
+Doug Evans (dje@@cygnus.com) spent many long hours rewriting the
+path-handling code in beta 16 and fixed countless other problems.
+Jason Molenda and Mark Eichin have also made many important
+contributions.
+
+Kim Knuttila and Michael Meissner put in many long hours working on
+the PowerPC port.
+
+Also many thanks to everyone using the tools for their many
+contributions in the form of advice, bug reports, and code fixes.
+Keep them coming!
+
+Commercial sites can purchase support from Cygnus for cross-compilers
+hosted under Windows NT/95.  Send mail to info@@cygnus.com for more
+information.  Official support for the Win32 native tools is not
+available at this time.

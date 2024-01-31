@@ -1,0 +1,30 @@
+Fri Aug 15 18:23:43 1997  Rob Savoye  <rob@cygnus.com>
+
+	New directory for the minimalist cygwin environment.
+	
+	* crtglob.c: New file. Turn on file globbing support. 
+	* crt_noglob.c: New file. Turn off file globbing support. 
+	* ctype_old.c: New file. Wrappers for functions that don't
+	have an underscore.
+	* dirent.c: New file. Directory routines readdir, opendir, closedir.
+	* dllcrt0.c: New file. Initialization code to use crtdll.dll.
+	* dllmain.c: New file. A stub DllMain function.
+	* hugeval.c: New file. A gross hack to define HUGE_VAL.
+	* init.c: New file. Common code to initialize standard file
+	handles and command line arguments.
+	* main.c: New file. A main for programs that only call WinMain.
+	* mcrt0.c: New file. Default crt0 for mingw32.
+	* oldnames.c: New File. Wrappers for functions that don't
+	have an underscore.
+	* string_old.c:  New File.
+	* include/{assert.h,ctype.h,errno.h,float.h,limits.h,locale.h
+	math.h,nonansi,setjmp.h,signal.h,stdarg.h,stddef.h,stdio.h,stdlib.h
+	string.h,tchar.h,time.h,wchar.h}: New header files for mingw.
+	* include/sys/types.h: New header file for mingw.
+	* include/nonansi/{alloc.h,conio.h,dir.h,direct.h,dirent.h
+	fcntl.h,io.h,malloc.h,mem.h,memory.h,process.h,share.h,unistd.h
+	utime.h,values.h,varargs.h}: New header files for mingw.
+	* include/nonansi/sys/{fcntl.h,locking.h,stat.h,time.h
+	timeb.h,unistd.h}: New header files for mingw.
+	* Makefile.in,configure.in: Build and configure support.
+	* configure: Generated from autoconf 2.12 with Cygnus patches.
